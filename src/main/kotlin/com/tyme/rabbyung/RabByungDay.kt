@@ -3,7 +3,6 @@ package com.tyme.rabbyung
 import com.tyme.AbstractTyme
 import com.tyme.culture.Zodiac
 import com.tyme.solar.SolarDay
-import kotlin.math.abs
 
 /**
  * 藏历日，仅支持藏历1950年十二月初一（公历1951年1月8日）至藏历2050年十二月三十（公历2051年2月11日）

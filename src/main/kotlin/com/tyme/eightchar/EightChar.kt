@@ -165,7 +165,7 @@ class EightChar: AbstractCulture {
         }
         while (y <= endYear) {
             // 立春为寅月的开始
-            var term: SolarTerm = SolarTerm(y, 3)
+            var term = SolarTerm(y, 3)
             // 节令推移，年干支和月干支就都匹配上了
             if (m > 0) {
                 term = term.next(m)
@@ -180,14 +180,14 @@ class EightChar: AbstractCulture {
                     solarDay = solarDay.next(d)
                 }
                 for (hour: Int in hours) {
-                    var mi: Int = 0
-                    var s: Int = 0
+                    var mi = 0
+                    var s = 0
                     // 如果正好是节令当天，且小时和节令的小时数相等的极端情况，把分钟和秒钟带上
                     if (d == 0 && hour == solarTime.getHour()) {
                         mi = solarTime.getMinute()
                         s = solarTime.getSecond()
                     }
-                    val time: SolarTime = SolarTime(solarDay.getYear(), solarDay.getMonth(), solarDay.getDay(), hour, mi, s)
+                    val time = SolarTime(solarDay.getYear(), solarDay.getMonth(), solarDay.getDay(), hour, mi, s)
                     // 验证一下
                     if (time.getLunarHour().getEightChar() == this) {
                         l.add(time)

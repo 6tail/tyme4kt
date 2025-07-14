@@ -261,8 +261,8 @@ class LunarMonthTest {
 
     @Test
     fun test40() {
-        assertEquals("己未", LunarDay(2018, 6, 26).getLunarMonth().getSixtyCycle().toString());
-        assertEquals("庚申", LunarDay(2018, 6, 26).getSixtyCycleDay().getMonth().toString());
+        assertEquals("己未", LunarDay(2018, 6, 26).getLunarMonth().getSixtyCycle().toString())
+        assertEquals("庚申", LunarDay(2018, 6, 26).getSixtyCycleDay().getMonth().toString())
     }
 
     @Test

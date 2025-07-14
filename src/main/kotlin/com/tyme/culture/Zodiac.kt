@@ -30,6 +30,10 @@ class Zodiac: LoopTyme {
         return other is Zodiac && other.toString() == this.toString()
     }
 
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+
     companion object {
         val NAMES: Array<String> = arrayOf("鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪")
 

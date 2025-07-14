@@ -202,7 +202,7 @@ class EightCharTest {
      */
     @Test
     fun test11() {
-        val childLimit: ChildLimit = ChildLimit(SolarTime(2022, 3, 9, 20, 51, 0), Gender.MAN)
+        val childLimit = ChildLimit(SolarTime(2022, 3, 9, 20, 51, 0), Gender.MAN)
         assertEquals(8, childLimit.getYearCount())
         assertEquals(9, childLimit.getMonthCount())
         assertEquals(2, childLimit.getDayCount())
@@ -216,7 +216,7 @@ class EightCharTest {
      */
     @Test
     fun test12() {
-        val childLimit: ChildLimit = ChildLimit(SolarTime(2018, 6, 11, 9, 30, 0), Gender.WOMAN)
+        val childLimit = ChildLimit(SolarTime(2018, 6, 11, 9, 30, 0), Gender.WOMAN)
         assertEquals(1, childLimit.getYearCount())
         assertEquals(9, childLimit.getMonthCount())
         assertEquals(10, childLimit.getDayCount())
@@ -231,7 +231,7 @@ class EightCharTest {
     @Test
     fun test13() {
         // 童限
-        val childLimit: ChildLimit = ChildLimit(SolarTime(1983, 2, 15, 20, 0, 0), Gender.WOMAN)
+        val childLimit = ChildLimit(SolarTime(1983, 2, 15, 20, 0, 0), Gender.WOMAN)
         // 八字
         assertEquals("癸亥 甲寅 甲戌 甲戌", childLimit.getEightChar().toString())
         // 童限年数
@@ -282,7 +282,7 @@ class EightCharTest {
     @Test
     fun test14() {
         // 童限
-        val childLimit: ChildLimit = ChildLimit(SolarTime(1992, 2, 2, 12, 0, 0), Gender.MAN)
+        val childLimit = ChildLimit(SolarTime(1992, 2, 2, 12, 0, 0), Gender.MAN)
         // 八字
         assertEquals("辛未 辛丑 戊申 戊午", childLimit.getEightChar().toString())
         // 童限年数
@@ -452,7 +452,7 @@ class EightCharTest {
     @Test
     fun test16() {
         // 童限
-        val childLimit: ChildLimit =
+        val childLimit =
             ChildLimit(SolarTime(1990, 3, 15, 10, 30, 0), Gender.MAN)
         // 八字
         assertEquals("庚午 己卯 己卯 己巳", childLimit.getEightChar().toString())
@@ -717,7 +717,7 @@ class EightCharTest {
         // 采用元亨利贞的起运算法
         ChildLimit.provider = China95ChildLimitProvider()
         // 童限
-        val childLimit: ChildLimit =
+        val childLimit =
             ChildLimit(SolarTime(1986, 5, 29, 13, 37, 0), Gender.MAN)
         // 童限年数
         assertEquals(2, childLimit.getYearCount())
@@ -739,7 +739,7 @@ class EightCharTest {
     @Test
     fun test44() {
         // 童限
-        val childLimit: ChildLimit = ChildLimit(SolarTime(1989, 12, 31, 23, 7, 17), Gender.MAN)
+        val childLimit = ChildLimit(SolarTime(1989, 12, 31, 23, 7, 17), Gender.MAN)
         // 童限结束(即开始起运)的公历时刻
         assertEquals("1998年3月1日 19:47:17", childLimit.getEndTime().toString())
     }
@@ -749,7 +749,7 @@ class EightCharTest {
         // 童限
         ChildLimit.provider = LunarSect1ChildLimitProvider()
 
-        val childLimit: ChildLimit = ChildLimit(SolarTime(1994, 10, 17, 1, 0, 0), Gender.MAN)
+        val childLimit = ChildLimit(SolarTime(1994, 10, 17, 1, 0, 0), Gender.MAN)
         assertEquals("2002年1月27日 01:00:00", childLimit.getEndTime().toString())
         assertEquals("壬午", childLimit.getStartDecadeFortune().getStartSixtyCycleYear().getSixtyCycle().getName())
 
@@ -778,8 +778,7 @@ class EightCharTest {
         // 童限
         ChildLimit.provider = LunarSect1ChildLimitProvider()
 
-        val childLimit: ChildLimit =
-            ChildLimit(SolarTime(2025, 2, 18, 16, 0, 0), Gender.MAN)
+        val childLimit = ChildLimit(SolarTime(2025, 2, 18, 16, 0, 0), Gender.MAN)
         assertEquals("甲寅", childLimit.getStartFortune().getSixtyCycle().getName())
         assertEquals("2030年1月18日 16:00:00", childLimit.getEndTime().toString())
         assertEquals("庚戌", childLimit.getEndSixtyCycleYear().getSixtyCycle().getName())

@@ -299,7 +299,7 @@ object ShouXingUtil {
 
     private fun decode(ss: String): String {
         var s: String = ss
-        val o: String = "0000000000"
+        val o = "0000000000"
         val o2: String = o + o
         s = s.replace("J", "00")
         s = s.replace("I", "000")
@@ -337,8 +337,8 @@ object ShouXingUtil {
     fun nutationLon2(t: Double): Double {
         var a: Double = -1.742 * t
         val t2: Double = t * t
-        var dl: Double = 0.0
-        var i: Int = 0
+        var dl = 0.0
+        var i = 0
         val j: Int = NUT_B.size
         while (i < j) {
             dl += (NUT_B[i + 3] + a) * sin(NUT_B[i] + NUT_B[i + 1] * t + NUT_B[i + 2] * t2)
@@ -348,10 +348,10 @@ object ShouXingUtil {
         return dl / 100.0 / SECOND_PER_RAD
     }
 
-    fun eLon(t: Double, n: Int): Double {
-        val t: Double = t / 10.0
-        var v: Double = 0.0
-        var tn: Double = 1.0
+    fun eLon(nt: Double, n: Int): Double {
+        val t: Double = nt / 10.0
+        var v = 0.0
+        var tn = 1.0
         var n1: Int
         var n2: Int
         var m: Int
@@ -395,11 +395,11 @@ object ShouXingUtil {
         return v
     }
 
-    fun mLon(t: Double, n: Int): Double {
-        var n = n
+    fun mLon(t: Double, nn: Int): Double {
+        var n = nn
         val obl: Int = XL1[0].size
-        var tn: Double = 1.0
-        var v: Double = 0.0
+        var tn = 1.0
+        var v = 0.0
         var t2: Double = t * t
         var t3: Double = t2 * t
         var t4: Double = t3 * t
@@ -430,8 +430,8 @@ object ShouXingUtil {
             if (m >= l) {
                 m = l
             }
-            var j: Int = 0
-            var c: Double = 0.0
+            var j = 0
+            var c = 0.0
             while (j < m) {
                 c += f[j] * cos(f[j + 1] + t * f[j + 2] + t2 * f[j + 3] + t3 * f[j + 4] + t4 * f[j + 5])
                 j += 6
@@ -470,13 +470,13 @@ object ShouXingUtil {
         val y0: Double = DT_AT[size - 2]
         val t0: Double = DT_AT[size - 1]
         if (y >= y0) {
-            val jsd: Double = 31.0
+            val jsd = 31.0
             if (y > y0 + 100) {
                 return dtExt(y, jsd)
             }
             return dtExt(y, jsd) - (dtExt(y0, jsd) - t0) * (y0 + 100 - y) * 1.0 / 100
         }
-        var i: Int = 0
+        var i = 0
         while (i < size) {
             if (y < DT_AT[i + 5]) {
                 break
@@ -500,7 +500,7 @@ object ShouXingUtil {
     }
 
     fun saLonT(w: Double): Double {
-        var v: Double = 628.3319653318
+        var v = 628.3319653318
         var t: Double = (w - 1.75347 - Math.PI) / v
         v = ev(t)
         t += (w - saLon(t, 10)) / v
@@ -514,7 +514,7 @@ object ShouXingUtil {
     }
 
     fun msaLonT(w: Double): Double {
-        var v: Double = 7771.37714500204
+        var v = 7771.37714500204
         var t: Double = (w + 1.08472) / v
         t += (w - msaLon(t, 3, 3)) / v
         v = mv(t) - ev(t)
@@ -524,7 +524,7 @@ object ShouXingUtil {
     }
 
     fun saLonT2(w: Double): Double {
-        val v: Double = 628.3319653318
+        val v = 628.3319653318
         var t: Double = (w - 1.75347 - Math.PI) / v
         t -= (0.000005297 * t * t + 0.0334166 * cos(4.669257 + 628.307585 * t) + 0.0002061 * cos( 2.67823 + 628.307585 * t) * t) / v
         t += (w - eLon( t, 8) - Math.PI + (20.5 + 17.2 * sin(2.1824 - 33.75705 * t)) / SECOND_PER_RAD) / v
@@ -532,7 +532,7 @@ object ShouXingUtil {
     }
 
     fun msaLonT2(w: Double): Double {
-        var v: Double = 7771.37714500204
+        var v = 7771.37714500204
         var t: Double = (w + 1.08472) / v
         var t2: Double = t * t
         t -= (-0.00003309 * t2 + 0.10976 * cos(0.784758 + 8328.6914246 * t + 0.000152292 * t2) + 0.02224 * cos( 0.18740 + 7214.0628654 * t - 0.00021848 * t2) - 0.03342 * cos(4.669257 + 628.307585 * t)) / v
@@ -564,7 +564,7 @@ object ShouXingUtil {
     }
 
     fun qiLow(w: Double): Double {
-        val v: Double = 628.3319653318
+        val v = 628.3319653318
         var t: Double = (w - 4.895062166) / v
         t -= (53 * t * t + 334116 * cos(4.67 + 628.307585 * t) + 2061 * cos(2.678 + 628.3076 * t) * t) / v / 10000000
         val n: Double = 48950621.66 + 6283319653.318 * t + 53 * t * t + 334166 * cos(4.669257 + 628.307585 * t) + 3489 * cos(     4.6261 + 1256.61517 * t ) + 2060.6 * cos(2.67823 + 628.307585 * t) * t - 994 - 834 * sin(2.1824 - 33.75705 * t)
@@ -573,22 +573,22 @@ object ShouXingUtil {
     }
 
     fun shuoLow(w: Double): Double {
-        val v: Double = 7771.37714500204
+        val v = 7771.37714500204
         var t: Double = (w + 1.08472) / v
         t -= (-0.0000331 * t * t + 0.10976 * cos(0.785 + 8328.6914 * t) + 0.02224 * cos(0.187 + 7214.0629 * t) - 0.03342 * cos( 4.669 + 628.3076 * t)) / v + (32 * (t + 1.8) * (t + 1.8) - 20) / SECOND_PER_DAY / 36525
         return t * 36525 + ONE_THIRD
     }
 
-    fun calcShuo(jd: Double): Double {
-        var jd: Double = jd
+    fun calcShuo(njd: Double): Double {
+        var jd: Double = njd
         val size: Int = SHUO_KB.size
-        var d: Double = 0.0
-        val pc: Int = 14
+        var d = 0.0
+        val pc = 14
         var i: Int
         jd += 2451545.0
         val f1: Double = SHUO_KB[0] - pc
         val f2: Double = SHUO_KB[size - 1] - pc
-        val f3: Double = 2436935.0
+        val f3 = 2436935.0
         if (jd < f1 || jd >= f3) {
             d = floor(shuoHigh(floor((jd + pc - 2451551) / 29.5306) * PI_2) + 0.5)
         } else if (jd >= f1 && jd < f2) {
@@ -618,16 +618,16 @@ object ShouXingUtil {
         return d
     }
 
-    fun calcQi(jd: Double): Double {
-        var jd: Double = jd
+    fun calcQi(njd: Double): Double {
+        var jd: Double = njd
         val size: Int = QI_KB.size
-        var d: Double = 0.0
-        val pc: Int = 7
+        var d = 0.0
+        val pc = 7
         var i: Int
         jd += 2451545.0
         val f1: Double = QI_KB[0] - pc
         val f2: Double = QI_KB[size - 1] - pc
-        val f3: Double = 2436935.0
+        val f3 = 2436935.0
         if (jd < f1 || jd >= f3) {
             d = floor(qiHigh(floor((jd + pc - 2451259) / 365.2422 * 24) * Math.PI / 12) + 0.5)
         } else if (jd >= f1 && jd < f2) {

@@ -23,7 +23,7 @@ class TwentyEightStar: LoopTyme {
 
     /** 七曜 */
     fun getSevenStar(): SevenStar {
-        return SevenStar(getIndex() % 7 + 4);
+        return SevenStar(getIndex() % 7 + 4)
     }
 
     /** 九野 */

@@ -35,5 +35,5 @@ abstract class AbstractChildLimitProvider: ChildLimitProvider {
         return ChildLimitInfo(birthTime, SolarTime(sm.getYear(), sm.getMonth(), d, h, mi, s), addYear, addMonth, addDay, addHour, addMinute)
     }
 
-    abstract override fun getInfo(birthTime: SolarTime, term: SolarTerm): ChildLimitInfo;
+    abstract override fun getInfo(birthTime: SolarTime, term: SolarTerm): ChildLimitInfo
 }

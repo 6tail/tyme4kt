@@ -2,7 +2,6 @@ package com.tyme.rabbyung
 
 import com.tyme.AbstractTyme
 import com.tyme.culture.Zodiac
-import kotlin.math.abs
 
 /**
  * 藏历月，仅支持藏历1950年十二月至藏历2050年十二月

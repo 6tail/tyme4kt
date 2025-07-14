@@ -85,61 +85,61 @@ class WeekTest{
 
     @Test
     fun test12() {
-        val solar: SolarDay = SolarDay(1582, 10, 1)
+        val solar = SolarDay(1582, 10, 1)
         assertEquals(1, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test13() {
-        val solar: SolarDay = SolarDay(1582, 10, 15)
+        val solar = SolarDay(1582, 10, 15)
         assertEquals(5, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test14() {
-        val solar: SolarDay = SolarDay(1129, 11, 17)
+        val solar = SolarDay(1129, 11, 17)
         assertEquals(0, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test15() {
-        val solar: SolarDay = SolarDay(1129, 11, 1)
+        val solar = SolarDay(1129, 11, 1)
         assertEquals(5, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test16() {
-        val solar: SolarDay = SolarDay(8, 11, 1)
+        val solar = SolarDay(8, 11, 1)
         assertEquals(4, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test17() {
-        val solar: SolarDay = SolarDay(1582, 9, 30)
+        val solar = SolarDay(1582, 9, 30)
         assertEquals(0, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test18() {
-        val solar: SolarDay = SolarDay(1582, 1, 1)
+        val solar = SolarDay(1582, 1, 1)
         assertEquals(1, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test19() {
-        val solar: SolarDay = SolarDay(1500, 2, 29)
+        val solar = SolarDay(1500, 2, 29)
         assertEquals(6, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test20() {
-        val solar: SolarDay = SolarDay(9865, 7, 26)
+        val solar = SolarDay(9865, 7, 26)
         assertEquals(3, solar.getWeek().getIndex().toLong())
     }
 
     @Test
     fun test21() {
-        val week: LunarWeek = LunarWeek(2023, 1, 0, 2)
+        val week = LunarWeek(2023, 1, 0, 2)
         assertEquals("农历癸卯年正月第一周", week.toString())
         assertEquals("农历壬寅年十二月廿六", week.getFirstDay().toString())
     }
@@ -173,7 +173,7 @@ class WeekTest{
 
     @Test
     fun test25() {
-        val week: LunarWeek = LunarWeek(2024, 6, 0, 0)
+        val week = LunarWeek(2024, 6, 0, 0)
         assertEquals("农历甲辰年六月第一周", week.toString())
         assertEquals("农历甲辰年六月第三周", week.next(2).toString())
         assertEquals("农历甲辰年七月第一周", week.next(5).toString())

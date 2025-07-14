@@ -226,7 +226,7 @@ class SolarDay(
         // 第1个庚日
         var start: SolarDay = xiaZhi.getJulianDay().getSolarDay()
         // 第3个庚日，即初伏第1天
-        start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(6) + 20);
+        start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(6) + 20)
         var days: Int = subtract(start)
         // 初伏以前
         if (days < 0) {
@@ -284,7 +284,7 @@ class SolarDay(
         val grainInEar = SolarTerm(getYear(), 11)
         var start: SolarDay = grainInEar.getJulianDay().getSolarDay()
         // 芒种后的第1个丙日
-        start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(2));
+        start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(2))
         // 小暑
         val slightHeat: SolarTerm = grainInEar.next(2)
         var end: SolarDay = slightHeat.getJulianDay().getSolarDay()
