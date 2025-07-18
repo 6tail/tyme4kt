@@ -3,8 +3,7 @@ package com.tyme.test
 import com.tyme.lunar.LunarWeek
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarWeek
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 星期测试

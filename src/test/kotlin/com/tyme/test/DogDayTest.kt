@@ -2,8 +2,7 @@ package com.tyme.test
 
 import com.tyme.culture.dog.DogDay
 import com.tyme.solar.SolarDay
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 三伏测试

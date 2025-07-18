@@ -2,7 +2,8 @@ package com.tyme.holiday
 
 import com.tyme.AbstractTyme
 import com.tyme.solar.SolarDay
-import java.util.regex.Pattern
+import com.tyme.util.pad2
+import com.tyme.util.pad4
 
 /**
  * 法定假日（自2001-12-29起）
@@ -35,7 +36,7 @@ class LegalHoliday(year: Int, month: Int, day: Int, data: String) : AbstractTyme
     }
 
     override fun toString(): String {
-        return "%s %s(%s)".format(day.toString(), name, if (work) "班" else "休")
+        return "${day} $name(${if (work) "班" else "休"})"
     }
 
     override fun next(n: Int): LegalHoliday? {
@@ -46,11 +47,11 @@ class LegalHoliday(year: Int, month: Int, day: Int, data: String) : AbstractTyme
             return fromYmd(year, month, day)
         }
         val data: MutableList<String> = ArrayList()
-        val reg = "%04d\\d{4}[0-1][0-8][+|-]\\d{2}"
-        val today = "%04d%02d%02d".format(year, month, day)
-        var matcher = Pattern.compile(reg.format(year)).matcher(DATA)
-        while (matcher.find()) {
-            data.add(matcher.group())
+        val reg = "\\d{4}[0-1][0-8][+|-]\\d{2}"
+        val today = "${year.pad4()}${month.pad2()}${day.pad2()}"
+        var matchResult = Regex(year.pad4() + reg).findAll(DATA)
+        for (result in matchResult) {
+            data.add(result.value)
         }
         var index = -1
         var size = data.size
@@ -70,9 +71,9 @@ class LegalHoliday(year: Int, month: Int, day: Int, data: String) : AbstractTyme
                 index -= size
                 y += 1
                 data.clear()
-                matcher = Pattern.compile(reg.format(y)).matcher(DATA)
-                while (matcher.find()) {
-                    data.add(matcher.group())
+                matchResult = Regex(y.pad4() + reg).findAll(DATA)
+                for (result in matchResult) {
+                    data.add(result.value)
                 }
                 size = data.size
                 if (size < 1) {
@@ -83,9 +84,9 @@ class LegalHoliday(year: Int, month: Int, day: Int, data: String) : AbstractTyme
             while (index < 0) {
                 y -= 1
                 data.clear()
-                matcher = Pattern.compile(reg.format(y)).matcher(DATA)
-                while (matcher.find()) {
-                    data.add(matcher.group())
+                matchResult = Regex(y.pad4() + reg).findAll(DATA)
+                for (result in matchResult) {
+                    data.add(result.value)
                 }
                 size = data.size
                 if (size < 1) {
@@ -104,8 +105,9 @@ class LegalHoliday(year: Int, month: Int, day: Int, data: String) : AbstractTyme
 
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): LegalHoliday? {
-            val matcher = Pattern.compile("%04d%02d%02d[0-1][0-8][+|-]\\d{2}".format(year, month, day)).matcher(DATA)
-            return if (!matcher.find()) null else LegalHoliday(year, month, day, matcher.group())
+            val regex = Regex("${year.pad4()}${month.pad2()}${day.pad2()}[0-1][0-8][+|-]\\d{2}")
+            val matchResult = regex.find(DATA)
+            return if (matchResult == null) null else LegalHoliday(year, month, day, matchResult.value)
         }
     }
 }

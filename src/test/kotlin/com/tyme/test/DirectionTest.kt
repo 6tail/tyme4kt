@@ -1,8 +1,7 @@
 package com.tyme.test
 
 import com.tyme.solar.SolarDay
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 方位测试

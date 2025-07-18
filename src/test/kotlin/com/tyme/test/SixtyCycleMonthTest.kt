@@ -1,8 +1,7 @@
 package com.tyme.test
 
 import com.tyme.sixtycycle.SixtyCycleMonth.Companion.fromIndex
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 干支月测试

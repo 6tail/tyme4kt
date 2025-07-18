@@ -4,8 +4,7 @@ import com.tyme.culture.Zodiac
 import com.tyme.rabbyung.RabByungElement
 import com.tyme.rabbyung.RabByungYear
 import com.tyme.rabbyung.RabByungYear.Companion.fromElementZodiac
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 藏历年测试

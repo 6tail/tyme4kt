@@ -1,8 +1,7 @@
 package com.tyme.test
 
 import com.tyme.solar.SolarMonth
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 公历月测试

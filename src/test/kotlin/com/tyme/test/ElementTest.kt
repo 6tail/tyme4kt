@@ -3,8 +3,7 @@ package com.tyme.test
 import com.tyme.culture.Element
 import com.tyme.sixtycycle.EarthBranch
 import com.tyme.sixtycycle.HeavenStem
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 五行测试

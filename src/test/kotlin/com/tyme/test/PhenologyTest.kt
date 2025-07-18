@@ -3,8 +3,7 @@ package com.tyme.test
 import com.tyme.culture.phenology.Phenology
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTime
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 
 /**

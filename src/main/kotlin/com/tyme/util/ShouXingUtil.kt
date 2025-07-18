@@ -1,5 +1,6 @@
 package com.tyme.util
 
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
@@ -12,14 +13,14 @@ import kotlin.math.sin
  */
 object ShouXingUtil {
     /** 2π */
-    const val PI_2: Double = 2 * Math.PI
+    const val PI_2: Double = 2 * PI
     const val ONE_THIRD: Double = 1.0 / 3
 
     /** 1天对应的秒数 */
     const val SECOND_PER_DAY: Int = 86400
 
     /** 1弧度对应的角秒 */
-    const val SECOND_PER_RAD: Double = 180 * 3600 / Math.PI
+    const val SECOND_PER_RAD: Double = 180 * 3600 / PI
     private val NUT_B: DoubleArray = doubleArrayOf(
         2.1824, -33.75705, 36e-6, -1720.0, 920.0,
         3.5069, 1256.66393, 11e-6, -132.0, 57.0,
@@ -457,7 +458,7 @@ object ShouXingUtil {
     }
 
     fun saLon(t: Double, n: Int): Double {
-        return eLon(t, n) + nutationLon2(t) + gxcSunLon(t) + Math.PI
+        return eLon(t, n) + nutationLon2(t) + gxcSunLon(t) + PI
     }
 
     fun dtExt(y: Double, jsd: Double): Double {
@@ -501,7 +502,7 @@ object ShouXingUtil {
 
     fun saLonT(w: Double): Double {
         var v = 628.3319653318
-        var t: Double = (w - 1.75347 - Math.PI) / v
+        var t: Double = (w - 1.75347 - PI) / v
         v = ev(t)
         t += (w - saLon(t, 10)) / v
         v = ev(t)
@@ -510,7 +511,7 @@ object ShouXingUtil {
     }
 
     fun msaLon(t: Double, mn: Int, sn: Int): Double {
-        return mLon(t, mn) + (-3.4E-6) - (eLon(t, sn) + gxcSunLon(t) + Math.PI)
+        return mLon(t, mn) + (-3.4E-6) - (eLon(t, sn) + gxcSunLon(t) + PI)
     }
 
     fun msaLonT(w: Double): Double {
@@ -525,9 +526,9 @@ object ShouXingUtil {
 
     fun saLonT2(w: Double): Double {
         val v = 628.3319653318
-        var t: Double = (w - 1.75347 - Math.PI) / v
+        var t: Double = (w - 1.75347 - PI) / v
         t -= (0.000005297 * t * t + 0.0334166 * cos(4.669257 + 628.307585 * t) + 0.0002061 * cos( 2.67823 + 628.307585 * t) * t) / v
-        t += (w - eLon( t, 8) - Math.PI + (20.5 + 17.2 * sin(2.1824 - 33.75705 * t)) / SECOND_PER_RAD) / v
+        t += (w - eLon( t, 8) - PI + (20.5 + 17.2 * sin(2.1824 - 33.75705 * t)) / SECOND_PER_RAD) / v
         return t
     }
 
@@ -629,7 +630,7 @@ object ShouXingUtil {
         val f2: Double = QI_KB[size - 1] - pc
         val f3 = 2436935.0
         if (jd < f1 || jd >= f3) {
-            d = floor(qiHigh(floor((jd + pc - 2451259) / 365.2422 * 24) * Math.PI / 12) + 0.5)
+            d = floor(qiHigh(floor((jd + pc - 2451259) / 365.2422 * 24) * PI / 12) + 0.5)
         } else if (jd >= f1 && jd < f2) {
             i = 0
             while (i < size) {
@@ -645,7 +646,7 @@ object ShouXingUtil {
             }
             d -= 2451545.0
         } else if (jd >= f2) {
-            d = floor(qiLow(floor((jd + pc - 2451259) / 365.2422 * 24) * Math.PI / 12) + 0.5)
+            d = floor(qiLow(floor((jd + pc - 2451259) / 365.2422 * 24) * PI / 12) + 0.5)
             val from: Int = ((jd - f2) / 365.2422 * 24).toInt()
             val n = QB.substring(from, from + 1)
             if ("1" == n) {
@@ -664,7 +665,7 @@ object ShouXingUtil {
     }
 
     fun qiAccurate2(jd: Double): Double {
-        val d: Double = Math.PI / 12
+        val d: Double = PI / 12
         val w: Double = floor((jd + 293) / 365.2422 * 24) * d
         val a: Double = qiAccurate(w)
         if (a - jd > 5) {

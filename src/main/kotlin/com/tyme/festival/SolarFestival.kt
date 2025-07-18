@@ -3,7 +3,7 @@ package com.tyme.festival
 import com.tyme.AbstractTyme
 import com.tyme.enums.FestivalType
 import com.tyme.solar.SolarDay
-import java.util.regex.Pattern
+import com.tyme.util.pad2
 
 /**
  * 公历现代节日
@@ -82,9 +82,9 @@ class SolarFestival(
         @JvmStatic
         fun fromIndex(year: Int, index: Int): SolarFestival? {
             require(index in NAMES.indices) { "illegal index: $index" }
-            val matcher = Pattern.compile("@%02d\\d+".format(index)).matcher(DATA)
-            if (matcher.find()) {
-                val data: String = matcher.group()
+            val matchResult = Regex("@${index.pad2()}\\d+").find(DATA)
+            if (matchResult != null) {
+                val data: String = matchResult.value
                 val type: Int = data[3].code - '0'.code
                 if (type == 0){
                     val startYear: Int = data.substring(8).toInt(10)
@@ -98,9 +98,11 @@ class SolarFestival(
 
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): SolarFestival? {
-            val matcher = Pattern.compile("@\\d{2}0%02d%02d\\d+".format(month, day)).matcher(DATA)
-            if (matcher.find()) {
-                val data = matcher.group()
+            month.toString().padStart(2, '0')
+
+            val matchResult = Regex("@\\d{2}0${month.pad2()}${day.pad2()}\\d+").find(DATA)
+            if (matchResult != null) {
+                val data = matchResult.value
                 val startYear = data.substring(8).toInt(10)
                 if (year >= startYear) {
                     return SolarFestival(FestivalType.DAY, SolarDay(year, month, day), startYear, data)

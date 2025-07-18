@@ -2,8 +2,7 @@ package com.tyme.test
 
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTerm
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 节气测试
@@ -97,7 +96,7 @@ class SolarTermTest {
     fun test100(){
         for(year in 2005..2030){
             for (index in 0..24) {
-                System.out.println(SolarTerm(year, index).getJulianDay().getSolarTime().toString())
+                println(SolarTerm(year, index).getJulianDay().getSolarTime().toString())
             }
         }
     }

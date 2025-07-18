@@ -4,7 +4,7 @@ import com.tyme.AbstractTyme
 import com.tyme.enums.FestivalType
 import com.tyme.lunar.LunarDay
 import com.tyme.solar.SolarTerm
-import java.util.regex.Pattern
+import com.tyme.util.pad2
 
 /**
  * 农历传统节日（依据国家标准《农历的编算和颁行》GB/T 33661-2017）
@@ -92,9 +92,10 @@ class LunarFestival(
         @JvmStatic
         fun fromIndex(year: Int, index: Int): LunarFestival? {
             require(!(index < 0 || index >= NAMES.size)) { "illegal index: $index" }
-            val matcher = Pattern.compile("@%02d\\d+".format(index)).matcher(DATA)
-            if (matcher.find()) {
-                val data = matcher.group()
+            val regex = Regex("@${index.pad2()}\\d+")
+            val matchResult = regex.find(DATA)
+            if (matchResult != null) {
+                val data = matchResult.value
                 val type: Int = data[3].code - '0'.code
                 when (type) {
                     0 -> {
@@ -136,26 +137,27 @@ class LunarFestival(
 
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): LunarFestival? {
-            var matcher = Pattern.compile("@\\d{2}0%02d%02d".format(month, day)).matcher(DATA)
-            if (matcher.find()) {
+            var matchResult = Regex("@\\d{2}0${month.pad2()}${day.pad2()}").find(DATA)
+            if (matchResult != null) {
                 return LunarFestival(
                     FestivalType.DAY,
                     LunarDay(year, month, day),
                     null,
-                    matcher.group()
+                    matchResult.value
                 )
             }
-            matcher = Pattern.compile("@\\d{2}1\\d{2}").matcher(DATA)
-            while (matcher.find()) {
-                val data: String = matcher.group()
+            val regex = Regex("@\\d{2}1\\d{2}")
+            val matches = regex.findAll(DATA)
+            for (match in matches) {
+                val data: String = match.value
                 val solarTerm = SolarTerm(year, data.substring(4).toInt(10))
                 val lunarDay = solarTerm.getJulianDay().getSolarDay().getLunarDay()
                 if (lunarDay.getYear() == year && lunarDay.getMonth() == month && lunarDay.getDay() == day) {
                     return LunarFestival(FestivalType.TERM, lunarDay, solarTerm, data)
                 }
             }
-            matcher = Pattern.compile("@\\d{2}2").matcher(DATA)
-            if (matcher.find()) {
+            matchResult = Regex("@\\d{2}2").find(DATA)
+            if (matchResult != null) {
                 val lunarDay = LunarDay(year, month, day)
                 val nextDay = lunarDay.next(1)
                 if (nextDay.getMonth() == 1 && nextDay.getDay() == 1) {
@@ -163,7 +165,7 @@ class LunarFestival(
                         FestivalType.EVE,
                         lunarDay,
                         null,
-                        matcher.group()
+                        matchResult.value
                     )
                 }
             }

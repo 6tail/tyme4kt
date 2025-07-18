@@ -2,8 +2,7 @@ package com.tyme.test
 
 import com.tyme.culture.God
 import com.tyme.solar.SolarDay
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 神煞测试

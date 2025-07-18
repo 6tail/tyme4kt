@@ -4,8 +4,7 @@ import com.tyme.culture.Zodiac
 import com.tyme.rabbyung.RabByungDay.Companion.fromElementZodiac
 import com.tyme.rabbyung.RabByungElement
 import com.tyme.solar.SolarDay
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 藏历日测试
