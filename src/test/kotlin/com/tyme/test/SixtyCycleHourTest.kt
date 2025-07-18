@@ -3,8 +3,7 @@ package com.tyme.test
 import com.tyme.eightchar.EightChar
 import com.tyme.sixtycycle.SixtyCycleHour
 import com.tyme.solar.SolarTime
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 干支时辰测试

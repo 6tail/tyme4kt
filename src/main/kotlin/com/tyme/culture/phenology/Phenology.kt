@@ -3,6 +3,7 @@ package com.tyme.culture.phenology
 import com.tyme.LoopTyme
 import com.tyme.jd.JulianDay
 import com.tyme.util.ShouXingUtil
+import kotlin.math.PI
 
 
 /**
@@ -64,7 +65,7 @@ class Phenology: LoopTyme {
      * @return 儒略日
      */
     fun getJulianDay(): JulianDay {
-        val t = ShouXingUtil.saLonT((year - 2000 + (getIndex() - 18) * 5.0 / 360 + 1) * 2 * Math.PI)
+        val t = ShouXingUtil.saLonT((year - 2000 + (getIndex() - 18) * 5.0 / 360 + 1) * 2 * PI)
         return JulianDay(t * 36525 + JulianDay.J2000 + 8.0 / 24 - ShouXingUtil.dtT(t * 36525))
     }
 

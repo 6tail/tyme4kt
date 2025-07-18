@@ -2,8 +2,7 @@ package com.tyme.test
 
 import com.tyme.sixtycycle.HideHeavenStemDay
 import com.tyme.solar.SolarDay
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 人元司令分野测试

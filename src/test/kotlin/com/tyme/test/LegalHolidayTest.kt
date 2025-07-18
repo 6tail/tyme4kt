@@ -3,8 +3,7 @@ package com.tyme.test
 import com.tyme.holiday.LegalHoliday
 import com.tyme.holiday.LegalHoliday.Companion.fromYmd
 import com.tyme.solar.SolarDay
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 法定节假日测试

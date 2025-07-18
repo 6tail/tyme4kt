@@ -14,8 +14,7 @@ import com.tyme.lunar.LunarHour
 import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarTime
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 八字测试
@@ -341,20 +340,26 @@ class EightCharTest {
         val hour: SixtyCycle = eightChar.getHour()
 
         val me: HeavenStem = day.getHeavenStem()
-        System.out.printf(
+
+        fun formatAndPrintln(template: String, vararg args: Any?): String = args
+            .fold(template) { acc, e -> acc.replaceFirst("%s", e.toString()) }
+            .replace("%n", "\n")
+            .also(::print)
+        
+        formatAndPrintln(
             "主星：%s %s 日主 %s%n",
             me.getTenStar(year.getHeavenStem()),
             me.getTenStar(month.getHeavenStem()),
             me.getTenStar(hour.getHeavenStem())
         )
-        System.out.printf(
+        formatAndPrintln(
             "八字：%s %s %s %s%n",
             year,
             month,
             day,
             hour
         )
-        System.out.printf(
+        formatAndPrintln(
             "藏干：[%s %s %s] [%s %s %s] [%s %s %s] [%s %s %s]%n",
             year.getEarthBranch().getHideHeavenStemMain(),
             year.getEarthBranch().getHideHeavenStemMiddle(),
@@ -369,7 +374,7 @@ class EightCharTest {
             hour.getEarthBranch().getHideHeavenStemMiddle(),
             hour.getEarthBranch().getHideHeavenStemResidual()
         )
-        System.out.printf(
+        formatAndPrintln(
             "副星：[%s %s %s] [%s %s %s] [%s %s %s] [%s %s %s]%n",
             me.getTenStar(year.getEarthBranch().getHideHeavenStemMain()),
             year.getEarthBranch().getHideHeavenStemMiddle()?.let { me.getTenStar(it) },
@@ -387,7 +392,7 @@ class EightCharTest {
             hour.getEarthBranch().getHideHeavenStemMiddle()?.let { me.getTenStar(it) },
             hour.getEarthBranch().getHideHeavenStemResidual()?.let { me.getTenStar(it) }
         )
-        System.out.printf(
+        formatAndPrintln(
             "五行：%s%s %s%s %s%s %s%s%n",
             year.getHeavenStem().getElement(),
             year.getEarthBranch().getElement(),
@@ -398,28 +403,28 @@ class EightCharTest {
             hour.getHeavenStem().getElement(),
             hour.getEarthBranch().getElement()
         )
-        System.out.printf(
+        formatAndPrintln(
             "纳音：%s %s %s %s%n",
             year.getSound(),
             month.getSound(),
             day.getSound(),
             hour.getSound()
         )
-        System.out.printf(
+        formatAndPrintln(
             "星运：%s %s %s %s%n",
             me.getTerrain(year.getEarthBranch()),
             me.getTerrain(month.getEarthBranch()),
             me.getTerrain(day.getEarthBranch()),
             me.getTerrain(hour.getEarthBranch())
         )
-        System.out.printf(
+        formatAndPrintln(
             "自坐：%s %s %s %s%n",
             year.getHeavenStem().getTerrain(year.getEarthBranch()),
             month.getHeavenStem().getTerrain(month.getEarthBranch()),
             day.getHeavenStem().getTerrain(day.getEarthBranch()),
             hour.getHeavenStem().getTerrain(hour.getEarthBranch())
         )
-        System.out.printf(
+        formatAndPrintln(
             "空亡：%s %s %s %s%n",
             year.getExtraEarthBranches().contentToString(),
             month.getExtraEarthBranches().contentToString(),
@@ -427,22 +432,22 @@ class EightCharTest {
             hour.getExtraEarthBranches().contentToString()
         )
 
-        System.out.printf(
+        formatAndPrintln(
             "胎元：%s(%s)%n",
             eightChar.getFetalOrigin(),
             eightChar.getFetalOrigin().getSound()
         )
-        System.out.printf(
+        formatAndPrintln(
             "胎息：%s(%s)%n",
             eightChar.getFetalBreath(),
             eightChar.getFetalBreath().getSound()
         )
-        System.out.printf(
+        formatAndPrintln(
             "命宫：%s(%s)%n",
             eightChar.getOwnSign(),
             eightChar.getOwnSign().getSound()
         )
-        System.out.printf(
+        formatAndPrintln(
             "身宫：%s(%s)%n",
             eightChar.getBodySign(),
             eightChar.getBodySign().getSound()

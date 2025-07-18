@@ -4,6 +4,7 @@ import com.tyme.AbstractTyme
 import com.tyme.culture.Week
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTime
+import kotlin.math.round
 
 /**
  * 儒略日
@@ -72,7 +73,7 @@ class JulianDay(private var day: Double) : AbstractTyme() {
 
         f -= minute
         f *= 60.0
-        val second: Int = Math.round(f).toInt()
+        val second: Int = round(f).toInt()
         return if (second < 60) SolarTime(year, month, day, hour, minute, second) else SolarTime(year, month, day, hour, minute, second - 60).next(60)
     }
 

@@ -5,6 +5,7 @@ import com.tyme.culture.phenology.Phenology
 import com.tyme.jd.JulianDay
 import com.tyme.lunar.LunarHour
 import com.tyme.sixtycycle.SixtyCycleHour
+import com.tyme.util.pad2
 
 
 /**
@@ -101,7 +102,7 @@ class SolarTime(
     }
 
     override fun getName(): String {
-        return "%02d:%02d:%02d".format(hour, minute, second)
+        return "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
     }
 
     override fun toString(): String {

@@ -1,8 +1,7 @@
 package com.tyme.test
 
 import com.tyme.sixtycycle.SixtyCycleYear
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 /**
  * 干支年测试
  *

@@ -1,8 +1,7 @@
 package com.tyme.test
 
 import com.tyme.solar.SolarHalfYear
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 公历半年测试

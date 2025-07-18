@@ -1,8 +1,7 @@
 package com.tyme.test
 
 import com.tyme.lunar.LunarHour
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 时辰测试

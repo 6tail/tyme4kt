@@ -3,8 +3,7 @@ package com.tyme.test
 import com.tyme.sixtycycle.EarthBranch
 import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 六十甲子测试
@@ -47,9 +46,9 @@ class SixtyCycleTest {
      */
     @Test
     fun test4() {
-        assertArrayEquals(arrayOf(EarthBranch("戌"), EarthBranch("亥")), SixtyCycle("甲子").getExtraEarthBranches())
-        assertArrayEquals(arrayOf(EarthBranch("子"), EarthBranch("丑")), SixtyCycle("乙卯").getExtraEarthBranches())
-        assertArrayEquals(arrayOf(EarthBranch("午"), EarthBranch("未")), SixtyCycle("癸巳").getExtraEarthBranches())
+        assertContentEquals(arrayOf(EarthBranch("戌"), EarthBranch("亥")), SixtyCycle("甲子").getExtraEarthBranches())
+        assertContentEquals(arrayOf(EarthBranch("子"), EarthBranch("丑")), SixtyCycle("乙卯").getExtraEarthBranches())
+        assertContentEquals(arrayOf(EarthBranch("午"), EarthBranch("未")), SixtyCycle("癸巳").getExtraEarthBranches())
     }
 
     /**

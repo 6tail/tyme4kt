@@ -2,7 +2,7 @@ package com.tyme.culture
 
 import com.tyme.LoopTyme
 import com.tyme.sixtycycle.SixtyCycle
-import java.util.regex.Pattern
+import com.tyme.util.hexPad2
 
 /**
  * 神煞
@@ -56,10 +56,10 @@ class God: LoopTyme {
         @JvmStatic
         fun getDayGods(month: SixtyCycle, day: SixtyCycle): List<God> {
             val l: MutableList<God> = ArrayList()
-            val matcher = Pattern.compile(";%02X(.[^;]*)".format(day.getIndex()))
-                .matcher(dayGods[month.getEarthBranch().next(-2).getIndex()])
-            if (matcher.find()) {
-                val data = matcher.group(1)
+            val regex = Regex(";${day.getIndex().hexPad2()}(.[^;]*)")
+            val matchResult = regex.find(dayGods[month.getEarthBranch().next(-2).getIndex()])
+            if (matchResult != null) {
+                val data = matchResult.groupValues[1]
                 var i = 0
                 val j = data.length
                 while (i < j) {

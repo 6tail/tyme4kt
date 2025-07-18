@@ -6,8 +6,7 @@ import com.tyme.lunar.LunarHour
 import com.tyme.lunar.LunarMonth
 import com.tyme.lunar.LunarYear
 import com.tyme.solar.SolarDay
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.*
 
 /**
  * 九星测试
