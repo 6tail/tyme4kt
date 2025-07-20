@@ -1,0 +1,19 @@
+package com.tyme.test
+
+import com.tyme.solar.SolarSeason
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+/**
+ * 公历季度测试
+ *
+ * @author 6tail
+ */
+class SolarSeasonTest {
+    @Test
+    fun test0() {
+        val season = SolarSeason(2023, 0)
+        assertEquals("2023年一季度", season.toString())
+        assertEquals("2021年四季度", season.next(-5).toString())
+    }
+}
