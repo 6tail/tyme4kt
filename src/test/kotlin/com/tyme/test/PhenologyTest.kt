@@ -3,7 +3,8 @@ package com.tyme.test
 import com.tyme.culture.phenology.Phenology
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTime
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 
 /**

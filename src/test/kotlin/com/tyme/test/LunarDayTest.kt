@@ -1,7 +1,8 @@
 package com.tyme.test
 
 import com.tyme.lunar.LunarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 /**
  * 农历日测试
  *

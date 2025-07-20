@@ -4,7 +4,8 @@ import com.tyme.culture.Zodiac
 import com.tyme.rabbyung.RabByungElement
 import com.tyme.rabbyung.RabByungYear
 import com.tyme.rabbyung.RabByungYear.Companion.fromElementZodiac
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 藏历年测试

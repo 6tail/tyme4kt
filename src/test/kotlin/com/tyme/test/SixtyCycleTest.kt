@@ -3,7 +3,9 @@ package com.tyme.test
 import com.tyme.sixtycycle.EarthBranch
 import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 /**
  * 六十甲子测试

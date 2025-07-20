@@ -2,7 +2,10 @@ package com.tyme.test
 
 import com.tyme.festival.SolarFestival
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 /**
  * 公历现代节日测试

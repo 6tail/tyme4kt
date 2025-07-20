@@ -2,7 +2,9 @@ package com.tyme.test
 
 import com.tyme.culture.nine.NineDay
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /**
  * 数九测试

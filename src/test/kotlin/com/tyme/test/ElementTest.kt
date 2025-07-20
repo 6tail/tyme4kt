@@ -3,7 +3,8 @@ package com.tyme.test
 import com.tyme.culture.Element
 import com.tyme.sixtycycle.EarthBranch
 import com.tyme.sixtycycle.HeavenStem
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 五行测试

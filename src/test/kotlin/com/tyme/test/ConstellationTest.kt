@@ -1,7 +1,8 @@
 package com.tyme.test
 
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 星座测试

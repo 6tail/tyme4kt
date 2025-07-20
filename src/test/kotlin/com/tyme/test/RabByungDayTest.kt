@@ -4,7 +4,8 @@ import com.tyme.culture.Zodiac
 import com.tyme.rabbyung.RabByungDay.Companion.fromElementZodiac
 import com.tyme.rabbyung.RabByungElement
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 藏历日测试

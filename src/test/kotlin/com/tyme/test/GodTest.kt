@@ -2,7 +2,8 @@ package com.tyme.test
 
 import com.tyme.culture.God
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 神煞测试

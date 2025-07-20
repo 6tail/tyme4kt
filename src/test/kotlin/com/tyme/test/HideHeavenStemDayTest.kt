@@ -2,7 +2,8 @@ package com.tyme.test
 
 import com.tyme.sixtycycle.HideHeavenStemDay
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 人元司令分野测试

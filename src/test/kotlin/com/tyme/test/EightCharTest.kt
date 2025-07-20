@@ -14,7 +14,9 @@ import com.tyme.lunar.LunarHour
 import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarTime
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /**
  * 八字测试

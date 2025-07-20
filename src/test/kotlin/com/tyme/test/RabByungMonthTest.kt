@@ -1,7 +1,8 @@
 package com.tyme.test
 
 import com.tyme.rabbyung.RabByungMonth.Companion.fromYm
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 藏历月测试

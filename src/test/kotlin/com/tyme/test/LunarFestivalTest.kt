@@ -3,7 +3,9 @@ package com.tyme.test
 import com.tyme.festival.LunarFestival
 import com.tyme.lunar.LunarDay
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 /**
  * 农历传统节日测试

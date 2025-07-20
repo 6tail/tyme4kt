@@ -1,7 +1,8 @@
 package com.tyme.test
 
 import com.tyme.culture.KitchenGodSteed
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 灶马头测试

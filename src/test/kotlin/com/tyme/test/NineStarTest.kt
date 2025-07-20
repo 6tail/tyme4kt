@@ -6,7 +6,8 @@ import com.tyme.lunar.LunarHour
 import com.tyme.lunar.LunarMonth
 import com.tyme.lunar.LunarYear
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 九星测试

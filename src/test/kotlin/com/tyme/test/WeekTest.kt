@@ -3,7 +3,8 @@ package com.tyme.test
 import com.tyme.lunar.LunarWeek
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarWeek
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 星期测试

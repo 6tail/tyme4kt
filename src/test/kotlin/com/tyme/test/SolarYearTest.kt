@@ -1,7 +1,10 @@
 package com.tyme.test
 
 import com.tyme.solar.SolarYear
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 /**
  * 公历年测试

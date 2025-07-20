@@ -2,7 +2,8 @@ package com.tyme.test
 
 import com.tyme.culture.star.twelve.TwelveStar
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 黄道黑道十二神测试

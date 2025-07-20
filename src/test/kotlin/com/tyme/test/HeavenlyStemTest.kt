@@ -1,7 +1,9 @@
 package com.tyme.test
 
 import com.tyme.sixtycycle.HeavenStem
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /**
  * 天干测试

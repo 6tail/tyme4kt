@@ -1,7 +1,9 @@
 package com.tyme.test
 
 import com.tyme.sixtycycle.EarthBranch
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /**
  * 地支测试

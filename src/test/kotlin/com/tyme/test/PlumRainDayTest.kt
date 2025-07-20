@@ -2,7 +2,9 @@ package com.tyme.test
 
 import com.tyme.culture.plumrain.PlumRainDay
 import com.tyme.solar.SolarDay
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /**
  * 梅雨天测试

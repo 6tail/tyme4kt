@@ -1,7 +1,8 @@
 package com.tyme.test
 
 import com.tyme.sixtycycle.SixtyCycleMonth.Companion.fromIndex
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 干支月测试

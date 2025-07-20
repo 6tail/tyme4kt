@@ -1,7 +1,8 @@
 package com.tyme.test
 
 import com.tyme.sixtycycle.SixtyCycleYear
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 /**
  * 干支年测试
  *

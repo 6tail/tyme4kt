@@ -1,7 +1,8 @@
 package com.tyme.test
 
 import com.tyme.solar.SolarMonth
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 公历月测试

@@ -3,7 +3,8 @@ package com.tyme.test
 import com.tyme.eightchar.EightChar
 import com.tyme.sixtycycle.SixtyCycleHour
 import com.tyme.solar.SolarTime
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 干支时辰测试

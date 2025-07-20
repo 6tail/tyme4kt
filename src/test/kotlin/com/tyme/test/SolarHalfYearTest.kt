@@ -1,7 +1,8 @@
 package com.tyme.test
 
 import com.tyme.solar.SolarHalfYear
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * 公历半年测试
