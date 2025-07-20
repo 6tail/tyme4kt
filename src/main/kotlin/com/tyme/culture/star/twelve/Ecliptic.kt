@@ -2,6 +2,7 @@ package com.tyme.culture.star.twelve
 
 import com.tyme.LoopTyme
 import com.tyme.culture.Luck
+import kotlin.jvm.JvmStatic
 
 /**
  * 黄道黑道

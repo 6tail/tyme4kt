@@ -2,6 +2,7 @@ package com.tyme.culture
 
 import com.tyme.LoopTyme
 import com.tyme.sixtycycle.SixtyCycle
+import kotlin.jvm.JvmStatic
 
 /**
  * 宜忌

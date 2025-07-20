@@ -1,6 +1,7 @@
 package com.tyme.culture.nine
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 数九

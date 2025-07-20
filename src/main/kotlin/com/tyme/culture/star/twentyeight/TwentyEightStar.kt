@@ -6,6 +6,7 @@ import com.tyme.culture.Land
 import com.tyme.culture.Luck
 import com.tyme.culture.Zone
 import com.tyme.culture.star.seven.SevenStar
+import kotlin.jvm.JvmStatic
 
 /**
  * 二十八宿

@@ -1,6 +1,7 @@
 package com.tyme.culture
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 运（20年=1运，3运=1元）

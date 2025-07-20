@@ -1,5 +1,7 @@
 package com.tyme.enums
 
+import kotlin.jvm.JvmStatic
+
 /**
  * 阴阳
  *

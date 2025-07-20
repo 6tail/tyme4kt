@@ -5,6 +5,7 @@ import com.tyme.enums.FestivalType
 import com.tyme.lunar.LunarDay
 import com.tyme.solar.SolarTerm
 import com.tyme.util.pad2
+import kotlin.jvm.JvmStatic
 
 /**
  * 农历传统节日（依据国家标准《农历的编算和颁行》GB/T 33661-2017）

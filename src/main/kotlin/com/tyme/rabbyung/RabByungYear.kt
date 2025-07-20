@@ -4,6 +4,7 @@ import com.tyme.AbstractTyme
 import com.tyme.culture.Zodiac
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarYear
+import kotlin.jvm.JvmStatic
 
 /**
  * 藏历年(公历1027年为藏历元年，第一饶迥火兔年）

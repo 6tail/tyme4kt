@@ -2,6 +2,7 @@ package com.tyme.solar
 
 import com.tyme.AbstractTyme
 import com.tyme.culture.Week
+import kotlin.jvm.JvmStatic
 
 /**
  * 公历周

@@ -3,6 +3,7 @@ package com.tyme.eightchar
 import com.tyme.AbstractTyme
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.sixtycycle.SixtyCycleYear
+import kotlin.jvm.JvmStatic
 
 /**
  * 小运

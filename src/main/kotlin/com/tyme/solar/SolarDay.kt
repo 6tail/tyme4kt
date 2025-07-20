@@ -21,6 +21,7 @@ import com.tyme.rabbyung.RabByungDay
 import com.tyme.sixtycycle.HideHeavenStem
 import com.tyme.sixtycycle.HideHeavenStemDay
 import com.tyme.sixtycycle.SixtyCycleDay
+import kotlin.jvm.JvmStatic
 import kotlin.math.ceil
 
 

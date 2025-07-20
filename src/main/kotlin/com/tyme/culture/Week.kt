@@ -2,6 +2,7 @@ package com.tyme.culture
 
 import com.tyme.LoopTyme
 import com.tyme.culture.star.seven.SevenStar
+import kotlin.jvm.JvmStatic
 
 /**
  * 星期

@@ -6,6 +6,7 @@ import com.tyme.culture.KitchenGodSteed
 import com.tyme.culture.Twenty
 import com.tyme.culture.star.nine.NineStar
 import com.tyme.sixtycycle.SixtyCycle
+import kotlin.jvm.JvmStatic
 import kotlin.math.floor
 
 /**

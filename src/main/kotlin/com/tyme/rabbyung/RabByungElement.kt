@@ -1,6 +1,7 @@
 package com.tyme.rabbyung
 
 import com.tyme.culture.Element
+import kotlin.jvm.JvmStatic
 
 /**
  * 藏历五行

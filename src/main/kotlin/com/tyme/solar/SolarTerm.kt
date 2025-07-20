@@ -3,6 +3,7 @@ package com.tyme.solar
 import com.tyme.LoopTyme
 import com.tyme.jd.JulianDay
 import com.tyme.util.ShouXingUtil
+import kotlin.jvm.JvmStatic
 import kotlin.math.floor
 
 /**

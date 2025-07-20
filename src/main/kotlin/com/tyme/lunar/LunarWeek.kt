@@ -2,6 +2,7 @@ package com.tyme.lunar
 
 import com.tyme.AbstractTyme
 import com.tyme.culture.Week
+import kotlin.jvm.JvmStatic
 
 /**
  * 农历周

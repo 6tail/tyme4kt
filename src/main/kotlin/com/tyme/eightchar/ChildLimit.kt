@@ -7,6 +7,7 @@ import com.tyme.enums.YinYang
 import com.tyme.sixtycycle.SixtyCycleYear
 import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTime
+import kotlin.jvm.JvmStatic
 
 /**
  * 童限（从出生到起运的时间段）

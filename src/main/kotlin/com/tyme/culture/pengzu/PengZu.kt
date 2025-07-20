@@ -2,6 +2,7 @@ package com.tyme.culture.pengzu
 
 import com.tyme.AbstractCulture
 import com.tyme.sixtycycle.SixtyCycle
+import kotlin.jvm.JvmStatic
 
 /**
  * 彭祖百忌

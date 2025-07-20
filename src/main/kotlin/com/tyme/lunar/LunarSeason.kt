@@ -1,6 +1,7 @@
 package com.tyme.lunar
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 农历季节

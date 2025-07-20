@@ -1,6 +1,7 @@
 package com.tyme.culture.star.nine
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 北斗九星

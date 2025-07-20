@@ -1,6 +1,7 @@
 package com.tyme.culture
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 地势(长生十二神)

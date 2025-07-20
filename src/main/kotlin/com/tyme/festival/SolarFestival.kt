@@ -4,6 +4,7 @@ import com.tyme.AbstractTyme
 import com.tyme.enums.FestivalType
 import com.tyme.solar.SolarDay
 import com.tyme.util.pad2
+import kotlin.jvm.JvmStatic
 
 /**
  * 公历现代节日

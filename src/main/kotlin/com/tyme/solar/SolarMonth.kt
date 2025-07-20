@@ -1,6 +1,7 @@
 package com.tyme.solar
 
 import com.tyme.AbstractTyme
+import kotlin.jvm.JvmStatic
 import kotlin.math.ceil
 
 /**

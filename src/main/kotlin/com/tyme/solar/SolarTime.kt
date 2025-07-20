@@ -6,6 +6,7 @@ import com.tyme.jd.JulianDay
 import com.tyme.lunar.LunarHour
 import com.tyme.sixtycycle.SixtyCycleHour
 import com.tyme.util.pad2
+import kotlin.jvm.JvmStatic
 
 
 /**

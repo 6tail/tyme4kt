@@ -3,6 +3,7 @@ package com.tyme.culture
 import com.tyme.AbstractCulture
 import com.tyme.lunar.LunarDay
 import com.tyme.sixtycycle.SixtyCycle
+import kotlin.jvm.JvmStatic
 
 /**
  * 灶马头(灶神的坐骑)

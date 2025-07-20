@@ -1,6 +1,7 @@
 package com.tyme.solar
 
 import com.tyme.AbstractTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 公历季度

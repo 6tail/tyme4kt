@@ -7,6 +7,7 @@ import com.tyme.culture.Terrain
 import com.tyme.culture.pengzu.PengZuHeavenStem
 import com.tyme.culture.star.ten.TenStar
 import com.tyme.enums.YinYang
+import kotlin.jvm.JvmStatic
 
 /**
  * 天干（天元）

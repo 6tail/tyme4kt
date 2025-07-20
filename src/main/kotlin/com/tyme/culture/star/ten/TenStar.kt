@@ -1,6 +1,7 @@
 package com.tyme.culture.star.ten
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 十神

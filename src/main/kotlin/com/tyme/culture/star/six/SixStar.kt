@@ -1,6 +1,7 @@
 package com.tyme.culture.star.six
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 六曜（孔明六曜星）

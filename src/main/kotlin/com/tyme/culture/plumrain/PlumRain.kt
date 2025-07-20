@@ -1,6 +1,7 @@
 package com.tyme.culture.plumrain
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 梅雨

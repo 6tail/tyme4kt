@@ -3,6 +3,7 @@ package com.tyme.culture.ren
 import com.tyme.LoopTyme
 import com.tyme.culture.Element
 import com.tyme.culture.Luck
+import kotlin.jvm.JvmStatic
 
 /**
  * 小六壬

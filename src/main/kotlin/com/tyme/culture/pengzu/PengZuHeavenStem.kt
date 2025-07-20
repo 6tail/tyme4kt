@@ -1,6 +1,7 @@
 package com.tyme.culture.pengzu
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 天干彭祖百忌

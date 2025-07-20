@@ -4,6 +4,7 @@ import com.tyme.AbstractTyme
 import com.tyme.solar.SolarDay
 import com.tyme.util.pad2
 import com.tyme.util.pad4
+import kotlin.jvm.JvmStatic
 
 /**
  * 法定假日（自2001-12-29起）

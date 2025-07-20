@@ -3,6 +3,7 @@ package com.tyme.culture.star.nine
 import com.tyme.LoopTyme
 import com.tyme.culture.Direction
 import com.tyme.culture.Element
+import kotlin.jvm.JvmStatic
 
 /**
  * 九星

@@ -2,6 +2,7 @@ package com.tyme.culture
 
 import com.tyme.LoopTyme
 import com.tyme.sixtycycle.EarthBranch
+import kotlin.jvm.JvmStatic
 
 /**
  * 生肖

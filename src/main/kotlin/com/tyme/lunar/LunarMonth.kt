@@ -11,6 +11,7 @@ import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarTerm
 import com.tyme.util.ShouXingUtil
+import kotlin.jvm.JvmStatic
 import kotlin.math.abs
 import kotlin.math.ceil
 

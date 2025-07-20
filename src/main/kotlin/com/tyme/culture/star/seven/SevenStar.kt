@@ -2,6 +2,7 @@ package com.tyme.culture.star.seven
 
 import com.tyme.LoopTyme
 import com.tyme.culture.Week
+import kotlin.jvm.JvmStatic
 
 /**
  * 七曜（七政、七纬、七耀）

@@ -2,6 +2,7 @@ package com.tyme.culture.fetus
 
 import com.tyme.LoopTyme
 import com.tyme.lunar.LunarMonth
+import kotlin.jvm.JvmStatic
 
 /**
  * 逐月胎神（正十二月在床房，二三九十门户中，四六十一灶勿犯，五甲七子八厕凶。）

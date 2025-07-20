@@ -15,6 +15,7 @@ import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.sixtycycle.SixtyCycleDay
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTerm
+import kotlin.jvm.JvmStatic
 import kotlin.math.abs
 
 /**

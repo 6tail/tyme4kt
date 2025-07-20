@@ -4,6 +4,7 @@ import com.tyme.LoopTyme
 import com.tyme.culture.Sound
 import com.tyme.culture.Ten
 import com.tyme.culture.pengzu.PengZu
+import kotlin.jvm.JvmStatic
 
 /**
  * 六十甲子(六十干支周)

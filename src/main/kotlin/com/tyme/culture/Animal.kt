@@ -2,6 +2,7 @@ package com.tyme.culture
 
 import com.tyme.LoopTyme
 import com.tyme.culture.star.twentyeight.TwentyEightStar
+import kotlin.jvm.JvmStatic
 
 /**
  * 动物

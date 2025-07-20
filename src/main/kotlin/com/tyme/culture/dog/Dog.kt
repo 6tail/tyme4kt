@@ -1,6 +1,7 @@
 package com.tyme.culture.dog
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 三伏

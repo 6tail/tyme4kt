@@ -1,6 +1,7 @@
 package com.tyme.culture.phenology
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 三候

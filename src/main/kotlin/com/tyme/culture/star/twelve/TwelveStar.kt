@@ -1,6 +1,7 @@
 package com.tyme.culture.star.twelve
 
 import com.tyme.LoopTyme
+import kotlin.jvm.JvmStatic
 
 /**
  * 黄道黑道十二神

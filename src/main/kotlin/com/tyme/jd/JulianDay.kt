@@ -4,6 +4,7 @@ import com.tyme.AbstractTyme
 import com.tyme.culture.Week
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTime
+import kotlin.jvm.JvmStatic
 import kotlin.math.round
 
 /**

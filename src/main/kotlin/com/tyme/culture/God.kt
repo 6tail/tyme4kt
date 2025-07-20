@@ -3,6 +3,7 @@ package com.tyme.culture
 import com.tyme.LoopTyme
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.util.hexPad2
+import kotlin.jvm.JvmStatic
 
 /**
  * 神煞

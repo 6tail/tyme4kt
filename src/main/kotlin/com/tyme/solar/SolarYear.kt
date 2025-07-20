@@ -2,6 +2,7 @@ package com.tyme.solar
 
 import com.tyme.AbstractTyme
 import com.tyme.rabbyung.RabByungYear
+import kotlin.jvm.JvmStatic
 
 /**
  * 公历年

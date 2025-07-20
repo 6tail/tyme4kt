@@ -7,6 +7,7 @@ import com.tyme.culture.Zodiac
 import com.tyme.culture.pengzu.PengZuEarthBranch
 import com.tyme.enums.HideHeavenStemType
 import com.tyme.enums.YinYang
+import kotlin.jvm.JvmStatic
 
 /**
  * 地支（地元）

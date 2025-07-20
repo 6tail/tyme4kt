@@ -4,6 +4,7 @@ import com.tyme.AbstractTyme
 import com.tyme.culture.Direction
 import com.tyme.culture.star.nine.NineStar
 import com.tyme.solar.SolarTerm
+import kotlin.jvm.JvmStatic
 
 /**
  * 干支月

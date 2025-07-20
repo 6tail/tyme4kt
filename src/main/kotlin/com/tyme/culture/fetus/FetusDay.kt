@@ -6,6 +6,7 @@ import com.tyme.enums.Side
 import com.tyme.lunar.LunarDay
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.sixtycycle.SixtyCycleDay
+import kotlin.jvm.JvmStatic
 
 /**
  * 逐日胎神
