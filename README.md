@@ -7,12 +7,12 @@ Tyme是一个非常强大的日历工具库，可以看作 [Lunar](https://6tail
 ```
 // build.gradle.kts
 dependencies {
-    implementation("cn.6tail:tyme4kt:1.3.6")
+    implementation("cn.6tail:tyme4kt:1.3.7")
 }
 
 // build.gradle
 dependencies {
-    implementation 'cn.6tail:tyme4kt:1.3.6'
+    implementation 'cn.6tail:tyme4kt:1.3.7'
 }
 ```
 

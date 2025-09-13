@@ -1,5 +1,10 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("multiplatform") version "2.0.21"
+    id("com.android.library") version "8.5.2"
     id("com.vanniktech.maven.publish") version "0.33.0"
 }
 
@@ -10,27 +15,39 @@ val artifactName: String by project
 group = groupName
 version = versionName
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
-}
-
-tasks.test {
-    useJUnitPlatform()
-}
-
 kotlin {
-    jvmToolchain(11)
+    androidTarget {
+        publishLibraryVariants("release")
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
+    jvm()
+    iosArm64()
+    iosSimulatorArm64()
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs().browser()
+
+    sourceSets {
+        commonMain.dependencies {
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+    }
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+android {
+    namespace = "com.tyme"
+    compileSdk = 34
+    defaultConfig {
+        minSdk = 24
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
 }
 
 mavenPublishing {

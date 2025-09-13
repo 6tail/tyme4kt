@@ -47,3 +47,5 @@ gradlew.bat
 gradle
 gradle/
 local.properties
+*.hprof
+kotlin-js-store/
