@@ -4,18 +4,15 @@ import com.tyme.eightchar.ChildLimit
 import com.tyme.eightchar.DecadeFortune
 import com.tyme.eightchar.EightChar
 import com.tyme.eightchar.Fortune
-import com.tyme.eightchar.provider.impl.China95ChildLimitProvider
-import com.tyme.eightchar.provider.impl.DefaultChildLimitProvider
-import com.tyme.eightchar.provider.impl.DefaultEightCharProvider
-import com.tyme.eightchar.provider.impl.LunarSect1ChildLimitProvider
-import com.tyme.eightchar.provider.impl.LunarSect2EightCharProvider
+import com.tyme.eightchar.provider.impl.*
 import com.tyme.enums.Gender
 import com.tyme.lunar.LunarHour
 import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarTime
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Assertions.*
 
 /**
  * 八字测试
@@ -648,6 +645,7 @@ class EightCharTest {
         }
 
         val expected: MutableList<String> = ArrayList()
+        expected.add("1904年3月6日 07:00:00")
         expected.add("1964年2月20日 08:00:00")
         expected.add("2024年2月5日 08:00:00")
         assertEquals(expected, actual)
@@ -794,5 +792,20 @@ class EightCharTest {
         assertEquals("己丑", eightChar.getBodySign().getName())
         assertEquals("癸酉", eightChar.getFetalOrigin().getName())
         assertEquals("甲午", eightChar.getFetalBreath().getName())
+    }
+
+    @Test
+    fun test50() {
+        val solarTimes: List<SolarTime> = EightChar("壬申", "壬寅", "庚辰", "甲申").getSolarTimes(1801, 2099)
+        val actual: MutableList<String> = ArrayList()
+        for (solarTime in solarTimes) {
+            actual.add(solarTime.toString())
+        }
+
+        val expected: MutableList<String> = ArrayList()
+        expected.add("1812年2月18日 16:00:00")
+        expected.add("1992年3月5日 15:00:00")
+        expected.add("2052年2月19日 16:00:00")
+        assertEquals(expected, actual)
     }
 }

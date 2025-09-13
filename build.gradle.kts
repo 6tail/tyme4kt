@@ -34,7 +34,7 @@ java {
 }
 
 mavenPublishing {
-    publishToMavenCentral()
+    publishToMavenCentral(automaticRelease = true)
     signAllPublications()
     coordinates(groupName, artifactName, versionName)
 

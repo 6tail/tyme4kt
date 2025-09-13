@@ -65,8 +65,7 @@ class LunarMonth : AbstractTyme {
         require(!(leap && m != currentLeapMonth)) { "illegal leap month $m in lunar year $year" }
 
         // 冬至
-        val dongZhi = SolarTerm(year, 0)
-        val dongZhiJd: Double = dongZhi.getCursoryJulianDay()
+        val dongZhiJd: Double = SolarTerm(year, 0).getCursoryJulianDay()
 
         // 冬至前的初一，今年首朔的日月黄经差
         var w: Double = ShouXingUtil.calcShuo(dongZhiJd)
@@ -299,7 +298,7 @@ class LunarMonth : AbstractTyme {
     fun getJupiterDirection(): Direction {
         val sixtyCycle: SixtyCycle = getSixtyCycle()
         val n: Int = intArrayOf(7, -1, 1, 3)[sixtyCycle.getEarthBranch().next(-2).getIndex() % 4]
-        return if (n == -1) sixtyCycle.getHeavenStem().getDirection() else Direction(n)
+        return if (n != -1) Direction(n) else sixtyCycle.getHeavenStem().getDirection()
     }
 
     /**

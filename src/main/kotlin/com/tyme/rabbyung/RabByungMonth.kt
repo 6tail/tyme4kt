@@ -271,7 +271,7 @@ class RabByungMonth: AbstractTyme {
                 while (ys.isNotEmpty()) {
                     val len: Int = ys[0].code - '0'.code
                     val data = IntArray(len)
-                    for (i in 0..<len) {
+                    for (i in 0 until len) {
                         data[i] = ys[i + 1].code - '5'.code - 30
                     }
                     DAYS[y * 13 + m] = data

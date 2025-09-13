@@ -190,8 +190,7 @@ class LunarHour(
         if (hour >= 23) {
             d = d.next(1)
         }
-        val heavenStemIndex: Int = d.getHeavenStem().getIndex() % 5 * 2 + earthBranchIndex
-        return SixtyCycle(HeavenStem(heavenStemIndex).getName() + EarthBranch(earthBranchIndex).getName())
+        return SixtyCycle(HeavenStem(d.getHeavenStem().getIndex() % 5 * 2 + earthBranchIndex).getName() + EarthBranch(earthBranchIndex).getName())
     }
 
     /**
@@ -211,14 +210,14 @@ class LunarHour(
     fun getNineStar(): NineStar {
         val solar: SolarDay = day.getSolarDay()
         val dongZhi = SolarTerm(solar.getYear(), 0)
-        val xiaZhi = dongZhi.next(12)
-        val asc: Boolean = !solar.isBefore(dongZhi.getJulianDay().getSolarDay()) && solar.isBefore(xiaZhi.getJulianDay().getSolarDay())
-        var start: Int = intArrayOf(8, 5, 2)[day.getSixtyCycle().getEarthBranch().getIndex() % 3]
-        if (asc) {
-            start = 8 - start
-        }
         val earthBranchIndex: Int = getIndexInDay() % 12
-        return NineStar(start + (if (asc) earthBranchIndex else -earthBranchIndex))
+        var index: Int = intArrayOf(8, 5, 2)[day.getSixtyCycle().getEarthBranch().getIndex() % 3]
+        if (!solar.isBefore(dongZhi.getJulianDay().getSolarDay()) && solar.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {
+            index = 8 + earthBranchIndex - index
+        } else {
+            index -= earthBranchIndex
+        }
+        return NineStar(index)
     }
 
     /**

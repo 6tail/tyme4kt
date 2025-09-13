@@ -178,11 +178,9 @@ class LunarDay(
     fun getNineStar(): NineStar {
         val d: SolarDay = getSolarDay()
         val dongZhi = SolarTerm(d.getYear(), 0)
-        val xiaZhi: SolarTerm = dongZhi.next(12)
-        val dongZhi2: SolarTerm = dongZhi.next(24)
         val dongZhiSolar: SolarDay = dongZhi.getJulianDay().getSolarDay()
-        val xiaZhiSolar: SolarDay = xiaZhi.getJulianDay().getSolarDay()
-        val dongZhiSolar2: SolarDay = dongZhi2.getJulianDay().getSolarDay()
+        val xiaZhiSolar: SolarDay = dongZhi.next(12).getJulianDay().getSolarDay()
+        val dongZhiSolar2: SolarDay = dongZhi.next(24).getJulianDay().getSolarDay()
         val dongZhiIndex: Int = dongZhiSolar.getLunarDay().getSixtyCycle().getIndex()
         val xiaZhiIndex: Int = xiaZhiSolar.getLunarDay().getSixtyCycle().getIndex()
         val dongZhiIndex2: Int = dongZhiSolar2.getLunarDay().getSixtyCycle().getIndex()

@@ -187,7 +187,10 @@ class EightChar: AbstractCulture {
                         mi = solarTime.getMinute()
                         s = solarTime.getSecond()
                     }
-                    val time = SolarTime(solarDay.getYear(), solarDay.getMonth(), solarDay.getDay(), hour, mi, s)
+                    var time = SolarTime(solarDay.getYear(), solarDay.getMonth(), solarDay.getDay(), hour, mi, s)
+                    if (d == 30) {
+                        time = time.next(-3600)
+                    }
                     // 验证一下
                     if (time.getLunarHour().getEightChar() == this) {
                         l.add(time)

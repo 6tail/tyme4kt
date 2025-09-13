@@ -44,7 +44,7 @@ class RabByungYear(
      * @return 生肖
      */
     fun getZodiac(): Zodiac {
-        return getSixtyCycle().getEarthBranch().getZodiac()
+        return sixtyCycle.getEarthBranch().getZodiac()
     }
 
     /**
@@ -53,7 +53,7 @@ class RabByungYear(
      * @return 藏历五行
      */
     fun getElement(): RabByungElement {
-        return RabByungElement(getSixtyCycle().getHeavenStem().getElement().getIndex())
+        return RabByungElement(sixtyCycle.getHeavenStem().getElement().getIndex())
     }
 
     /**
@@ -94,7 +94,7 @@ class RabByungYear(
      * @return 年
      */
     fun getYear(): Int {
-        return 1024 + rabByungIndex * 60 + getSixtyCycle().getIndex()
+        return 1024 + rabByungIndex * 60 + sixtyCycle.getIndex()
     }
 
     /**
@@ -151,7 +151,7 @@ class RabByungYear(
     fun getMonths(): List<RabByungMonth> {
         val l: MutableList<RabByungMonth> = ArrayList()
         val leapMonth: Int = getLeapMonth()
-        for (i in 1 until  13) {
+        for (i in 1 until 13) {
             l.add(RabByungMonth(this, i))
             if (i == leapMonth) {
                 l.add(RabByungMonth(this, -i))

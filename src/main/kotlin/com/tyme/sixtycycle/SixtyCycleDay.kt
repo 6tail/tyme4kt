@@ -64,7 +64,7 @@ class SixtyCycleDay: AbstractTyme {
         this.solarDay = solarDay
         month = SixtyCycleMonth(
             SixtyCycleYear(lunarYear.getYear()),
-            LunarMonth.fromYm(solarYear, 1).getSixtyCycle().next(floor(index * 1.0 / 2).toInt())
+            LunarMonth.fromYm(solarYear, 1).getSixtyCycle().next(floor(index * 0.5).toInt())
         )
         day = lunarDay.getSixtyCycle()
     }

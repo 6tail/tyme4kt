@@ -51,18 +51,17 @@ class JulianDay(private var day: Double) : AbstractTyme() {
             d += 1 + c - (c * 0.25).toInt()
         }
         d += 1524
-        var year: Int = ((d - 122.1) / 365.25).toInt()
-        d -= (365.25 * year).toInt()
-        var month = (d / 30.601).toInt()
-        d -= (30.601 * month).toInt()
-        val day: Int = d
-        if (month > 13) {
-            month -= 12
+        var y: Int = ((d - 122.1) / 365.25).toInt()
+        d -= (365.25 * y).toInt()
+        var m = (d / 30.601).toInt()
+        d -= (30.601 * m).toInt()
+        if (m > 13) {
+            m -= 12
         } else {
-            year -= 1
+            y -= 1
         }
-        month -= 1
-        year -= 4715
+        m -= 1
+        y -= 4715
         f *= 24.0
         val hour: Int = f.toInt()
 
@@ -73,7 +72,7 @@ class JulianDay(private var day: Double) : AbstractTyme() {
         f -= minute
         f *= 60.0
         val second: Int = Math.round(f).toInt()
-        return if (second < 60) SolarTime(year, month, day, hour, minute, second) else SolarTime(year, month, day, hour, minute, second - 60).next(60)
+        return if (second < 60) SolarTime(y, m, d, hour, minute, second) else SolarTime(y, m, d, hour, minute, second - 60).next(60)
     }
 
     /**

@@ -42,16 +42,10 @@ class FetusDay(sixtyCycle: SixtyCycle) : AbstractCulture() {
         } else if (s.startsWith("门")) {
             s = "占$s"
         }
-
         s += " "
+        s += if (Side.IN == side) "房内" else "外"
 
         val directionName: String = direction.getName()
-        if (Side.IN == side) {
-            s += "房内"
-        }else{
-            s += "外"
-        }
-
         if (Side.OUT == side && "北南西东".contains(directionName)) {
             s += "正"
         }

@@ -286,8 +286,7 @@ class SolarDay(
         // 芒种后的第1个丙日
         start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(2))
         // 小暑
-        val slightHeat: SolarTerm = grainInEar.next(2)
-        var end: SolarDay = slightHeat.getJulianDay().getSolarDay()
+        var end: SolarDay = grainInEar.next(2).getJulianDay().getSolarDay()
         // 小暑后的第1个未日
         end = end.next(end.getLunarDay().getSixtyCycle().getEarthBranch().stepsTo(7))
 
