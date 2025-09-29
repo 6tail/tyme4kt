@@ -2,6 +2,7 @@ package com.tyme.lunar
 
 import com.tyme.AbstractTyme
 import com.tyme.culture.*
+import com.tyme.culture.Phase
 import com.tyme.culture.fetus.FetusDay
 import com.tyme.culture.ren.MinorRen
 import com.tyme.culture.star.nine.NineStar
@@ -221,12 +222,29 @@ class LunarDay(
     }
 
     /**
+     * 月相第几天
+     *
+     * @return 月相第几天
+     */
+    fun getPhaseDay(): PhaseDay {
+        val today = getSolarDay()
+        val m = month.next(1)
+        var p = Phase.fromIndex(m.getYear(), m.getMonth(), 0)
+        var d = p.getSolarDay()
+        while (d.isAfter(today)) {
+            p = p.next(-1)
+            d = p.getSolarDay()
+        }
+        return PhaseDay(p, today.subtract(d))
+    }
+
+    /**
      * 月相
      *
      * @return 月相
      */
     fun getPhase(): Phase {
-        return Phase(day - 1)
+        return getPhaseDay().getPhase()
     }
 
     /**

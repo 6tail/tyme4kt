@@ -24,7 +24,7 @@ class Zodiac: LoopTyme {
      * @return 地支
      */
     fun getEarthBranch(): EarthBranch {
-        return EarthBranch(this.getIndex())
+        return EarthBranch(getIndex())
     }
 
     override fun equals(other: Any?): Boolean {

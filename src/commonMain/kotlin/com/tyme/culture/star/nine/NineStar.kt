@@ -25,7 +25,7 @@ class NineStar : LoopTyme {
      * @return 颜色
      */
     fun getColor(): String {
-        return arrayOf("白", "黑", "碧", "绿", "黄", "白", "赤", "白", "紫")[this.getIndex()]
+        return arrayOf("白", "黑", "碧", "绿", "黄", "白", "赤", "白", "紫")[getIndex()]
     }
 
     /**
@@ -34,7 +34,7 @@ class NineStar : LoopTyme {
      * @return 五行
      */
     fun getElement(): Element {
-        return Element(intArrayOf(4, 2, 0, 0, 2, 3, 3, 2, 1)[this.getIndex()])
+        return Element(intArrayOf(4, 2, 0, 0, 2, 3, 3, 2, 1)[getIndex()])
     }
 
     /**
@@ -43,7 +43,7 @@ class NineStar : LoopTyme {
      * @return 北斗九星
      */
     fun getDipper(): Dipper {
-        return Dipper(this.getIndex())
+        return Dipper(getIndex())
     }
 
     /**
@@ -52,7 +52,7 @@ class NineStar : LoopTyme {
      * @return 方位
      */
     fun getDirection(): Direction {
-        return Direction(this.getIndex())
+        return Direction(getIndex())
     }
 
     override fun toString(): String {

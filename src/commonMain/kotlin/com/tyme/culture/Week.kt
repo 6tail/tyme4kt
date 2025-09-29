@@ -20,7 +20,7 @@ class Week: LoopTyme {
 
     /** 七曜 */
     fun getSevenStar(): SevenStar {
-        return SevenStar(this.getIndex())
+        return SevenStar(getIndex())
     }
 
     companion object {

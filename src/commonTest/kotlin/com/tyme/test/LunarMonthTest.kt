@@ -55,12 +55,12 @@ class LunarMonthTest {
 
     @Test
     fun test8() {
-        assertEquals("丙辰", LunarMonth.fromYm(2023, -2).getSixtyCycle().getName())
+        assertEquals("乙卯", LunarMonth.fromYm(2023, -2).getSixtyCycle().getName())
     }
 
     @Test
     fun test9() {
-        assertEquals("丁巳", LunarMonth.fromYm(2023, 3).getSixtyCycle().getName())
+        assertEquals("丙辰", LunarMonth.fromYm(2023, 3).getSixtyCycle().getName())
     }
 
     @Test
@@ -70,7 +70,7 @@ class LunarMonthTest {
 
     @Test
     fun test11() {
-        assertEquals("丙寅", LunarMonth.fromYm(2023, 12).getSixtyCycle().getName())
+        assertEquals("乙丑", LunarMonth.fromYm(2023, 12).getSixtyCycle().getName())
     }
 
     @Test
@@ -155,14 +155,14 @@ class LunarMonthTest {
 
     @Test
     fun test28() {
-        assertEquals("癸亥", LunarMonth.fromYm(2023, 9).getSixtyCycle().toString())
+        assertEquals("壬戌", LunarMonth.fromYm(2023, 9).getSixtyCycle().toString())
     }
 
     @Test
     fun test29() {
         val solarDay = SolarDay(2023, 10, 7)
         val lunarDay = solarDay.getLunarDay()
-        assertEquals("壬戌", lunarDay.getLunarMonth().getSixtyCycle().toString())
+        assertEquals("辛酉", lunarDay.getLunarMonth().getSixtyCycle().toString())
         assertEquals("辛酉", lunarDay.getSixtyCycleDay().getMonth().toString())
         assertEquals("辛酉", solarDay.getSixtyCycleDay().getMonth().toString())
     }
@@ -171,7 +171,7 @@ class LunarMonthTest {
     fun test30() {
         val solarDay = SolarDay(2023, 10, 8)
         val lunarDay = solarDay.getLunarDay()
-        assertEquals("壬戌", lunarDay.getLunarMonth().getSixtyCycle().toString())
+        assertEquals("辛酉", lunarDay.getLunarMonth().getSixtyCycle().toString())
         assertEquals("壬戌", lunarDay.getSixtyCycleDay().getMonth().toString())
         assertEquals("壬戌", solarDay.getSixtyCycleDay().getMonth().toString())
     }
@@ -181,7 +181,7 @@ class LunarMonthTest {
         val solarDay = SolarDay(2023, 10, 15)
         val lunarDay = solarDay.getLunarDay()
         assertEquals("九月", lunarDay.getLunarMonth().getName())
-        assertEquals("癸亥", lunarDay.getLunarMonth().getSixtyCycle().toString())
+        assertEquals("壬戌", lunarDay.getLunarMonth().getSixtyCycle().toString())
         assertEquals("壬戌", lunarDay.getSixtyCycleDay().getMonth().toString())
         assertEquals("壬戌", solarDay.getSixtyCycleDay().getMonth().toString())
     }
@@ -190,7 +190,7 @@ class LunarMonthTest {
     fun test32() {
         val solarDay = SolarDay(2023, 11, 7)
         val lunarDay = solarDay.getLunarDay()
-        assertEquals("癸亥", lunarDay.getLunarMonth().getSixtyCycle().toString())
+        assertEquals("壬戌", lunarDay.getLunarMonth().getSixtyCycle().toString())
         assertEquals("壬戌", lunarDay.getSixtyCycleDay().getMonth().toString())
         assertEquals("壬戌", solarDay.getSixtyCycleDay().getMonth().toString())
     }
@@ -199,7 +199,7 @@ class LunarMonthTest {
     fun test33() {
         val solarDay = SolarDay(2023, 11, 8)
         val lunarDay = solarDay.getLunarDay()
-        assertEquals("癸亥", lunarDay.getLunarMonth().getSixtyCycle().toString())
+        assertEquals("壬戌", lunarDay.getLunarMonth().getSixtyCycle().toString())
         assertEquals("癸亥", lunarDay.getSixtyCycleDay().getMonth().toString())
         assertEquals("癸亥", solarDay.getSixtyCycleDay().getMonth().toString())
     }
@@ -238,7 +238,7 @@ class LunarMonthTest {
     fun test37() {
         val solarDay = SolarDay(2023, 10, 30)
         val lunarDay = solarDay.getLunarDay()
-        assertEquals("癸亥", lunarDay.getLunarMonth().getSixtyCycle().toString())
+        assertEquals("壬戌", lunarDay.getLunarMonth().getSixtyCycle().toString())
         assertEquals("壬戌", lunarDay.getSixtyCycleDay().getMonth().toString())
         assertEquals("壬戌", solarDay.getSixtyCycleDay().getMonth().toString())
     }
@@ -247,7 +247,7 @@ class LunarMonthTest {
     fun test38() {
         val solarDay = SolarDay(2023, 10, 19)
         val lunarDay = solarDay.getLunarDay()
-        assertEquals("癸亥", lunarDay.getLunarMonth().getSixtyCycle().toString())
+        assertEquals("壬戌", lunarDay.getLunarMonth().getSixtyCycle().toString())
         assertEquals("壬戌", lunarDay.getSixtyCycleDay().getMonth().toString())
         assertEquals("壬戌", solarDay.getSixtyCycleDay().getMonth().toString())
     }
@@ -256,7 +256,7 @@ class LunarMonthTest {
     fun test39() {
         val m = LunarMonth.fromYm(2023, 11)
         assertEquals("农历癸卯年十一月", m.toString())
-        assertEquals("乙丑", m.getSixtyCycle().toString())
+        assertEquals("甲子", m.getSixtyCycle().toString())
     }
 
     @Test

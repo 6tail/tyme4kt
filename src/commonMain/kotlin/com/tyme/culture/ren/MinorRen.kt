@@ -25,7 +25,7 @@ class MinorRen : LoopTyme {
      * @return 吉凶
      */
     fun getLuck(): Luck {
-        return Luck(this.getIndex() % 2)
+        return Luck(getIndex() % 2)
     }
 
     /**
@@ -34,7 +34,7 @@ class MinorRen : LoopTyme {
      * @return 五行
      */
     fun getElement(): Element {
-        return Element(intArrayOf(0, 4, 1, 3, 0, 2)[this.getIndex()])
+        return Element(intArrayOf(0, 4, 1, 3, 0, 2)[getIndex()])
     }
 
     companion object {

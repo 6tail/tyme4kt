@@ -19,12 +19,12 @@ class Direction: LoopTyme {
 
     /** 九野 */
     fun getLand(): Land {
-        return Land(this.getIndex())
+        return Land(getIndex())
     }
 
     /** 五行 */
     fun getElement(): Element {
-        return Element(intArrayOf(4, 2, 0, 0, 2, 3, 3, 2, 1)[this.getIndex()])
+        return Element(intArrayOf(4, 2, 0, 0, 2, 3, 3, 2, 1)[getIndex()])
     }
 
     companion object {

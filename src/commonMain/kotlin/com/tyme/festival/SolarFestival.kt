@@ -99,8 +99,6 @@ class SolarFestival(
 
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): SolarFestival? {
-            month.toString().padStart(2, '0')
-
             val matchResult = Regex("@\\d{2}0${month.pad2()}${day.pad2()}\\d+").find(DATA)
             if (matchResult != null) {
                 val data = matchResult.value

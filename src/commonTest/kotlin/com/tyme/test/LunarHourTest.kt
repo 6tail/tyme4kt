@@ -70,7 +70,7 @@ class LunarHourTest {
 
         assertEquals("甲子", sixtyCycleHour.getMonth().getName())
         assertEquals("农历癸卯年十一月", h.getLunarDay().getLunarMonth().toString())
-        assertEquals("乙丑", h.getLunarDay().getLunarMonth().getSixtyCycle().getName())
+        assertEquals("甲子", h.getLunarDay().getLunarMonth().getSixtyCycle().getName())
 
         assertEquals("癸卯", sixtyCycleHour.getYear().getName())
         assertEquals("农历癸卯年", h.getLunarDay().getLunarMonth().getLunarYear().toString())
@@ -89,7 +89,7 @@ class LunarHourTest {
 
         assertEquals("甲子", sixtyCycleHour.getMonth().getName())
         assertEquals("农历癸卯年十一月", h.getLunarDay().getLunarMonth().toString())
-        assertEquals("乙丑", h.getLunarDay().getLunarMonth().getSixtyCycle().getName())
+        assertEquals("甲子", h.getLunarDay().getLunarMonth().getSixtyCycle().getName())
 
         assertEquals("癸卯", sixtyCycleHour.getYear().getName())
         assertEquals("农历癸卯年", h.getLunarDay().getLunarMonth().getLunarYear().toString())

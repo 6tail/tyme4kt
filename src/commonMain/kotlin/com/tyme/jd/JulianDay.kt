@@ -101,6 +101,11 @@ class JulianDay(private var day: Double) : AbstractTyme() {
         const val J2000: Double = 2451545.0
 
         @JvmStatic
+        fun fromJulianDay(jd: Double): JulianDay {
+            return JulianDay(jd)
+        }
+
+        @JvmStatic
         fun fromYmdHms(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int): JulianDay {
             var y: Int = year
             var m: Int = month

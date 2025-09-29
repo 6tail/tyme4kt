@@ -24,7 +24,7 @@ class Ecliptic : LoopTyme {
      * @return 吉凶
      */
     fun getLuck(): Luck {
-        return Luck(this.getIndex())
+        return Luck(getIndex())
     }
 
     companion object {

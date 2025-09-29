@@ -19,7 +19,7 @@ class Beast: LoopTyme {
 
     /** 宫 */
     fun getZone(): Zone {
-        return Zone(this.getIndex())
+        return Zone(getIndex())
     }
 
     companion object {

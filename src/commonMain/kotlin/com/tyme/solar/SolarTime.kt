@@ -1,6 +1,7 @@
 package com.tyme.solar
 
 import com.tyme.AbstractTyme
+import com.tyme.culture.Phase
 import com.tyme.culture.phenology.Phenology
 import com.tyme.jd.JulianDay
 import com.tyme.lunar.LunarHour
@@ -247,6 +248,20 @@ class SolarTime(
      */
     fun getSixtyCycleHour(): SixtyCycleHour {
         return SixtyCycleHour(this)
+    }
+
+    /**
+     * 月相
+     *
+     * @return 月相
+     */
+    fun getPhase(): Phase {
+        val month = getLunarHour().getLunarDay().getLunarMonth().next(1)
+        var p = Phase.fromIndex(month.getYear(), month.getMonth(), 0)
+        while (p.getSolarTime().isAfter(this)) {
+            p = p.next(-1)
+        }
+        return p
     }
 
     override fun equals(other: Any?): Boolean {

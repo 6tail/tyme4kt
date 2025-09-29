@@ -275,7 +275,7 @@ class LunarMonth : AbstractTyme {
      * @return 干支
      */
      fun getSixtyCycle(): SixtyCycle {
-         return SixtyCycle(HeavenStem((year.getSixtyCycle().getHeavenStem().getIndex() + 1) * 2 + indexInYear).getName() + EarthBranch(indexInYear + 2).getName())
+         return SixtyCycle(HeavenStem(year.getSixtyCycle().getHeavenStem().getIndex() * 2 + month + 1).getName() + EarthBranch(month + 1).getName())
      }
 
      /**

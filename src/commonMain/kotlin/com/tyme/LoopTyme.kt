@@ -10,7 +10,7 @@ abstract class LoopTyme : AbstractTyme {
     protected var names: Array<String>
 
     /** 索引，从0开始 */
-    private var index: Int
+    protected var _index: Int
 
     /**
      * 通过索引初始化
@@ -20,7 +20,7 @@ abstract class LoopTyme : AbstractTyme {
      */
     protected constructor(names: Array<String>, index: Int) {
         this.names = names
-        this.index = indexOf(index)
+        this._index = indexOf(index)
     }
 
     /**
@@ -31,7 +31,7 @@ abstract class LoopTyme : AbstractTyme {
      */
     protected constructor(names: Array<String>, name: String) {
         this.names = names
-        this.index = indexOf(name)
+        this._index = indexOf(name)
     }
 
     /**
@@ -40,12 +40,12 @@ abstract class LoopTyme : AbstractTyme {
      * @return 名称
      */
     override fun getName(): String {
-        return names[index]
+        return names[_index]
     }
 
     /** 索引，从0开始 */
     fun getIndex(): Int{
-        return index
+        return _index
     }
 
     /** 数量 */
@@ -88,7 +88,7 @@ abstract class LoopTyme : AbstractTyme {
      * @return 索引，从0开始
      */
     protected fun nextIndex(n: Int): Int {
-        return indexOf(index + n)
+        return indexOf(_index + n)
     }
 
     /**
@@ -98,6 +98,6 @@ abstract class LoopTyme : AbstractTyme {
      * @return 步数
      */
     fun stepsTo(targetIndex: Int): Int {
-        return indexOf(targetIndex - index)
+        return indexOf(targetIndex - _index)
     }
 }

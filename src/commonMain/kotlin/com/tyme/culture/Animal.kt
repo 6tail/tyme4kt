@@ -21,7 +21,7 @@ class Animal: LoopTyme {
 
     /** 二十八宿 */
     fun getTwentyEightStar(): TwentyEightStar {
-        return TwentyEightStar(this.getIndex())
+        return TwentyEightStar(getIndex())
     }
 
     companion object {

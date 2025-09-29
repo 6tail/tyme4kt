@@ -25,7 +25,7 @@ class God: LoopTyme {
      * @return 吉凶
      */
     fun getLuck(): Luck {
-        return Luck(if (this.getIndex() < 60) 0 else 1)
+        return Luck(if (getIndex() < 60) 0 else 1)
     }
 
     companion object {

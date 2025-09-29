@@ -2,6 +2,8 @@ package com.tyme.solar
 
 import com.tyme.AbstractTyme
 import com.tyme.culture.Constellation
+import com.tyme.culture.Phase
+import com.tyme.culture.PhaseDay
 import com.tyme.culture.Week
 import com.tyme.culture.dog.Dog
 import com.tyme.culture.dog.DogDay
@@ -414,6 +416,31 @@ class SolarDay(
      */
     fun getFestival(): SolarFestival? {
         return SolarFestival.fromYmd(getYear(), getMonth(), day)
+    }
+
+    /**
+     * 月相第几天
+     *
+     * @return 月相第几天
+     */
+    fun getPhaseDay(): PhaseDay {
+        val month = getLunarDay().getLunarMonth().next(1)
+        var p = Phase.fromIndex(month.getYear(), month.getMonth(), 0)
+        var d = p.getSolarDay()
+        while (d.isAfter(this)) {
+            p = p.next(-1)
+            d = p.getSolarDay()
+        }
+        return PhaseDay(p, subtract(d))
+    }
+
+    /**
+     * 月相
+     *
+     * @return 月相
+     */
+    fun getPhase(): Phase {
+        return getPhaseDay().getPhase()
     }
 
     override fun equals(other: Any?): Boolean {

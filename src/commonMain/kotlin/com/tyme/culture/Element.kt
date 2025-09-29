@@ -59,7 +59,7 @@ open class Element: LoopTyme {
      * @return 方位
      */
     fun getDirection(): Direction {
-        return Direction(intArrayOf(2, 8, 4, 6, 0)[this.getIndex()])
+        return Direction(intArrayOf(2, 8, 4, 6, 0)[getIndex()])
     }
 
     companion object {

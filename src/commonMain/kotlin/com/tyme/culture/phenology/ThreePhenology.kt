@@ -18,7 +18,7 @@ class ThreePhenology: LoopTyme {
     }
 
     fun getThreePhenology(): ThreePhenology {
-        return ThreePhenology(this.getIndex() % 3)
+        return ThreePhenology(getIndex() % 3)
     }
 
     companion object {

@@ -19,7 +19,7 @@ class Land: LoopTyme {
 
     /** 方位 */
     fun getDirection(): Direction {
-        return Direction(this.getIndex())
+        return Direction(getIndex())
     }
 
     companion object {

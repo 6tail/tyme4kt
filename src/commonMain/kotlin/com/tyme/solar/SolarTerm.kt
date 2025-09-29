@@ -23,7 +23,7 @@ class SolarTerm: LoopTyme {
     }
 
     constructor(year: Int, name: String) : super(NAMES, name) {
-        initByYear(year, this.getIndex())
+        initByYear(year, getIndex())
     }
 
     protected fun initByYear(year: Int, offset: Int) {
