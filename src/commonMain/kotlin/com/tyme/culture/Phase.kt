@@ -24,7 +24,7 @@ class Phase: LoopTyme {
     constructor(lunarYear: Int, lunarMonth: Int, index: Int): super(NAMES, index) {
         val m = LunarMonth.fromYm(lunarYear, lunarMonth).next(index / getSize())
         this.lunarYear = m.getYear()
-        this.lunarMonth = m.getMonth()
+        this.lunarMonth = m.getMonthWithLeap()
     }
 
     constructor(lunarYear: Int, lunarMonth: Int, name: String): super(NAMES, name) {
@@ -43,7 +43,7 @@ class Phase: LoopTyme {
         if (i != 0) {
             m = m.next(i)
         }
-        return fromIndex(m.getYear(), m.getMonth(), nextIndex(n))
+        return fromIndex(m.getYear(), m.getMonthWithLeap(), nextIndex(n))
     }
 
     protected fun getStartSolarTime(): SolarTime {

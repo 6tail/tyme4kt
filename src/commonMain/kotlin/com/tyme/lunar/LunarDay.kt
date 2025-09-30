@@ -229,7 +229,7 @@ class LunarDay(
     fun getPhaseDay(): PhaseDay {
         val today = getSolarDay()
         val m = month.next(1)
-        var p = Phase.fromIndex(m.getYear(), m.getMonth(), 0)
+        var p = Phase.fromIndex(m.getYear(), m.getMonthWithLeap(), 0)
         var d = p.getSolarDay()
         while (d.isAfter(today)) {
             p = p.next(-1)

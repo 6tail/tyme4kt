@@ -425,7 +425,7 @@ class SolarDay(
      */
     fun getPhaseDay(): PhaseDay {
         val month = getLunarDay().getLunarMonth().next(1)
-        var p = Phase.fromIndex(month.getYear(), month.getMonth(), 0)
+        var p = Phase.fromIndex(month.getYear(), month.getMonthWithLeap(), 0)
         var d = p.getSolarDay()
         while (d.isAfter(this)) {
             p = p.next(-1)
