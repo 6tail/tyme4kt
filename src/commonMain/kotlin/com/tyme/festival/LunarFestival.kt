@@ -152,7 +152,7 @@ class LunarFestival(
             for (match in matches) {
                 val data: String = match.value
                 val solarTerm = SolarTerm(year, data.substring(4).toInt(10))
-                val lunarDay = solarTerm.getJulianDay().getSolarDay().getLunarDay()
+                val lunarDay = solarTerm.getSolarDay().getLunarDay()
                 if (lunarDay.getYear() == year && lunarDay.getMonth() == month && lunarDay.getDay() == day) {
                     return LunarFestival(FestivalType.TERM, lunarDay, solarTerm, data)
                 }

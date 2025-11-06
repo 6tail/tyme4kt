@@ -96,7 +96,7 @@ class SixtyCycleMonth(
      * @return 干支日
      */
     fun getFirstDay(): SixtyCycleDay {
-        return SixtyCycleDay(SolarTerm(year.getYear(), 3 + getIndexInYear() * 2).getJulianDay().getSolarDay())
+        return SixtyCycleDay(SolarTerm(year.getYear(), 3 + getIndexInYear() * 2).getSolarDay())
     }
 
     /**

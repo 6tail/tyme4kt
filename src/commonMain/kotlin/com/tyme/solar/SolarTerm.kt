@@ -2,6 +2,7 @@ package com.tyme.solar
 
 import com.tyme.LoopTyme
 import com.tyme.jd.JulianDay
+import com.tyme.jd.JulianDay.Companion.fromJulianDay
 import com.tyme.util.ShouXingUtil
 import kotlin.jvm.JvmStatic
 import kotlin.math.floor
@@ -14,7 +15,7 @@ import kotlin.math.floor
 class SolarTerm: LoopTyme {
     /** 年 */
     private var year: Int = 0
-    /** 粗略的儒略日 */
+    /** 儒略日（用于日历，只精确到日中午12:00） */
     private var cursoryJulianDay: Double = 0.0
 
     constructor(year: Int, index: Int) : super(NAMES, index) {
@@ -62,12 +63,21 @@ class SolarTerm: LoopTyme {
     }
 
     /**
-     * 儒略日
+     * 儒略日（精确到秒）
      *
      * @return 儒略日
      */
     fun getJulianDay(): JulianDay {
         return JulianDay(ShouXingUtil.qiAccurate2(cursoryJulianDay) + JulianDay.J2000)
+    }
+
+    /**
+     * 公历日（用于日历）
+     *
+     * @return 公历日
+     */
+    fun getSolarDay(): SolarDay {
+        return fromJulianDay(cursoryJulianDay + JulianDay.J2000).getSolarDay()
     }
 
     /**
@@ -80,7 +90,7 @@ class SolarTerm: LoopTyme {
     }
 
     /**
-     * 粗略的儒略日
+     * 儒略日（用于日历，只精确到日中午12:00）
      *
      * @return 儒略日数
      */

@@ -173,10 +173,10 @@ class SolarDay(
             i = 0
         }
         var term = SolarTerm(y, i)
-        var day: SolarDay = term.getJulianDay().getSolarDay()
+        var day: SolarDay = term.getSolarDay()
         while (isBefore(day)) {
             term = term.next(-1)
-            day = term.getJulianDay().getSolarDay()
+            day = term.getSolarDay()
         }
         return SolarTermDay(term, subtract(day))
     }
@@ -227,7 +227,7 @@ class SolarDay(
         // 夏至
         val xiaZhi = SolarTerm(getYear(), 12)
         // 第1个庚日
-        var start: SolarDay = xiaZhi.getJulianDay().getSolarDay()
+        var start: SolarDay = xiaZhi.getSolarDay()
         // 第3个庚日，即初伏第1天
         start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(6) + 20)
         var days: Int = subtract(start)
@@ -248,7 +248,7 @@ class SolarDay(
         start = start.next(10)
         days = subtract(start)
         // 立秋
-        if (xiaZhi.next(3).getJulianDay().getSolarDay().isAfter(start)) {
+        if (xiaZhi.next(3).getSolarDay().isAfter(start)) {
             if (days < 10) {
                 return DogDay(Dog(1), days + 10)
             }
@@ -265,9 +265,9 @@ class SolarDay(
      */
     fun getNineDay(): NineDay? {
         val year: Int = getYear()
-        var start: SolarDay = SolarTerm(year + 1, 0).getJulianDay().getSolarDay()
+        var start: SolarDay = SolarTerm(year + 1, 0).getSolarDay()
         if (isBefore(start)) {
-            start = SolarTerm(year, 0).getJulianDay().getSolarDay()
+            start = SolarTerm(year, 0).getSolarDay()
         }
         val end = start.next(81)
         if (isBefore(start) || !isBefore(end)) {
@@ -285,11 +285,11 @@ class SolarDay(
     fun getPlumRainDay(): PlumRainDay? {
         // 芒种
         val grainInEar = SolarTerm(getYear(), 11)
-        var start: SolarDay = grainInEar.getJulianDay().getSolarDay()
+        var start: SolarDay = grainInEar.getSolarDay()
         // 芒种后的第1个丙日
         start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(2))
         // 小暑
-        var end: SolarDay = grainInEar.next(2).getJulianDay().getSolarDay()
+        var end: SolarDay = grainInEar.next(2).getSolarDay()
         // 小暑后的第1个未日
         end = end.next(end.getLunarDay().getSixtyCycle().getEarthBranch().stepsTo(7))
 
@@ -310,7 +310,7 @@ class SolarDay(
         if (term.isQi()) {
             term = term.next(-1)
         }
-        var dayIndex: Int = subtract(term.getJulianDay().getSolarDay())
+        var dayIndex: Int = subtract(term.getSolarDay())
         val startIndex: Int = (term.getIndex() - 1) * 3
         val data: String = "93705542220504xx1513904541632524533533105544806564xx7573304542018584xx95".substring(startIndex, startIndex + 6)
         var days = 0

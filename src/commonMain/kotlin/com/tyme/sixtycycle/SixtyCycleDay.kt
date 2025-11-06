@@ -1,11 +1,7 @@
 package com.tyme.sixtycycle
 
 import com.tyme.AbstractTyme
-import com.tyme.culture.Direction
-import com.tyme.culture.Duty
-import com.tyme.culture.Element
-import com.tyme.culture.God
-import com.tyme.culture.Taboo
+import com.tyme.culture.*
 import com.tyme.culture.fetus.FetusDay
 import com.tyme.culture.star.nine.NineStar
 import com.tyme.culture.star.twelve.TwelveStar
@@ -45,7 +41,7 @@ class SixtyCycleDay: AbstractTyme {
      */
     constructor(solarDay: SolarDay) {
         val solarYear: Int = solarDay.getYear()
-        val springSolarDay: SolarDay = SolarTerm(solarYear, 3).getJulianDay().getSolarDay()
+        val springSolarDay: SolarDay = SolarTerm(solarYear, 3).getSolarDay()
         val lunarDay: LunarDay = solarDay.getLunarDay()
         var lunarYear: LunarYear = lunarDay.getLunarMonth().getLunarYear()
         if (lunarYear.getYear() == solarYear) {
@@ -59,7 +55,7 @@ class SixtyCycleDay: AbstractTyme {
         }
         val term: SolarTerm = solarDay.getTerm()
         var index: Int = term.getIndex() - 3
-        if (index < 0 && term.getJulianDay().getSolarDay().isAfter(springSolarDay)) {
+        if (index < 0 && term.getSolarDay().isAfter(springSolarDay)) {
             index += 24
         }
         this.solarDay = solarDay
@@ -151,9 +147,9 @@ class SixtyCycleDay: AbstractTyme {
         val dongZhi = SolarTerm(solar.getYear(), 0)
         val xiaZhi: SolarTerm = dongZhi.next(12)
         val dongZhi2: SolarTerm = dongZhi.next(24)
-        val dongZhiSolar: SolarDay = dongZhi.getJulianDay().getSolarDay()
-        val xiaZhiSolar: SolarDay = xiaZhi.getJulianDay().getSolarDay()
-        val dongZhiSolar2: SolarDay = dongZhi2.getJulianDay().getSolarDay()
+        val dongZhiSolar: SolarDay = dongZhi.getSolarDay()
+        val xiaZhiSolar: SolarDay = xiaZhi.getSolarDay()
+        val dongZhiSolar2: SolarDay = dongZhi2.getSolarDay()
         val dongZhiIndex: Int = dongZhiSolar.getLunarDay().getSixtyCycle().getIndex()
         val xiaZhiIndex: Int = xiaZhiSolar.getLunarDay().getSixtyCycle().getIndex()
         val dongZhiIndex2: Int = dongZhiSolar2.getLunarDay().getSixtyCycle().getIndex()
@@ -253,6 +249,15 @@ class SixtyCycleDay: AbstractTyme {
             l.add(h)
         }
         return l
+    }
+
+    /**
+     * 三柱
+     *
+     * @return 三柱
+     */
+    fun getThreePillars(): ThreePillars {
+        return ThreePillars(getYear(), getMonth(), getSixtyCycle())
     }
 
     companion object {

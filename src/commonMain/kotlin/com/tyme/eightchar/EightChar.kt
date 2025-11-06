@@ -4,6 +4,7 @@ import com.tyme.AbstractCulture
 import com.tyme.sixtycycle.EarthBranch
 import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
+import com.tyme.sixtycycle.ThreePillars
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTime
@@ -15,12 +16,8 @@ import kotlin.math.ceil
  * @author 6tail
  */
 class EightChar: AbstractCulture {
-    /** 年柱 */
-    private var year: SixtyCycle
-    /** 月柱 */
-    private var month: SixtyCycle
-    /** 日柱 */
-    private var day: SixtyCycle
+    /** 三柱 */
+    private var threePillars: ThreePillars
     /** 时柱 */
     private var hour: SixtyCycle
 
@@ -33,16 +30,12 @@ class EightChar: AbstractCulture {
      * @param hour  时柱
      */
     constructor(year: String, month: String, day: String, hour: String): super() {
-        this.year = SixtyCycle(year)
-        this.month = SixtyCycle(month)
-        this.day = SixtyCycle(day)
+        threePillars = ThreePillars(year, month, day)
         this.hour = SixtyCycle(hour)
     }
 
     constructor(year: SixtyCycle, month: SixtyCycle, day: SixtyCycle, hour: SixtyCycle): super() {
-        this.year = year
-        this.month = month
-        this.day = day
+        threePillars = ThreePillars(year, month, day)
         this.hour = hour
     }
 
@@ -52,7 +45,7 @@ class EightChar: AbstractCulture {
      * @return 年柱
      */
     fun getYear(): SixtyCycle {
-        return year
+        return threePillars.getYear()
     }
 
     /**
@@ -61,7 +54,7 @@ class EightChar: AbstractCulture {
      * @return 月柱
      */
     fun getMonth(): SixtyCycle {
-        return month
+        return threePillars.getMonth()
     }
 
     /**
@@ -70,7 +63,7 @@ class EightChar: AbstractCulture {
      * @return 日柱
      */
     fun getDay(): SixtyCycle {
-        return day
+        return threePillars.getDay()
     }
 
     /**
@@ -88,7 +81,8 @@ class EightChar: AbstractCulture {
      * @return 胎元
      */
     fun getFetalOrigin(): SixtyCycle {
-        return SixtyCycle(month.getHeavenStem().next(1).getName() + month.getEarthBranch().next(3).getName())
+        val m = getMonth()
+        return SixtyCycle(m.getHeavenStem().next(1).getName() + m.getEarthBranch().next(3).getName())
     }
 
     /**
@@ -97,7 +91,8 @@ class EightChar: AbstractCulture {
      * @return 胎息
      */
     fun getFetalBreath(): SixtyCycle {
-        return SixtyCycle(day.getHeavenStem().next(5).getName() + EarthBranch(13 - day.getEarthBranch().getIndex()).getName())
+        val d = getDay()
+        return SixtyCycle(d.getHeavenStem().next(5).getName() + EarthBranch(13 - d.getEarthBranch().getIndex()).getName())
     }
 
     /**
@@ -106,7 +101,7 @@ class EightChar: AbstractCulture {
      * @return 命宫
      */
     fun getOwnSign(): SixtyCycle {
-        var m: Int = month.getEarthBranch().getIndex() - 1
+        var m: Int = getMonth().getEarthBranch().getIndex() - 1
         if (m < 1) {
             m += 12
         }
@@ -116,7 +111,7 @@ class EightChar: AbstractCulture {
         }
         var offset: Int = m + h
         offset = (if (offset >= 14) 26 else 14) - offset
-        return SixtyCycle(HeavenStem((year.getHeavenStem().getIndex() + 1) * 2 + offset - 1).getName() + EarthBranch(offset + 1).getName())
+        return SixtyCycle(HeavenStem((getYear().getHeavenStem().getIndex() + 1) * 2 + offset - 1).getName() + EarthBranch(offset + 1).getName())
     }
 
     /**
@@ -125,7 +120,7 @@ class EightChar: AbstractCulture {
      * @return 身宫
      */
     fun getBodySign(): SixtyCycle {
-        var offset: Int = month.getEarthBranch().getIndex() - 1
+        var offset: Int = getMonth().getEarthBranch().getIndex() - 1
         if (offset < 1) {
             offset += 12
         }
@@ -133,7 +128,7 @@ class EightChar: AbstractCulture {
         if (offset > 12) {
             offset -= 12
         }
-        return SixtyCycle(HeavenStem((year.getHeavenStem().getIndex() + 1) * 2 + offset - 1).getName() + EarthBranch(offset + 1).getName())
+        return SixtyCycle(HeavenStem((getYear().getHeavenStem().getIndex() + 1) * 2 + offset - 1).getName() + EarthBranch(offset + 1).getName())
     }
 
     /**
@@ -145,6 +140,9 @@ class EightChar: AbstractCulture {
      */
     fun getSolarTimes(startYear: Int, endYear: Int): List<SolarTime> {
         val l: MutableList<SolarTime> = ArrayList()
+        val year = getYear()
+        val month = getMonth()
+        val day = getDay()
         // 月地支距寅月的偏移值
         var m: Int = month.getEarthBranch().next(-2).getIndex()
         // 月天干要一致
@@ -203,7 +201,7 @@ class EightChar: AbstractCulture {
     }
 
     override fun getName(): String {
-        return "$year $month $day $hour"
+        return "$threePillars $hour"
     }
 
     override fun equals(other: Any?): Boolean {

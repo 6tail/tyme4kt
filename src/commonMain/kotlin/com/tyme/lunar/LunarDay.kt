@@ -2,7 +2,6 @@ package com.tyme.lunar
 
 import com.tyme.AbstractTyme
 import com.tyme.culture.*
-import com.tyme.culture.Phase
 import com.tyme.culture.fetus.FetusDay
 import com.tyme.culture.ren.MinorRen
 import com.tyme.culture.star.nine.NineStar
@@ -10,10 +9,7 @@ import com.tyme.culture.star.six.SixStar
 import com.tyme.culture.star.twelve.TwelveStar
 import com.tyme.culture.star.twentyeight.TwentyEightStar
 import com.tyme.festival.LunarFestival
-import com.tyme.sixtycycle.EarthBranch
-import com.tyme.sixtycycle.HeavenStem
-import com.tyme.sixtycycle.SixtyCycle
-import com.tyme.sixtycycle.SixtyCycleDay
+import com.tyme.sixtycycle.*
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTerm
 import kotlin.jvm.JvmStatic
@@ -180,9 +176,9 @@ class LunarDay(
     fun getNineStar(): NineStar {
         val d: SolarDay = getSolarDay()
         val dongZhi = SolarTerm(d.getYear(), 0)
-        val dongZhiSolar: SolarDay = dongZhi.getJulianDay().getSolarDay()
-        val xiaZhiSolar: SolarDay = dongZhi.next(12).getJulianDay().getSolarDay()
-        val dongZhiSolar2: SolarDay = dongZhi.next(24).getJulianDay().getSolarDay()
+        val dongZhiSolar: SolarDay = dongZhi.getSolarDay()
+        val xiaZhiSolar: SolarDay = dongZhi.next(12).getSolarDay()
+        val dongZhiSolar2: SolarDay = dongZhi.next(24).getSolarDay()
         val dongZhiIndex: Int = dongZhiSolar.getLunarDay().getSixtyCycle().getIndex()
         val xiaZhiIndex: Int = xiaZhiSolar.getLunarDay().getSixtyCycle().getIndex()
         val dongZhiIndex2: Int = dongZhiSolar2.getLunarDay().getSixtyCycle().getIndex()
@@ -350,6 +346,15 @@ class LunarDay(
      */
     fun getMinorRen(): MinorRen {
         return getLunarMonth().getMinorRen().next(day - 1)
+    }
+
+    /**
+     * 三柱
+     *
+     * @return 三柱
+     */
+    fun getThreePillars(): ThreePillars {
+        return getSixtyCycleDay().getThreePillars()
     }
 
     override fun equals(other: Any?): Boolean {

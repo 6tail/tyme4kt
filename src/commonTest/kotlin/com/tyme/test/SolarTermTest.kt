@@ -2,6 +2,7 @@ package com.tyme.test
 
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTerm
+import com.tyme.solar.SolarTerm.Companion.fromName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,24 +20,28 @@ class SolarTermTest {
         assertEquals(0, dongZhi.getIndex().toLong())
         // 公历日
         assertEquals("2022年12月22日", dongZhi.getJulianDay().getSolarDay().toString())
+        assertEquals("2022年12月22日", dongZhi.getSolarDay().toString())
 
         // 冬至顺推23次，就是大雪 2023-12-07 17:32:44
         val daXue = dongZhi.next(23)
         assertEquals("大雪", daXue.getName())
         assertEquals(23, daXue.getIndex().toLong())
         assertEquals("2023年12月7日", daXue.getJulianDay().getSolarDay().toString())
+        assertEquals("2023年12月7日", daXue.getSolarDay().toString())
 
         // 冬至逆推2次，就是上一年的小雪 2022-11-22 16:20:18
         val xiaoXue = dongZhi.next(-2)
         assertEquals("小雪", xiaoXue.getName())
         assertEquals(22, xiaoXue.getIndex().toLong())
         assertEquals("2022年11月22日", xiaoXue.getJulianDay().getSolarDay().toString())
+        assertEquals("2022年11月22日", xiaoXue.getSolarDay().toString())
 
         // 冬至顺推24次，就是下一个冬至 2023-12-22 11:27:09
         val dongZhi2 = dongZhi.next(24)
         assertEquals("冬至", dongZhi2.getName())
         assertEquals(0, dongZhi2.getIndex().toLong())
         assertEquals("2023年12月22日", dongZhi2.getJulianDay().getSolarDay().toString())
+        assertEquals("2023年12月22日", dongZhi2.getSolarDay().toString())
     }
 
     @Test
@@ -56,6 +61,7 @@ class SolarTermTest {
         assertEquals(23, jq.getIndex().toLong())
         // 公历
         assertEquals("2023年12月7日", jq.getJulianDay().getSolarDay().toString())
+        assertEquals("2023年12月7日", jq.getSolarDay().toString())
         // 农历
         assertEquals("农历癸卯年十月廿五", jq.getJulianDay().getSolarDay().getLunarDay().toString())
         // 推移
@@ -83,14 +89,13 @@ class SolarTermTest {
     @Test
     fun test5() {
         assertEquals("2024年1月6日 04:49:22", SolarTerm(2024, "小寒").getJulianDay().getSolarTime().toString())
+        assertEquals("2024年1月6日", SolarTerm(2024, "小寒").getSolarDay().toString())
     }
 
     @Test
-    fun test100(){
-        for(year in 2005..2030){
-            for (index in 0..24) {
-                println(SolarTerm(year, index).getJulianDay().getSolarTime().toString())
-            }
-        }
+    fun test6(){
+        assertEquals("1034年10月1日", fromName(1034, "寒露").getSolarDay().toString())
+        assertEquals("1034年10月3日", fromName(1034, "寒露").getJulianDay().getSolarDay().toString())
+        assertEquals("1034年10月3日 06:02:28", fromName(1034, "寒露").getJulianDay().getSolarTime().toString())
     }
 }
