@@ -2,7 +2,6 @@ package com.tyme.test
 
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTerm
-import com.tyme.solar.SolarTerm.Companion.fromName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -94,8 +93,8 @@ class SolarTermTest {
 
     @Test
     fun test6(){
-        assertEquals("1034年10月1日", fromName(1034, "寒露").getSolarDay().toString())
-        assertEquals("1034年10月3日", fromName(1034, "寒露").getJulianDay().getSolarDay().toString())
-        assertEquals("1034年10月3日 06:02:28", fromName(1034, "寒露").getJulianDay().getSolarTime().toString())
+        assertEquals("1034年10月1日", SolarTerm.fromName(1034, "寒露").getSolarDay().toString())
+        assertEquals("1034年10月3日", SolarTerm.fromName(1034, "寒露").getJulianDay().getSolarDay().toString())
+        assertEquals("1034年10月3日 06:02:28", SolarTerm.fromName(1034, "寒露").getJulianDay().getSolarTime().toString())
     }
 }

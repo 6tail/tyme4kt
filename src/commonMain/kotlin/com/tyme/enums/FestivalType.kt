@@ -38,22 +38,12 @@ enum class FestivalType(private val code: Int) {
          */
         @JvmStatic
         fun fromName(name: String): FestivalType? {
-            for (entry in entries) {
-                if (entry.getName() == name) {
-                    return entry
-                }
-            }
-            return null
+            return FestivalType.entries.find { it.getName() == name }
         }
 
         @JvmStatic
         fun fromCode(code: Int): FestivalType? {
-            for (entry in entries) {
-                if (entry.code == code) {
-                    return entry
-                }
-            }
-            return null
+            return FestivalType.entries.find { it.code == code }
         }
     }
 }

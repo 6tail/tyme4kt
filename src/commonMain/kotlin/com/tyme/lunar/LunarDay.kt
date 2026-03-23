@@ -8,7 +8,9 @@ import com.tyme.culture.star.six.SixStar
 import com.tyme.culture.star.twelve.TwelveStar
 import com.tyme.culture.star.twentyeight.TwentyEightStar
 import com.tyme.festival.LunarFestival
-import com.tyme.sixtycycle.*
+import com.tyme.sixtycycle.SixtyCycle
+import com.tyme.sixtycycle.SixtyCycleDay
+import com.tyme.sixtycycle.ThreePillars
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTerm
 import com.tyme.unit.DayUnit
@@ -62,7 +64,8 @@ class LunarDay(
             return year < target.year
         }
         if (month != target.month) {
-            return abs(month) < abs(target.month)
+            val t: Int = abs(target.month)
+            return month == t || abs(month) < t
         }
         return day < target.day
     }
@@ -78,7 +81,8 @@ class LunarDay(
             return year > target.year
         }
         if (month != target.month) {
-            return abs(month) >= abs(target.month)
+            val t: Int = abs(month)
+            return t == target.month || t > abs(target.month)
         }
         return day > target.day
     }
@@ -98,8 +102,7 @@ class LunarDay(
      * @return 干支
      */
     fun getSixtyCycle(): SixtyCycle {
-        val offset: Int = getLunarMonth().getFirstJulianDay().next(day - 12).getDay().toInt()
-        return SixtyCycle(HeavenStem(offset).getName() + EarthBranch(offset).getName())
+        return SixtyCycle(getLunarMonth().getFirstJulianDay().next(day - 12).getDay().toInt())
     }
 
     /**
@@ -129,27 +132,25 @@ class LunarDay(
      */
     fun getNineStar(): NineStar {
         val d: SolarDay = getSolarDay()
-        val dongZhi = SolarTerm(d.year, 0)
-        val dongZhiSolar: SolarDay = dongZhi.getSolarDay()
-        val xiaZhiSolar: SolarDay = dongZhi.next(12).getSolarDay()
-        val dongZhiSolar2: SolarDay = dongZhi.next(24).getSolarDay()
-        val dongZhiIndex: Int = dongZhiSolar.getLunarDay().getSixtyCycle().getIndex()
-        val xiaZhiIndex: Int = xiaZhiSolar.getLunarDay().getSixtyCycle().getIndex()
-        val dongZhiIndex2: Int = dongZhiSolar2.getLunarDay().getSixtyCycle().getIndex()
-        val solarShunBai: SolarDay = dongZhiSolar.next(if (dongZhiIndex > 29) 60 - dongZhiIndex else -dongZhiIndex)
-        val solarShunBai2: SolarDay = dongZhiSolar2.next(if (dongZhiIndex2 > 29) 60 - dongZhiIndex2 else -dongZhiIndex2)
-        val solarNiZi: SolarDay = xiaZhiSolar.next(if (xiaZhiIndex > 29) 60 - xiaZhiIndex else -xiaZhiIndex)
-        var offset = 0
-        if (!d.isBefore(solarShunBai) && d.isBefore(solarNiZi)) {
-            offset = d.subtract(solarShunBai)
-        } else if (!d.isBefore(solarNiZi) && d.isBefore(solarShunBai2)) {
-            offset = 8 - d.subtract(solarNiZi)
-        } else if (!d.isBefore(solarShunBai2)) {
-            offset = d.subtract(solarShunBai2)
-        } else if (d.isBefore(solarShunBai)) {
-            offset = 8 + solarShunBai.subtract(d)
+        val winterSolstice: SolarDay = SolarTerm.fromIndex(d.year, 0).getSolarDay()
+        val summerSolstice: SolarDay = SolarTerm.fromIndex(d.year, 12).getSolarDay()
+        val nextWinterSolstice: SolarDay = SolarTerm.fromIndex(d.year + 1, 0).getSolarDay()
+        // 距冬至最近的甲子日
+        val w: SolarDay = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        // 距夏至最近的甲子日
+        val s: SolarDay = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        // 距下个冬至最近的甲子日
+        val n: SolarDay = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        // 43210012345678876543210012345
+        //      w        s        n
+        //     冬至     夏至      冬至
+        if (d.isBefore(w)) {
+            return NineStar(w.subtract(d) - 1)
         }
-        return NineStar(offset)
+        if (d.isBefore(s)) {
+            return NineStar(d.subtract(w))
+        }
+        return NineStar(if (d.isBefore(n)) n.subtract(d) - 1 else d.subtract(n))
     }
 
     /**
@@ -159,8 +160,7 @@ class LunarDay(
      */
     fun getJupiterDirection(): Direction {
         val index: Int = getSixtyCycle().getIndex()
-        return if (index % 12 < 6) Element(index / 12).getDirection() else getLunarMonth().getLunarYear()
-            .getJupiterDirection()
+        return if (index % 12 < 6) Element(index / 12).getDirection() else getLunarMonth().getLunarYear().getJupiterDirection()
     }
 
     /**
@@ -178,10 +178,10 @@ class LunarDay(
      * @return 月相第几天
      */
     fun getPhaseDay(): PhaseDay {
-        val today = getSolarDay()
-        val m = getLunarMonth().next(1)
-        var p = Phase.fromIndex(m.year, m.getMonthWithLeap(), 0)
-        var d = p.getSolarDay()
+        val today: SolarDay = getSolarDay()
+        val m: LunarMonth = getLunarMonth().next(1)
+        var p: Phase = Phase.fromIndex(m.year, m.getMonthWithLeap(), 0)
+        var d: SolarDay = p.getSolarDay()
         while (d.isAfter(today)) {
             p = p.next(-1)
             d = p.getSolarDay()
@@ -231,9 +231,7 @@ class LunarDay(
      * @return 二十八宿
      */
     fun getTwentyEightStar(): TwentyEightStar {
-        return TwentyEightStar(
-            intArrayOf(10, 18, 26, 6, 14, 22, 2)[getSolarDay().getWeek().getIndex()]
-        ).next(-7 * getSixtyCycle().getEarthBranch().getIndex())
+        return TwentyEightStar(intArrayOf(10, 18, 26, 6, 14, 22, 2)[getSolarDay().getWeek().getIndex()]).next(-7 * getSixtyCycle().getEarthBranch().getIndex())
     }
 
     /**

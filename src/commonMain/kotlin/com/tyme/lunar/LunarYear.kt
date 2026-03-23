@@ -127,10 +127,12 @@ class LunarYear(
      */
     fun getMonths(): List<LunarMonth> {
         val l: MutableList<LunarMonth> = ArrayList(13)
-        var m: LunarMonth = getFirstMonth()
-        while (m.year == year) {
-            l.add(m)
-            m = m.next(1)
+        val leapMonth = getLeapMonth()
+        for (i in 1..12) {
+            l.add(LunarMonth(year, i))
+            if (i == leapMonth) {
+                l.add(LunarMonth(year, -i))
+            }
         }
         return l
     }

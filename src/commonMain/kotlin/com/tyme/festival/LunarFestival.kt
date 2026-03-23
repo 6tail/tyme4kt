@@ -6,6 +6,7 @@ import com.tyme.lunar.LunarDay
 import com.tyme.solar.SolarTerm
 import com.tyme.util.pad2
 import kotlin.jvm.JvmStatic
+import kotlin.math.abs
 
 /**
  * 农历传统节日（依据国家标准《农历的编算和颁行》GB/T 33661-2017）
@@ -102,36 +103,18 @@ class LunarFestival(
                 val type: Int = data[3].code - '0'.code
                 when (type) {
                     0 -> {
-                        return LunarFestival(
-                            FestivalType.DAY,
-                            LunarDay(
-                                year,
-                                data.substring(4, 6).toInt(10),
-                                data.substring(6).toInt(10)
-                            ),
-                            null,
-                            data
-                        )
+                        return LunarFestival(FestivalType.DAY, LunarDay(year, data.substring(4, 6).toInt(10), data.substring(6).toInt(10)), null, data)
                     }
+
                     1 -> {
-                        val solarTerm = SolarTerm(year, data.substring(4).toInt(10))
-                        return LunarFestival(
-                            FestivalType.TERM,
-                            solarTerm.getJulianDay()
-                                .getSolarDay()
-                                .getLunarDay(),
-                            solarTerm,
-                            data
-                        )
+                        val term = SolarTerm(year, data.substring(4).toInt(10))
+                        return LunarFestival(FestivalType.TERM, term.getJulianDay().getSolarDay().getLunarDay(), term, data)
                     }
+
                     2 -> {
-                        return LunarFestival(
-                            FestivalType.EVE,
-                            LunarDay(year + 1, 1, 1).next(-1),
-                            null,
-                            data
-                        )
+                        return LunarFestival(FestivalType.EVE, LunarDay(year + 1, 1, 1).next(-1), null, data)
                     }
+
                     else -> return null
                 }
             }
@@ -142,12 +125,7 @@ class LunarFestival(
         fun fromYmd(year: Int, month: Int, day: Int): LunarFestival? {
             var matchResult = Regex("@\\d{2}0${month.pad2()}${day.pad2()}").find(DATA)
             if (matchResult != null) {
-                return LunarFestival(
-                    FestivalType.DAY,
-                    LunarDay(year, month, day),
-                    null,
-                    matchResult.value
-                )
+                return LunarFestival(FestivalType.DAY, LunarDay(year, month, day), null, matchResult.value)
             }
             val lunarDay = LunarDay(year, month, day)
             val solarDay = lunarDay.getSolarDay()
@@ -161,17 +139,11 @@ class LunarFestival(
                     return LunarFestival(FestivalType.TERM, lunarDay, term, data)
                 }
             }
-            if (month == 12 && day > 28) {
+            if (abs(month) == 12 && day > 28) {
                 matchResult = Regex("@\\d{2}2").find(DATA)
                 if (matchResult != null) {
-                    val nextDay = lunarDay.next(1)
-                    if (nextDay.month == 1 && nextDay.day == 1) {
-                        return LunarFestival(
-                            FestivalType.EVE,
-                            lunarDay,
-                            null,
-                            matchResult.value
-                        )
+                    if (lunarDay.next(1).year != year) {
+                        return LunarFestival(FestivalType.EVE, lunarDay, null, matchResult.value)
                     }
                 }
             }

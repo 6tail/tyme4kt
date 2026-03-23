@@ -24,7 +24,7 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
     private var info: ChildLimitInfo
 
     init {
-        val yang = YinYang.YANG == eightChar.getYear().getHeavenStem().getYinYang()
+        val yang: Boolean = YinYang.YANG == eightChar.getYear().getHeavenStem().getYinYang()
         val man: Boolean = Gender.MAN == gender
         forward = (yang && man) || (!yang && !man)
         var term: SolarTerm = birthTime.getTerm()

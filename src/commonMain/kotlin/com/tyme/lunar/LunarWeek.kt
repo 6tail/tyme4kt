@@ -36,9 +36,6 @@ class LunarWeek(
     }
 
     override fun next(n: Int): LunarWeek {
-        if (n == 0) {
-            return LunarWeek(year, month, index, start)
-        }
         var d: Int = index + n
         var m: LunarMonth = getLunarMonth()
         if (n > 0) {

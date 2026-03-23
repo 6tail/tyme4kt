@@ -1,86 +1,35 @@
 package com.tyme.rabbyung
 
-import com.tyme.AbstractTyme
-import com.tyme.culture.Zodiac
+import com.tyme.unit.MonthUnit
 import kotlin.jvm.JvmStatic
+import kotlin.math.abs
 
 /**
  * 藏历月，仅支持藏历1950年十二月至藏历2050年十二月
  *
  * @author 6tail
  */
-class RabByungMonth: AbstractTyme {
-    /**
-     * 藏历年
-     */
-    private var year: RabByungYear
-
-    /**
-     * 月
-     */
-    private var month: Int
-
+class RabByungMonth(
+    year: Int,
+    month: Int,
+) : MonthUnit(year, abs(month)) {
     /**
      * 是否闰月
      */
     private var leap: Boolean
 
-    /**
-     * 位于当年的索引，0-12
-     */
-    private var indexInYear: Int
-
-    constructor(year: RabByungYear, month: Int): super() {
-        require(month in -12 .. 12 && month != 0) { "illegal rab-byung month: $month" }
-        val y: Int = year.getYear()
-        require(y in 1950 .. 2050) { "rab-byung year $y must between 1950 and 2050" }
-        var m = month
-        var leap = false
-        if (month < 0) {
-            m = -m
-            leap = true
-        }
-        require(!(y == 1950 && m < 12)) { "month $month must be 12 in rab-byung year $y" }
-        val leapMonth: Int = year.getLeapMonth()
-        require(!(leap && m != leapMonth)) { "illegal leap month $m in rab-byung year $y" }
-        this.year = year
-        this.month = m
-        this.leap = leap
-        // 位于当年的索引
-        var index = m - 1
-        if (leap || (leapMonth in 1..<m)) {
-            index += 1
-        }
-        indexInYear = index
+    init {
+        validate(year, month)
+        leap = month < 0
     }
 
     /**
-     * 从藏历年月初始化
+     * 藏历年
      *
-     * @param year  藏历年
-     * @param month 藏历月，闰月为负
+     * @return 藏历年
      */
-    constructor(year: Int, month: Int): this(RabByungYear.fromYear(year), month)
-
-    constructor(rabByungIndex: Int, element: RabByungElement, zodiac: Zodiac, month: Int):
-            this(RabByungYear.fromElementZodiac(rabByungIndex, element, zodiac), month)
-
-    /**
-     * 年
-     *
-     * @return 年
-     */
-    fun getYear(): Int {
-        return year.getYear()
-    }
-
-    /**
-     * 月
-     *
-     * @return 月
-     */
-    fun getMonth(): Int {
-        return month
+    fun getRabByungYear(): RabByungYear {
+        return RabByungYear.fromYear(year)
     }
 
     /**
@@ -98,7 +47,16 @@ class RabByungMonth: AbstractTyme {
      * @return 索引
      */
     fun getIndexInYear(): Int {
-        return indexInYear
+        var index: Int = month - 1
+        if (leap) {
+            index += 1
+        } else {
+            val leapMonth: Int = getRabByungYear().getLeapMonth()
+            if (leapMonth in 1..<month) {
+                index += 1
+            }
+        }
+        return index
     }
 
     /**
@@ -129,15 +87,15 @@ class RabByungMonth: AbstractTyme {
     }
 
     override fun toString(): String {
-        return year.toString() + getName()
+        return getRabByungYear().toString() + getName()
     }
 
     override fun next(n: Int): RabByungMonth {
         if (n == 0) {
-            return fromYm(getYear(), getMonthWithLeap())
+            return fromYm(year, getMonthWithLeap())
         }
-        var m: Int = indexInYear + 1 + n
-        var y: RabByungYear = year
+        var m: Int = getIndexInYear() + 1 + n
+        var y: RabByungYear = getRabByungYear()
         if (n > 0) {
             var monthCount: Int = y.getMonthCount()
             while (m > monthCount) {
@@ -170,7 +128,7 @@ class RabByungMonth: AbstractTyme {
      * @return 藏历日
      */
     fun getFirstDay(): RabByungDay {
-        return RabByungDay(this, 1)
+        return RabByungDay(year, getMonthWithLeap(), 1)
     }
 
     /**
@@ -182,13 +140,14 @@ class RabByungMonth: AbstractTyme {
         val l: MutableList<RabByungDay> = ArrayList()
         val missDays: List<Int> = getMissDays()
         val leapDays: List<Int> = getLeapDays()
+        val m: Int = getMonthWithLeap()
         for (i in 1 until 31) {
             if (missDays.contains(i)) {
                 continue
             }
-            l.add(RabByungDay(this, i))
+            l.add(RabByungDay(year, m, i))
             if (leapDays.contains(i)) {
-                l.add(RabByungDay(this, -i))
+                l.add(RabByungDay(year, m, -i))
             }
         }
         return l
@@ -210,7 +169,7 @@ class RabByungMonth: AbstractTyme {
      */
     fun getSpecialDays(): List<Int> {
         val l: MutableList<Int> = ArrayList()
-        val days: IntArray = DAYS.get(getYear() * 13 + getIndexInYear()) ?: return l
+        val days: IntArray = DAYS[year * 13 + getIndexInYear()] ?: return l
         for (d in days) {
             l.add(d)
         }
@@ -284,6 +243,20 @@ class RabByungMonth: AbstractTyme {
             }
         }
 
+        @JvmStatic
+        fun validate(year: Int, month: Int) {
+            require(month in -12..12 && month != 0) { "illegal rab-byung month: $month" }
+            require(year in 1950..2050) { "rab-byung year $year must between 1950 and 2050" }
+            val leap = month < 0
+            var m: Int = month
+            if (leap) {
+                m = -m
+            }
+            require(!(year == 1950 && m < 12)) { "month $month must be 12 in rab-byung year $year" }
+            val leapMonth: Int = RabByungYear.fromYear(year).getLeapMonth()
+            require(!(leap && m != leapMonth)) { "illegal leap month $m in rab-byung year $year" }
+        }
+
         /**
          * 从藏历年月初始化
          *
@@ -294,11 +267,6 @@ class RabByungMonth: AbstractTyme {
         @JvmStatic
         fun fromYm(year: Int, month: Int): RabByungMonth {
             return RabByungMonth(year, month)
-        }
-
-        @JvmStatic
-        fun fromElementZodiac(rabByungIndex: Int, element: RabByungElement, zodiac: Zodiac, month: Int): RabByungMonth {
-            return RabByungMonth(rabByungIndex, element, zodiac, month)
         }
     }
 }

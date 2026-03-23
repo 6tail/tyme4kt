@@ -29,29 +29,19 @@ enum class Side(private val code: Int) {
     companion object {
 
         /**
-         * 通过名称获取节日类型
+         * 通过名称获取内外
          *
          * @param name 名称
-         * @return 节日类型
+         * @return 内外
          */
         @JvmStatic
         fun fromName(name: String): Side? {
-            for (entry in entries) {
-                if (entry.getName() == name) {
-                    return entry
-                }
-            }
-            return null
+            return Side.entries.find { it.getName() == name }
         }
 
         @JvmStatic
         fun fromCode(code: Int): Side? {
-            for (entry in entries) {
-                if (entry.code == code) {
-                    return entry
-                }
-            }
-            return null
+            return Side.entries.find { it.code == code }
         }
     }
 }

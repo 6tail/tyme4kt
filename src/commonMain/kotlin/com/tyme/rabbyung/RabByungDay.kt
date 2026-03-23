@@ -1,57 +1,30 @@
 package com.tyme.rabbyung
 
-import com.tyme.AbstractTyme
-import com.tyme.culture.Zodiac
 import com.tyme.solar.SolarDay
+import com.tyme.unit.DayUnit
 import kotlin.jvm.JvmStatic
+import kotlin.math.abs
 
 /**
  * 藏历日，仅支持藏历1950年十二月初一（公历1951年1月8日）至藏历2050年十二月三十（公历2051年2月11日）
  *
  * @author 6tail
  */
-class RabByungDay: AbstractTyme {
-
-    /**
-     * 藏历月
-     */
-    private var month: RabByungMonth
-
-    /**
-     * 日
-     */
-    private var day: Int
+class RabByungDay(
+    year: Int,
+    month: Int,
+    day: Int
+) : DayUnit(year, month, abs(day)) {
 
     /**
      * 是否闰日
      */
     private var leap: Boolean
 
-    constructor(month: RabByungMonth, day: Int): super() {
-        require(day in -30 .. 30 && day != 0) { "illegal day $day in $month" }
-        val leap: Boolean = day < 0
-        var d = day
-        if (d < 0) {
-            d = -d
-        }
-        require(!(leap && !month.getLeapDays().contains(d))) { "illegal leap day $d in $month" }
-        require(!(!leap && month.getMissDays().contains(d))) { "illegal day $d in $month" }
-        this.month = month
-        this.day = d
-        this.leap = leap
+    init {
+        validate(year, month, day)
+        leap = day < 0
     }
-
-    /**
-     * 初始化
-     *
-     * @param year  藏历年
-     * @param month 藏历月，闰月为负
-     * @param day   藏历日，闰日为负
-     */
-    constructor(year: Int, month: Int, day: Int): this(RabByungMonth.fromYm(year, month), day)
-
-    constructor(rabByungIndex: Int, element: RabByungElement, zodiac: Zodiac, month: Int, day: Int):
-            this(RabByungMonth(rabByungIndex, element, zodiac, month), day)
 
     /**
      * 藏历月
@@ -59,34 +32,7 @@ class RabByungDay: AbstractTyme {
      * @return 藏历月
      */
     fun getRabByungMonth(): RabByungMonth {
-        return month
-    }
-
-    /**
-     * 年
-     *
-     * @return 年
-     */
-    fun getYear(): Int {
-        return month.getYear()
-    }
-
-    /**
-     * 月
-     *
-     * @return 月
-     */
-    fun getMonth(): Int {
-        return month.getMonthWithLeap()
-    }
-
-    /**
-     * 日
-     *
-     * @return 日
-     */
-    fun getDay(): Int {
-        return day
+        return RabByungMonth.fromYm(year, month)
     }
 
     /**
@@ -112,7 +58,7 @@ class RabByungDay: AbstractTyme {
     }
 
     override fun toString(): String {
-        return month.toString() + getName()
+        return getRabByungMonth().toString() + getName()
     }
 
     /**
@@ -132,8 +78,9 @@ class RabByungDay: AbstractTyme {
      */
     fun getSolarDay(): SolarDay {
         var m: RabByungMonth = RabByungMonth.fromYm(1950, 12)
+        val cm: RabByungMonth = getRabByungMonth()
         var n = 0
-        while (!month.equals(m)) {
+        while (m != cm) {
             n += m.getDayCount()
             m = m.next(1)
         }
@@ -162,6 +109,19 @@ class RabByungDay: AbstractTyme {
     companion object {
         val NAMES: Array<String> = arrayOf("初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十", "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十", "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十")
 
+        @JvmStatic
+        fun validate(year: Int, month: Int, day: Int) {
+            require(day in -30 .. 30 && day != 0) { "illegal day $day in $month" }
+            val leap: Boolean = day < 0
+            var d: Int = day
+            if (leap) {
+                d = -d
+            }
+            val m: RabByungMonth = RabByungMonth.fromYm(year, month)
+            require(!(leap && !m.getLeapDays().contains(d))) { "illegal leap day $d in $m" }
+            require(!(!leap && m.getMissDays().contains(d))) { "illegal day $d in $m" }
+        }
+
         /**
          * 从藏历年月日初始化
          *
@@ -172,11 +132,6 @@ class RabByungDay: AbstractTyme {
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): RabByungDay {
             return RabByungDay(year, month, day)
-        }
-
-        @JvmStatic
-        fun fromElementZodiac(rabByungIndex: Int, element: RabByungElement, zodiac: Zodiac, month: Int, day: Int): RabByungDay {
-            return RabByungDay(rabByungIndex, element, zodiac, month, day)
         }
 
         @JvmStatic
@@ -204,7 +159,7 @@ class RabByungDay: AbstractTyme {
                     }
                 }
             }
-            return RabByungDay(m, day)
+            return RabByungDay(m.year, m.getMonthWithLeap(), day)
         }
     }
 }

@@ -86,7 +86,7 @@ class SixtyCycleYear(
      * @return 干支月
      */
     fun getFirstMonth(): SixtyCycleMonth {
-        return SixtyCycleMonth(this, SixtyCycle(HeavenStem((getSixtyCycle().getHeavenStem().getIndex() + 1) * 2).getName() + "寅"))
+        return SixtyCycleMonth(this, SixtyCycle(year * 12 - 46))
     }
 
     /**

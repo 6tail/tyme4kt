@@ -53,10 +53,9 @@ class SolarWeek(
     }
 
     override fun next(n: Int): SolarWeek {
-        var d = index
+        var d: Int = index + n
         var m: SolarMonth = getSolarMonth()
         if (n > 0) {
-            d += n
             var weekCount: Int = m.getWeekCount(start)
             while (d >= weekCount) {
                 d -= weekCount
@@ -67,7 +66,6 @@ class SolarWeek(
                 weekCount = m.getWeekCount(start)
             }
         } else if (n < 0) {
-            d += n
             while (d < 0) {
                 if (m.getFirstDay().getWeek().getIndex() != start) {
                     d -= 1
@@ -96,7 +94,7 @@ class SolarWeek(
      */
     fun getDays(): List<SolarDay> {
         val l: MutableList<SolarDay> = ArrayList(7)
-        val d = getFirstDay()
+        val d: SolarDay = getFirstDay()
         l.add(d)
         for (i in 1..6) {
             l.add(d.next(i))

@@ -1,6 +1,6 @@
 package com.tyme.test
 
-import com.tyme.rabbyung.RabByungMonth.Companion.fromYm
+import com.tyme.rabbyung.RabByungMonth
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -12,6 +12,6 @@ import kotlin.test.assertEquals
 class RabByungMonthTest{
     @Test
     fun test0() {
-        assertEquals("第十六饶迥铁虎年十二月", fromYm(1950, 12).toString())
+        assertEquals("第十六饶迥铁虎年十二月", RabByungMonth.fromYm(1950, 12).toString())
     }
 }

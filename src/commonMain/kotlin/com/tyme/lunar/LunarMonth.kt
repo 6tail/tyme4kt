@@ -5,8 +5,6 @@ import com.tyme.culture.fetus.FetusMonth
 import com.tyme.culture.ren.MinorRen
 import com.tyme.culture.star.nine.NineStar
 import com.tyme.jd.JulianDay
-import com.tyme.sixtycycle.EarthBranch
-import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarTerm
 import com.tyme.unit.MonthUnit
@@ -38,7 +36,7 @@ class LunarMonth(
         val dongZhiJd = SolarTerm.fromIndex(year, 0).getCursoryJulianDay()
 
         // 冬至前的初一，今年首朔的日月黄经差
-        var w = ShouXingUtil.calcShuo(dongZhiJd)
+        var w: Double = ShouXingUtil.calcShuo(dongZhiJd)
         if (w > dongZhiJd) {
             w -= 29.53
         }
@@ -90,8 +88,8 @@ class LunarMonth(
      * @return 索引
      */
     fun getIndexInYear(): Int{
-        var index = month - 1
-        if (isLeap()) {
+        var index: Int = month - 1
+        if (leap) {
             index += 1
         } else {
             val leapMonth = getLunarYear().getLeapMonth()
@@ -225,7 +223,7 @@ class LunarMonth(
      * @return 干支
      */
      fun getSixtyCycle(): SixtyCycle {
-         return SixtyCycle(HeavenStem(getLunarYear().getSixtyCycle().getHeavenStem().getIndex() * 2 + month + 1).getName() + EarthBranch(month + 1).getName())
+         return SixtyCycle(year * 12 + month - 47)
      }
 
      /**

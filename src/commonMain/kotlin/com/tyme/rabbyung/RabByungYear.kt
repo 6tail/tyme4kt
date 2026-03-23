@@ -1,6 +1,7 @@
 package com.tyme.rabbyung
 
 import com.tyme.AbstractTyme
+import com.tyme.culture.Element
 import com.tyme.culture.Zodiac
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarYear
@@ -14,11 +15,15 @@ import kotlin.jvm.JvmStatic
 class RabByungYear(
     /** 饶迥(胜生周)序号，从0开始 */
     private var rabByungIndex: Int,
-    /** 干支 */
-    private var sixtyCycle: SixtyCycle
+    /** 五行索引，从0开始 */
+    private var elementIndex: Int,
+    /** 生肖索引，从0开始 */
+    private var zodiacIndex: Int
 ) : AbstractTyme() {
     init {
         require(rabByungIndex in 0 .. 150) { "illegal rab-byung index: $rabByungIndex" }
+        require(elementIndex in 0..<Element.NAMES.size) { "illegal element index: $elementIndex" }
+        require(zodiacIndex in 0..<Zodiac.NAMES.size) { "illegal zodiac index: $zodiacIndex" }
     }
 
     /**
@@ -36,7 +41,7 @@ class RabByungYear(
      * @return 干支
      */
     fun getSixtyCycle(): SixtyCycle {
-        return sixtyCycle
+        return SixtyCycle(6 * (elementIndex * 2 + zodiacIndex % 2) - 5 * zodiacIndex)
     }
 
     /**
@@ -45,7 +50,7 @@ class RabByungYear(
      * @return 生肖
      */
     fun getZodiac(): Zodiac {
-        return sixtyCycle.getEarthBranch().getZodiac()
+        return Zodiac(zodiacIndex)
     }
 
     /**
@@ -54,7 +59,7 @@ class RabByungYear(
      * @return 藏历五行
      */
     fun getElement(): RabByungElement {
-        return RabByungElement(sixtyCycle.getHeavenStem().getElement().getIndex())
+        return RabByungElement(elementIndex)
     }
 
     /**
@@ -66,7 +71,7 @@ class RabByungYear(
         val digits: Array<String> = arrayOf("零", "一", "二", "三", "四", "五", "六", "七", "八", "九")
         val units: Array<String> = arrayOf("", "十", "百")
         var n: Int = rabByungIndex + 1
-        val s: StringBuilder = StringBuilder()
+        val s = StringBuilder()
         var pos = 0
         while (n > 0) {
             val digit: Int = n % 10
@@ -95,7 +100,7 @@ class RabByungYear(
      * @return 年
      */
     fun getYear(): Int {
-        return 1024 + rabByungIndex * 60 + sixtyCycle.getIndex()
+        return 1024 + rabByungIndex * 60 + getSixtyCycle().getIndex()
     }
 
     /**
@@ -106,13 +111,17 @@ class RabByungYear(
     fun getLeapMonth(): Int {
         var y = 1
         var m = 4
-        var t = 0
+        var t = 1
         val currentYear: Int = getYear()
         while (y < currentYear) {
-            val i: Int = m - 1 + (if (t % 2 == 0) 33 else 32)
-            y = (y * 12 + i) / 12
-            m = i % 12 + 1
-            t++
+            val i = m + 31 + t
+            y += 2
+            m = i - 23
+            if (i > 35) {
+                y += 1
+                m -= 12
+            }
+            t = 1 - t
         }
         return if (y == currentYear) m else 0
     }
@@ -132,7 +141,7 @@ class RabByungYear(
      * @return 藏历月
      */
     fun getFirstMonth(): RabByungMonth {
-        return RabByungMonth(this, 1)
+        return RabByungMonth(getYear(), 1)
     }
 
     /**
@@ -151,11 +160,12 @@ class RabByungYear(
      */
     fun getMonths(): List<RabByungMonth> {
         val l: MutableList<RabByungMonth> = ArrayList()
+        val y: Int = getYear()
         val leapMonth: Int = getLeapMonth()
         for (i in 1 until 13) {
-            l.add(RabByungMonth(this, i))
+            l.add(RabByungMonth(y, i))
             if (i == leapMonth) {
-                l.add(RabByungMonth(this, -i))
+                l.add(RabByungMonth(y, -i))
             }
         }
         return l
@@ -163,25 +173,26 @@ class RabByungYear(
 
     companion object {
         @JvmStatic
+        fun validate(year: Int) {
+            if (year !in 1027..9999) {
+                throw IllegalArgumentException("illegal rab-byung year: $year")
+            }
+        }
+
+        @JvmStatic
         fun fromSixtyCycle(rabByungIndex: Int, sixtyCycle: SixtyCycle): RabByungYear {
-            return RabByungYear(rabByungIndex, sixtyCycle)
+            return RabByungYear(rabByungIndex, sixtyCycle.getHeavenStem().getElement().getIndex(), sixtyCycle.getEarthBranch().getZodiac().getIndex())
         }
 
         @JvmStatic
         fun fromElementZodiac(rabByungIndex: Int, element: RabByungElement, zodiac: Zodiac): RabByungYear {
-            for (i in 0..59) {
-                val sixtyCycle = SixtyCycle(i)
-                if (sixtyCycle.getEarthBranch().getZodiac().equals(zodiac) &&
-                    sixtyCycle.getHeavenStem().getElement().getIndex() == element.getIndex()) {
-                    return RabByungYear(rabByungIndex, sixtyCycle)
-                }
-            }
-            throw IllegalArgumentException("illegal rab-byung element $element, zodiac $zodiac")
+            return RabByungYear(rabByungIndex, element.getIndex(), zodiac.getIndex())
         }
 
         @JvmStatic
         fun fromYear(year: Int): RabByungYear {
-            return RabByungYear((year - 1024) / 60, SixtyCycle(year - 4))
+            validate(year)
+            return fromSixtyCycle((year - 1024) / 60, SixtyCycle(year - 4))
         }
     }
 }

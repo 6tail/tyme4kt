@@ -1,6 +1,6 @@
 package com.tyme.test
 
-import com.tyme.sixtycycle.SixtyCycleMonth.Companion.fromIndex
+import com.tyme.sixtycycle.SixtyCycleMonth
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 class SixtyCycleMonthTest{
     @Test
     fun test23() {
-        val month = fromIndex(2025, 0)
+        val month = SixtyCycleMonth.fromIndex(2025, 0)
         assertEquals("乙巳年戊寅月", month.toString())
     }
 }

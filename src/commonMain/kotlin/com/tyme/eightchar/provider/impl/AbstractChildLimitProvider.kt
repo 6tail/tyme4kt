@@ -13,10 +13,10 @@ import com.tyme.solar.SolarTime
  */
 abstract class AbstractChildLimitProvider: ChildLimitProvider {
     fun next(birthTime: SolarTime, addYear: Int, addMonth: Int, addDay: Int, addHour: Int, addMinute: Int, addSecond: Int): ChildLimitInfo {
-        var d = birthTime.day + addDay
-        var h = birthTime.hour + addHour
-        var mi = birthTime.minute + addMinute
-        var s = birthTime.second + addSecond
+        var d: Int = birthTime.day + addDay
+        var h: Int = birthTime.hour + addHour
+        var mi: Int = birthTime.minute + addMinute
+        var s: Int = birthTime.second + addSecond
         mi += s / 60
         s %= 60
         h += mi / 60
@@ -24,9 +24,9 @@ abstract class AbstractChildLimitProvider: ChildLimitProvider {
         d += h / 24
         h %= 24
 
-        var sm = SolarMonth(birthTime.year + addYear, birthTime.month).next(addMonth)
+        var sm: SolarMonth = SolarMonth(birthTime.year + addYear, birthTime.month).next(addMonth)
 
-        var dc = sm.getDayCount()
+        var dc: Int = sm.getDayCount()
         while (d > dc) {
             d -= dc
             sm = sm.next(1)

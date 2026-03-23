@@ -31,29 +31,19 @@ enum class HideHeavenStemType(private val code: Int) {
     companion object {
 
         /**
-         * 通过名称获取节日类型
+         * 通过名称获取藏干类型
          *
          * @param name 名称
-         * @return 节日类型
+         * @return 藏干类型
          */
         @JvmStatic
         fun fromName(name: String): HideHeavenStemType? {
-            for (entry in entries) {
-                if (entry.getName() == name) {
-                    return entry
-                }
-            }
-            return null
+            return HideHeavenStemType.entries.find { it.getName() == name }
         }
 
         @JvmStatic
         fun fromCode(code: Int): HideHeavenStemType? {
-            for (entry in entries) {
-                if (entry.code == code) {
-                    return entry
-                }
-            }
-            return null
+            return HideHeavenStemType.entries.find { it.code == code }
         }
     }
 }

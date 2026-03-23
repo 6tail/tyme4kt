@@ -30,29 +30,19 @@ enum class Gender(private val code: Int) {
     companion object {
 
         /**
-         * 通过名称获取节日类型
+         * 通过名称获取性别
          *
          * @param name 名称
-         * @return 节日类型
+         * @return 性别
          */
         @JvmStatic
         fun fromName(name: String): Gender? {
-            for (entry in entries) {
-                if (entry.getName() == name) {
-                    return entry
-                }
-            }
-            return null
+            return Gender.entries.find { it.getName() == name }
         }
 
         @JvmStatic
         fun fromCode(code: Int): Gender? {
-            for (entry in entries) {
-                if (entry.code == code) {
-                    return entry
-                }
-            }
-            return null
+            return Gender.entries.find { it.code == code }
         }
     }
 }

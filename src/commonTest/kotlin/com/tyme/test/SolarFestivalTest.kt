@@ -20,7 +20,7 @@ class SolarFestivalTest {
         while (i < j) {
             val f = SolarFestival.fromIndex(2023, i)
             assertNotNull(f)
-            assertEquals(SolarFestival.NAMES[i], f!!.getName())
+            assertEquals(SolarFestival.NAMES[i], f.getName())
             i++
         }
     }
@@ -32,7 +32,9 @@ class SolarFestivalTest {
         var i = 0
         val j = SolarFestival.NAMES.size
         while (i < j) {
-            assertEquals(SolarFestival.NAMES[i], f!!.next(i)!!.getName())
+            val n = f.next(i)
+            assertNotNull(n)
+            assertEquals(SolarFestival.NAMES[i], n.getName())
             i++
         }
     }
@@ -41,15 +43,15 @@ class SolarFestivalTest {
     fun test2() {
         val f = SolarFestival.fromIndex(2023, 0)
         assertNotNull(f)
-        assertEquals("2024年5月1日 五一劳动节", f!!.next(13).toString())
-        assertEquals("2022年8月1日 八一建军节", f.next(-3).toString())
+        assertEquals("2024年5月1日 劳动节", f.next(13).toString())
+        assertEquals("2022年8月1日 建军节", f.next(-3).toString())
     }
 
     @Test
     fun test3() {
         val f = SolarFestival.fromIndex(2023, 0)
         assertNotNull(f)
-        assertEquals("2022年3月8日 三八妇女节", f!!.next(-9).toString())
+        assertEquals("2022年3月8日 妇女节", f.next(-9).toString())
     }
 
     @Test
@@ -63,7 +65,7 @@ class SolarFestivalTest {
     fun test5() {
         val f: SolarFestival? = SolarDay(2021, 5, 4).getFestival()
         assertNotNull(f)
-        assertEquals("2021年5月4日 五四青年节", f.toString())
+        assertEquals("2021年5月4日 青年节", f.toString())
     }
 
     @Test

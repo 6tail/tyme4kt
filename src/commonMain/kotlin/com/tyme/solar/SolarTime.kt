@@ -62,13 +62,13 @@ class SolarTime(
             ts += 60
             tm -= 1
         }
-        var th = hour + tm / 60
+        var th: Int = hour + tm / 60
         tm %= 60
         if (tm < 0) {
             tm += 60
             th -= 1
         }
-        var td = th / 24
+        var td: Int = th / 24
         th %= 24
         if (th < 0) {
             th += 24
@@ -86,8 +86,8 @@ class SolarTime(
      * @return true/false
      */
     fun isBefore(target: SolarTime): Boolean {
-        val aDay = getSolarDay()
-        val bDay = target.getSolarDay()
+        val aDay: SolarDay = getSolarDay()
+        val bDay: SolarDay = target.getSolarDay()
         if (aDay != bDay) {
             return aDay.isBefore(bDay)
         }
@@ -157,7 +157,7 @@ class SolarTime(
      * @return 秒数
      */
     fun subtract(target: SolarTime): Int {
-        var days = getSolarDay().subtract(target.getSolarDay())
+        var days: Int = getSolarDay().subtract(target.getSolarDay())
         val cs: Int = hour * 3600 + minute * 60 + second
         val ts: Int = target.hour * 3600 + target.minute * 60 + target.second
         var seconds: Int = cs - ts

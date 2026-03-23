@@ -121,30 +121,19 @@ class SixtyCycleDay: AbstractTyme {
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        val solar: SolarDay = getSolarDay()
-        val dongZhi = SolarTerm(solar.year, 0)
-        val xiaZhi: SolarTerm = dongZhi.next(12)
-        val dongZhi2: SolarTerm = dongZhi.next(24)
-        val dongZhiSolar: SolarDay = dongZhi.getSolarDay()
-        val xiaZhiSolar: SolarDay = xiaZhi.getSolarDay()
-        val dongZhiSolar2: SolarDay = dongZhi2.getSolarDay()
-        val dongZhiIndex: Int = dongZhiSolar.getLunarDay().getSixtyCycle().getIndex()
-        val xiaZhiIndex: Int = xiaZhiSolar.getLunarDay().getSixtyCycle().getIndex()
-        val dongZhiIndex2: Int = dongZhiSolar2.getLunarDay().getSixtyCycle().getIndex()
-        val solarShunBai: SolarDay = dongZhiSolar.next(if(dongZhiIndex > 29) 60 - dongZhiIndex else -dongZhiIndex)
-        val solarShunBai2: SolarDay = dongZhiSolar2.next(if(dongZhiIndex2 > 29) 60 - dongZhiIndex2 else -dongZhiIndex2)
-        val solarNiZi: SolarDay = xiaZhiSolar.next(if(xiaZhiIndex > 29) 60 - xiaZhiIndex else -xiaZhiIndex)
-        var offset = 0
-        if (!solar.isBefore(solarShunBai) && solar.isBefore(solarNiZi)) {
-            offset = solar.subtract(solarShunBai)
-        } else if (!solar.isBefore(solarNiZi) && solar.isBefore(solarShunBai2)) {
-            offset = 8 - solar.subtract(solarNiZi)
-        } else if (!solar.isBefore(solarShunBai2)) {
-            offset = solar.subtract(solarShunBai2)
-        } else if (solar.isBefore(solarShunBai)) {
-            offset = 8 + solarShunBai.subtract(solar)
+        val winterSolstice: SolarDay = SolarTerm.fromIndex(solarDay.year, 0).getSolarDay()
+        val summerSolstice: SolarDay = SolarTerm.fromIndex(solarDay.year, 12).getSolarDay()
+        val nextWinterSolstice: SolarDay = SolarTerm.fromIndex(solarDay.year + 1, 0).getSolarDay()
+        val w: SolarDay = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        val s: SolarDay = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        val n: SolarDay = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        if (solarDay.isBefore(w)) {
+            return NineStar(w.subtract(solarDay) - 1)
         }
-        return NineStar(offset)
+        if (solarDay.isBefore(s)) {
+            return NineStar(solarDay.subtract(w))
+        }
+        return NineStar(if (solarDay.isBefore(n)) n.subtract(solarDay) - 1 else solarDay.subtract(n))
     }
 
     /**
@@ -222,7 +211,7 @@ class SixtyCycleDay: AbstractTyme {
         val d: SolarDay = solarDay.next(-1)
         var h = SixtyCycleHour(SolarTime(d.year, d.month, d.day, 23, 0, 0))
         l.add(h)
-        for (i in 0 until 11) {
+        (0 until 11).forEach { _ ->
             h = h.next(7200)
             l.add(h)
         }

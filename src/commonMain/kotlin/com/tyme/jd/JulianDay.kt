@@ -55,7 +55,7 @@ class JulianDay(private var day: Double) : AbstractTyme() {
         d += 1524
         var y: Int = ((d - 122.1) / 365.25).toInt()
         d -= (365.25 * y).toInt()
-        var m = (d / 30.601).toInt()
+        var m: Int = (d / 30.601).toInt()
         d -= (30.601 * m).toInt()
         if (m > 13) {
             m -= 12

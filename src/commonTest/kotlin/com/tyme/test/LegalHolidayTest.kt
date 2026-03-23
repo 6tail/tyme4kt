@@ -1,7 +1,6 @@
 package com.tyme.test
 
 import com.tyme.holiday.LegalHoliday
-import com.tyme.holiday.LegalHoliday.Companion.fromYmd
 import com.tyme.solar.SolarDay
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,41 +15,41 @@ import kotlin.test.assertNull
 class LegalHolidayTest {
     @Test
     fun test0() {
-        val d = fromYmd(2011, 5, 1)
+        val d = LegalHoliday.fromYmd(2011, 5, 1)
         assertNotNull(d)
         assertEquals("2011年5月1日 劳动节(休)", d.toString())
-        assertEquals("2011年5月2日 劳动节(休)", d?.next(1).toString())
-        assertEquals("2011年6月4日 端午节(休)", d?.next(2).toString())
-        assertEquals("2011年4月30日 劳动节(休)", d?.next(-1).toString())
-        assertEquals("2011年4月5日 清明节(休)", d?.next(-2).toString())
+        assertEquals("2011年5月2日 劳动节(休)", d.next(1).toString())
+        assertEquals("2011年6月4日 端午节(休)", d.next(2).toString())
+        assertEquals("2011年4月30日 劳动节(休)", d.next(-1).toString())
+        assertEquals("2011年4月5日 清明节(休)", d.next(-2).toString())
     }
 
     @Test
     fun test1() {
-        val d = fromYmd(2010, 1, 1)
+        val d = LegalHoliday.fromYmd(2010, 1, 1)
         assertNotNull(d)
     }
 
     @Test
     fun test2() {
-        val d = fromYmd(2010, 1, 1)
+        val d = LegalHoliday.fromYmd(2010, 1, 1)
         assertNotNull(d)
     }
 
     @Test
     fun test3() {
-        val d = fromYmd(2001, 12, 29)
+        val d = LegalHoliday.fromYmd(2001, 12, 29)
         assertNotNull(d)
-        assertEquals("2001年12月29日 元旦节(班)", d.toString())
-        assertNull(d?.next(-1))
+        assertEquals("2001年12月29日 元旦(班)", d.toString())
+        assertNull(d.next(-1))
     }
 
     @Test
     fun test4() {
-        val d = fromYmd(2022, 10, 5)
+        val d = LegalHoliday.fromYmd(2022, 10, 5)
         assertNotNull(d)
         assertEquals("2022年10月5日 国庆节(休)", d.toString())
-        assertEquals("2022年10月4日 国庆节(休)", d!!.next(-1).toString())
+        assertEquals("2022年10月4日 国庆节(休)", d.next(-1).toString())
         assertEquals("2022年10月6日 国庆节(休)", d.next(1).toString())
     }
 

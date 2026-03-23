@@ -1,5 +1,7 @@
 package com.tyme
 
+import kotlin.math.abs
+
 /**
  * 可轮回的Tyme
  *
@@ -99,5 +101,28 @@ abstract class LoopTyme : AbstractTyme {
      */
     fun stepsTo(targetIndex: Int): Int {
         return indexOf(targetIndex - _index)
+    }
+
+    /**
+     * 到目标索引的步数（从右往左逆序）
+     *
+     * @param targetIndex 目标索引
+     * @return 步数（<=0）
+     */
+    fun stepsBackTo(targetIndex: Int): Int {
+        val n = getSize()
+        return -((_index - targetIndex + n) % n)
+    }
+
+    /**
+     * 到目标索引的最少步数
+     *
+     * @param targetIndex 目标索引
+     * @return 步数（从左往右顺序>=0，从右往左逆序<=0）
+     */
+    fun stepsCloseTo(targetIndex: Int): Int {
+        val d1 = stepsTo(targetIndex)
+        val d2: Int = stepsBackTo(targetIndex)
+        return if (d1 <= abs(d2)) d1 else d2
     }
 }

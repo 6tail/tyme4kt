@@ -2,7 +2,6 @@ package com.tyme.solar
 
 import com.tyme.LoopTyme
 import com.tyme.jd.JulianDay
-import com.tyme.jd.JulianDay.Companion.fromJulianDay
 import com.tyme.util.ShouXingUtil
 import kotlin.jvm.JvmStatic
 import kotlin.math.floor
@@ -77,7 +76,7 @@ class SolarTerm: LoopTyme {
      * @return 公历日
      */
     fun getSolarDay(): SolarDay {
-        return fromJulianDay(cursoryJulianDay + JulianDay.J2000).getSolarDay()
+        return JulianDay.fromJulianDay(cursoryJulianDay + JulianDay.J2000).getSolarDay()
     }
 
     /**

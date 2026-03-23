@@ -50,13 +50,7 @@ class SixtyCycleHour(
             index += 24
         }
         val d: SixtyCycle = lunarDay.getSixtyCycle()
-        this.day = SixtyCycleDay(
-            solarTime.getSolarDay(),
-            SixtyCycleMonth(
-                SixtyCycleYear(lunarYear.year),
-                LunarMonth.fromYm(solarYear, 1).getSixtyCycle().next(floor(index * 0.5).toInt())
-            ),
-            if(solarTime.hour < 23) d else d.next(1))
+        this.day = SixtyCycleDay(solarTime.getSolarDay(), SixtyCycleMonth(SixtyCycleYear(lunarYear.year), LunarMonth.fromYm(solarYear, 1).getSixtyCycle().next(floor(index * 0.5).toInt())), if(solarTime.hour < 23) d else d.next(1))
         this.hour = lunarHour.getSixtyCycle()
     }
 
@@ -142,7 +136,7 @@ class SixtyCycleHour(
         val solar: SolarDay = solarTime.getSolarDay()
         val dongZhi = SolarTerm(solar.year, 0)
         val earthBranchIndex: Int = getIndexInDay() % 12
-        var index: Int = intArrayOf(8, 5, 2)[getDay().getEarthBranch().getIndex() % 3]
+        var index: Int = 8 - 3 * (getDay().getEarthBranch().getIndex() % 3)
         if (!solar.isBefore(dongZhi.getJulianDay().getSolarDay()) && solar.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {
             index = 8 + earthBranchIndex - index
         } else {

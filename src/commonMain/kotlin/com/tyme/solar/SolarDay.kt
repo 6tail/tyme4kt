@@ -13,6 +13,7 @@ import com.tyme.culture.phenology.PhenologyDay
 import com.tyme.culture.plumrain.PlumRain
 import com.tyme.culture.plumrain.PlumRainDay
 import com.tyme.enums.HideHeavenStemType
+import com.tyme.event.Event
 import com.tyme.festival.SolarFestival
 import com.tyme.holiday.LegalHoliday
 import com.tyme.jd.JulianDay
@@ -174,38 +175,19 @@ class SolarDay(
      * @return 三伏天
      */
     fun getDogDay(): DogDay? {
-        // 夏至
-        val xiaZhi = SolarTerm(year, 12)
-        // 第1个庚日
-        var start: SolarDay = xiaZhi.getSolarDay()
-        // 第3个庚日，即初伏第1天
-        start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(6) + 20)
-        var days: Int = subtract(start)
-        // 初伏以前
-        if (days < 0) {
+        // 初伏，夏至后第3个庚日
+        val d0: SolarDay = Event.builder().termHeavenStem(12, 6, 20).build().getSolarDay(year)!!
+        // 中伏，夏至后第4个庚日
+        val d1: SolarDay = Event.builder().termHeavenStem(12, 6, 30).build().getSolarDay(year)!!
+        // 末伏，立秋后第1个庚日
+        val d2: SolarDay = Event.builder().termHeavenStem(15, 6, 0).build().getSolarDay(year)!!
+        if (isBefore(d0) || isAfter(d2.next(9))) {
             return null
         }
-        if (days < 10) {
-            return DogDay(Dog(0), days)
+        if (!isBefore(d2)) {
+            return DogDay(Dog(2), subtract(d2))
         }
-        // 第4个庚日，中伏第1天
-        start = start.next(10)
-        days = subtract(start)
-        if (days < 10) {
-            return DogDay(Dog(1), days)
-        }
-        // 第5个庚日，中伏第11天或末伏第1天
-        start = start.next(10)
-        days = subtract(start)
-        // 立秋
-        if (xiaZhi.next(3).getSolarDay().isAfter(start)) {
-            if (days < 10) {
-                return DogDay(Dog(1), days + 10)
-            }
-            start = start.next(10)
-            days = subtract(start)
-        }
-        return if (days >= 10) null else DogDay(Dog(2), days)
+        return if (isBefore(d1)) DogDay(Dog(0), subtract(d0)) else DogDay(Dog(1), subtract(d1))
     }
 
     /**
@@ -232,20 +214,14 @@ class SolarDay(
      * @return 梅雨天
      */
     fun getPlumRainDay(): PlumRainDay? {
-        // 芒种
-        val grainInEar = SolarTerm(year, 11)
-        var start: SolarDay = grainInEar.getSolarDay()
-        // 芒种后的第1个丙日
-        start = start.next(start.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(2))
-        // 小暑
-        var end: SolarDay = grainInEar.next(2).getSolarDay()
-        // 小暑后的第1个未日
-        end = end.next(end.getLunarDay().getSixtyCycle().getEarthBranch().stepsTo(7))
-
+        // 入梅，芒种后第1个丙日
+        val start: SolarDay = Event.builder().termHeavenStem(11, 2, 0).build().getSolarDay(year)!!
+        // 出梅，小暑后第1个未日
+        val end: SolarDay = Event.builder().termEarthBranch(13, 7, 0).build().getSolarDay(year)!!
         if (isBefore(start) || isAfter(end)) {
             return null
         }
-        return if (this == end) PlumRainDay(PlumRain(1), 0) else PlumRainDay(PlumRain(0), subtract(start))
+        return if (equals(end)) PlumRainDay(PlumRain(1), 0) else PlumRainDay(PlumRain(0), subtract(start))
     }
 
     /**

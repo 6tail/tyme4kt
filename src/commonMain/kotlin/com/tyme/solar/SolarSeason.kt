@@ -35,7 +35,7 @@ class SolarSeason(
     }
 
     override fun next(n: Int): SolarSeason {
-        val i = index + n
+        val i: Int = index + n
         return SolarSeason((year * 4 + i) / 4, indexOf(i, 4))
     }
 

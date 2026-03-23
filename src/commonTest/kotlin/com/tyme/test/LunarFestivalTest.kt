@@ -20,7 +20,7 @@ class LunarFestivalTest {
         while (i < j) {
             val f = LunarFestival.fromIndex(2023, i)
             assertNotNull(f)
-            assertEquals(LunarFestival.NAMES[i], f!!.getName())
+            assertEquals(LunarFestival.NAMES[i], f.getName())
             i++
         }
     }
@@ -32,7 +32,9 @@ class LunarFestivalTest {
         var i = 0
         val j = LunarFestival.NAMES.size
         while (i < j) {
-            assertEquals(LunarFestival.NAMES[i], f!!.next(i)!!.getName())
+            val n = f.next(i)
+            assertNotNull(n)
+            assertEquals(LunarFestival.NAMES[i], n.getName())
             i++
         }
     }
@@ -42,7 +44,7 @@ class LunarFestivalTest {
         val f = LunarFestival.fromIndex(2023, 0)
         assertNotNull(f)
         assertEquals("农历癸卯年正月初一 春节", f.toString())
-        assertEquals("农历癸卯年十一月初十 冬至节", f!!.next(10).toString())
+        assertEquals("农历癸卯年十一月初十 冬至节", f.next(10).toString())
         assertEquals("农历甲辰年正月初一 春节", f.next(13).toString())
         assertEquals("农历壬寅年十一月廿九 冬至节", f.next(-3).toString())
     }
@@ -51,7 +53,7 @@ class LunarFestivalTest {
     fun test3() {
         val f = LunarFestival.fromIndex(2023, 0)
         assertNotNull(f)
-        assertEquals("农历壬寅年三月初五 清明节", f!!.next(-9).toString())
+        assertEquals("农历壬寅年三月初五 清明节", f.next(-9).toString())
     }
 
     @Test

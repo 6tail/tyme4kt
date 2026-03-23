@@ -36,7 +36,7 @@ class SolarMonth(
         if (1582 == year && 10 == month) {
             return 21
         }
-        var d = DAYS[getIndexInYear()]
+        var d: Int = DAYS[getIndexInYear()]
         //公历闰年2月多一天
         if (2 == month && getSolarYear().isLeap()) {
             d++
@@ -81,7 +81,7 @@ class SolarMonth(
     }
 
     override fun next(n: Int): SolarMonth {
-        val i = month - 1 + n
+        val i: Int = month - 1 + n
         return SolarMonth((year * 12 + i) / 12, indexOf(i, 12) + 1)
     }
 
@@ -92,7 +92,7 @@ class SolarMonth(
      * @return 周列表
      */
     fun getWeeks(start: Int): List<SolarWeek> {
-        val size = getWeekCount(start)
+        val size: Int = getWeekCount(start)
         val l: MutableList<SolarWeek> = ArrayList(size)
         for (i in 0 until size) {
             l.add(SolarWeek(year, month, i, start))
@@ -106,7 +106,7 @@ class SolarMonth(
      * @return 公历日列表
      */
     fun getDays(): List<SolarDay> {
-        val size = getDayCount()
+        val size: Int = getDayCount()
         val l: MutableList<SolarDay> = ArrayList(size)
         for (i in 1..size) {
             l.add(SolarDay(year, month, i))
