@@ -111,8 +111,6 @@ class SolarWeek(
     }
 
     companion object {
-        val NAMES: Array<String> = arrayOf("第一周", "第二周", "第三周", "第四周", "第五周", "第六周")
-
         @JvmStatic
         fun validate(year: Int, month: Int, index: Int, start: Int) {
             validate(index, start)

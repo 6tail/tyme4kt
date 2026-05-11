@@ -24,13 +24,31 @@ class Event(
         validate(data)
     }
 
+    private fun getCharIndex(index: Int): Int {
+        return EventManager.CHARS.indexOf(data[index])
+    }
+
+    fun getValue(index: Int): Int {
+        return getCharIndex(index) - 31
+    }
+
+    fun getMonth(year: Int): IntArray {
+        var y: Int = year
+        var m: Int = getValue(2)
+        if (m > 12) {
+            m = 1
+            y += 1
+        }
+        return intArrayOf(y, m)
+    }
+
     /**
      * 事件类型
      *
      * @return 事件类型
      */
     fun getType(): EventType? {
-        return EventType.fromCode(EventManager.CHARS.indexOf(data[1]))
+        return EventType.fromCode(getCharIndex(1))
     }
 
     /**
@@ -60,7 +78,7 @@ class Event(
         var n = 0
         val size: Int = EventManager.CHARS.length
         for (i in 0..2) {
-            n = n * size + EventManager.CHARS.indexOf(data[6 + i])
+            n = n * size + getCharIndex(6 + i)
         }
         return n
     }
@@ -87,21 +105,17 @@ class Event(
         if (null == d) {
             return null
         }
-        val offset: Int = EventManager.CHARS.indexOf(data[5]) - 31
+        val offset: Int = getValue(5)
         return if (0 == offset) d else d.next(offset)
     }
 
     private fun getSolarDayBySolarDay(year: Int): SolarDay? {
-        var y: Int = year
-        var m: Int = EventManager.CHARS.indexOf(data[2]) - 31
-        if (m > 12) {
-            m = 1
-            y += 1
-        }
-        val d: Int = EventManager.CHARS.indexOf(data[3]) - 31
-        val delay: Int = EventManager.CHARS.indexOf(data[4]) - 31
-        val month = SolarMonth(y, m)
-        val lastDay: Int = month.getDayCount()
+        val month: IntArray = getMonth(year)
+        val y: Int = month[0]
+        val m: Int = month[1]
+        val d: Int = getValue(3)
+        val delay: Int = getValue(4)
+        val lastDay: Int = SolarMonth(y, m).getDayCount()
         if (d > lastDay) {
             if (0 == delay) {
                 return null
@@ -112,16 +126,12 @@ class Event(
     }
 
     private fun getSolarDayByLunarDay(year: Int): SolarDay? {
-        var y: Int = year
-        var m: Int = EventManager.CHARS.indexOf(data[2]) - 31
-        if (m > 12) {
-            m = 1
-            y += 1
-        }
-        val d: Int = EventManager.CHARS.indexOf(data[3]) - 31
-        val delay: Int = EventManager.CHARS.indexOf(data[4]) - 31
-        val month = LunarMonth(y, m)
-        val lastDay: Int = month.getDayCount()
+        val month: IntArray = getMonth(year)
+        val y: Int = month[0]
+        val m: Int = month[1]
+        val d: Int = getValue(3)
+        val delay: Int = getValue(4)
+        val lastDay: Int = LunarMonth(y, m).getDayCount()
         if (d > lastDay) {
             if (0 == delay) {
                 return null
@@ -133,13 +143,13 @@ class Event(
 
     private fun getSolarDayByWeek(year: Int): SolarDay? {
         // 第几个星期
-        val n: Int = EventManager.CHARS.indexOf(data[3]) - 31
+        val n: Int = getValue(3)
         if (n == 0) {
             return null
         }
-        val m = SolarMonth(year, EventManager.CHARS.indexOf(data[2]) - 31)
+        val m = SolarMonth(year, getValue(2))
         // 星期几
-        val w: Int = EventManager.CHARS.indexOf(data[4]) - 31
+        val w: Int = getValue(4)
         if (n > 0) {
             // 当月第1天
             val d: SolarDay = m.getFirstDay()
@@ -153,19 +163,19 @@ class Event(
     }
 
     private fun getSolarDayByTerm(year: Int): SolarDay {
-        val offset: Int = EventManager.CHARS.indexOf(data[4]) - 31
-        val d: SolarDay = SolarTerm.fromIndex(year, EventManager.CHARS.indexOf(data[2]) - 31).getSolarDay()
+        val d: SolarDay = SolarTerm.fromIndex(year, getValue(2)).getSolarDay()
+        val offset: Int = getValue(4)
         return if (0 == offset) d else d.next(offset)
     }
 
     private fun getSolarDayByTermHeavenStem(year: Int): SolarDay {
         val d: SolarDay = getSolarDayByTerm(year)
-        return d.next(d.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(EventManager.CHARS.indexOf(data[3]) - 31))
+        return d.next(d.getLunarDay().getSixtyCycle().getHeavenStem().stepsTo(getValue(3)))
     }
 
     private fun getSolarDayByTermEarthBranch(year: Int): SolarDay {
         val d: SolarDay = getSolarDayByTerm(year)
-        return d.next(d.getLunarDay().getSixtyCycle().getEarthBranch().stepsTo(EventManager.CHARS.indexOf(data[3]) - 31))
+        return d.next(d.getLunarDay().getSixtyCycle().getEarthBranch().stepsTo(getValue(3)))
     }
 
     companion object {

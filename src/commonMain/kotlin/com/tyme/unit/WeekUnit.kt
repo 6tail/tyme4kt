@@ -18,6 +18,8 @@ abstract class WeekUnit(
     val start: Int,
 ) : MonthUnit(year, month) {
     companion object {
+        val NAMES: Array<String> = arrayOf("第一周", "第二周", "第三周", "第四周", "第五周", "第六周")
+
         @JvmStatic
         fun validate(index: Int, start: Int) {
             if (index !in 0..5) {

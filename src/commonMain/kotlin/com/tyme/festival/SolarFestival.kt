@@ -1,9 +1,7 @@
 package com.tyme.festival
 
-import com.tyme.AbstractTyme
-import com.tyme.enums.FestivalType
+import com.tyme.event.Event
 import com.tyme.solar.SolarDay
-import com.tyme.util.pad2
 import kotlin.jvm.JvmStatic
 
 /**
@@ -12,49 +10,27 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class SolarFestival(
-    /** 类型 */
-    private var type: FestivalType,
-    /** 公历日 */
-    private var day: SolarDay,
-    /** 起始年 */
-    private var startYear: Int,
-    data: String
-) : AbstractTyme() {
-    /** 索引 */
-    private var index: Int = data.substring(1, 3).toInt(10)
-
-    /** 名称 */
-    private var name: String = NAMES[index]
-
-    override fun getName(): String {
-        return name
-    }
-
     /**
      * 索引
-     *
-     * @return 索引
      */
-    fun getIndex(): Int{
-        return index
-    }
+    private var index: Int,
+    /**
+     * 事件
+     */
+    private var event: Event,
+    /**
+     * 公历日
+     */
+    private var day: SolarDay
+) : AbstractFestival(index, event, day) {
 
     /**
      * 公历日
      *
      * @return 公历日
      */
-    fun getDay(): SolarDay {
+    override fun getDay(): SolarDay {
         return day
-    }
-
-    /**
-     * 类型
-     *
-     * @return 节日类型
-     */
-    fun getType(): FestivalType {
-        return type
     }
 
     /**
@@ -63,11 +39,7 @@ class SolarFestival(
      * @return 年
      */
     fun getStartYear(): Int {
-        return startYear
-    }
-
-    override fun toString(): String {
-        return "$day $name"
+        return event.getStartYear()
     }
 
     override fun next(n: Int): SolarFestival? {
@@ -86,36 +58,30 @@ class SolarFestival(
 
     companion object {
         val NAMES: Array<String> = arrayOf("元旦", "妇女节", "植树节", "劳动节", "青年节", "儿童节", "建党节", "建军节", "教师节", "国庆节")
-        var DATA: String = "@00001011950@01003081950@02003121979@03005011950@04005041950@05006011950@06007011941@07008011933@08009101985@09010011950"
+        var DATA: String = "0VV__0Ux0Xc__0Ux0Xg__0_Q0ZV__0Ux0ZY__0Ux0aV__0Ux0bV__0Uo0cV__0Ug0de__0_V0eV__0Ux"
 
         @JvmStatic
         fun fromIndex(year: Int, index: Int): SolarFestival? {
             if (index < 0 || index >= NAMES.size) {
                 return null
             }
-            val matchResult = Regex("@${index.pad2()}\\d+").find(DATA)
-            if (matchResult != null) {
-                val data: String = matchResult.value
-                val type: Int = data[3].code - '0'.code
-                if (type == 0){
-                    val startYear: Int = data.substring(8).toInt(10)
-                    if (year >= startYear){
-                        return SolarFestival(FestivalType.DAY, SolarDay(year, data.substring(4, 6).toInt(10), data.substring(6, 8).toInt(10)), startYear, data)
-                    }
-                }
-            }
-            return null
+            val start: Int = index * 8
+            val e = Event(NAMES[index], "@${DATA.substring(start, start + 8)}")
+            return if (year < e.getStartYear()) null else SolarFestival(index, e, SolarDay.fromYmd(year, e.getValue(2), e.getValue(3)))
         }
 
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): SolarFestival? {
-            val matchResult = Regex("@\\d{2}0${month.pad2()}${day.pad2()}\\d+").find(DATA)
-            if (matchResult != null) {
-                val data = matchResult.value
-                val startYear = data.substring(8).toInt(10)
-                if (year >= startYear) {
-                    return SolarFestival(FestivalType.DAY, SolarDay(year, month, day), startYear, data)
+            val d: SolarDay = SolarDay.fromYmd(year, month, day)
+            var i = 0
+            val j: Int = NAMES.size
+            while (i < j) {
+                val start: Int = i * 8
+                val e = Event(NAMES[i], "@${DATA.substring(start, start + 8)}")
+                if (d.year >= e.getStartYear() && d.month == e.getValue(2) && d.day == e.getValue(3)) {
+                    return SolarFestival(i, e, d)
                 }
+                i++
             }
             return null
         }

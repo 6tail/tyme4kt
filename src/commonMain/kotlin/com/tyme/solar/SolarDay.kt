@@ -12,6 +12,7 @@ import com.tyme.culture.phenology.Phenology
 import com.tyme.culture.phenology.PhenologyDay
 import com.tyme.culture.plumrain.PlumRain
 import com.tyme.culture.plumrain.PlumRainDay
+import com.tyme.culture.star.nine.NineStar
 import com.tyme.enums.HideHeavenStemType
 import com.tyme.event.Event
 import com.tyme.festival.SolarFestival
@@ -366,6 +367,33 @@ class SolarDay(
      */
     fun getPhase(): Phase {
         return getPhaseDay().getPhase()
+    }
+
+    /**
+     * 九星
+     *
+     * @return 九星
+     */
+    fun getNineStar(): NineStar {
+        val winterSolstice: SolarDay = SolarTerm.fromIndex(year, 0).getSolarDay()
+        val summerSolstice: SolarDay = SolarTerm.fromIndex(year, 12).getSolarDay()
+        val nextWinterSolstice: SolarDay = SolarTerm.fromIndex(year + 1, 0).getSolarDay()
+        // 距冬至最近的甲子日
+        val w: SolarDay = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        // 距夏至最近的甲子日
+        val s: SolarDay = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        // 距下个冬至最近的甲子日
+        val n: SolarDay = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
+        // 43210012345678876543210012345
+        //      w        s        n
+        //     冬至     夏至      冬至
+        if (isBefore(w)) {
+            return NineStar(w.subtract(this) - 1)
+        }
+        if (isBefore(s)) {
+            return NineStar(subtract(w))
+        }
+        return NineStar(if (isBefore(n)) n.subtract(this) - 1 else subtract(n))
     }
 
     override fun equals(other: Any?): Boolean {

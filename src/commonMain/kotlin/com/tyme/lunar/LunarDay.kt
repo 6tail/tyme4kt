@@ -12,7 +12,6 @@ import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.sixtycycle.SixtyCycleDay
 import com.tyme.sixtycycle.ThreePillars
 import com.tyme.solar.SolarDay
-import com.tyme.solar.SolarTerm
 import com.tyme.unit.DayUnit
 import kotlin.jvm.JvmStatic
 import kotlin.math.abs
@@ -131,26 +130,7 @@ class LunarDay(
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        val d: SolarDay = getSolarDay()
-        val winterSolstice: SolarDay = SolarTerm.fromIndex(d.year, 0).getSolarDay()
-        val summerSolstice: SolarDay = SolarTerm.fromIndex(d.year, 12).getSolarDay()
-        val nextWinterSolstice: SolarDay = SolarTerm.fromIndex(d.year + 1, 0).getSolarDay()
-        // 距冬至最近的甲子日
-        val w: SolarDay = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
-        // 距夏至最近的甲子日
-        val s: SolarDay = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
-        // 距下个冬至最近的甲子日
-        val n: SolarDay = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
-        // 43210012345678876543210012345
-        //      w        s        n
-        //     冬至     夏至      冬至
-        if (d.isBefore(w)) {
-            return NineStar(w.subtract(d) - 1)
-        }
-        if (d.isBefore(s)) {
-            return NineStar(d.subtract(w))
-        }
-        return NineStar(if (d.isBefore(n)) n.subtract(d) - 1 else d.subtract(n))
+        return getSolarDay().getNineStar()
     }
 
     /**

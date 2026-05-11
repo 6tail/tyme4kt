@@ -7,7 +7,6 @@ import com.tyme.culture.star.nine.NineStar
 import com.tyme.culture.star.twelve.TwelveStar
 import com.tyme.culture.star.twentyeight.TwentyEightStar
 import com.tyme.solar.SolarDay
-import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTime
 import kotlin.jvm.JvmStatic
 
@@ -121,19 +120,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        val winterSolstice: SolarDay = SolarTerm.fromIndex(solarDay.year, 0).getSolarDay()
-        val summerSolstice: SolarDay = SolarTerm.fromIndex(solarDay.year, 12).getSolarDay()
-        val nextWinterSolstice: SolarDay = SolarTerm.fromIndex(solarDay.year + 1, 0).getSolarDay()
-        val w: SolarDay = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
-        val s: SolarDay = summerSolstice.next(summerSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
-        val n: SolarDay = nextWinterSolstice.next(nextWinterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
-        if (solarDay.isBefore(w)) {
-            return NineStar(w.subtract(solarDay) - 1)
-        }
-        if (solarDay.isBefore(s)) {
-            return NineStar(solarDay.subtract(w))
-        }
-        return NineStar(if (solarDay.isBefore(n)) n.subtract(solarDay) - 1 else solarDay.subtract(n))
+        return solarDay.getNineStar()
     }
 
     /**

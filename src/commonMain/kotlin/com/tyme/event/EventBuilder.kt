@@ -29,12 +29,18 @@ class EventBuilder {
         return this
     }
 
-    private fun content(type: EventType, a: Int, b: Int, c: Int): EventBuilder {
-        data[1] = EventManager.CHARS[type.getCode()]
-        data[2] = EventManager.CHARS[31 + a]
-        data[3] = EventManager.CHARS[31 + b]
-        data[4] = EventManager.CHARS[31 + c]
+    private fun getChar(index: Int): Char {
+        return EventManager.CHARS[index]
+    }
+
+    private fun setValue(index: Int, n: Int): EventBuilder {
+        data[index] = getChar(31 + n)
         return this
+    }
+
+    private fun content(type: EventType, a: Int, b: Int, c: Int): EventBuilder {
+        data[1] = getChar(type.getCode())
+        return setValue(2, a).setValue(3, b).setValue(4, c)
     }
 
     /**
@@ -118,7 +124,7 @@ class EventBuilder {
         val size: Int = EventManager.CHARS.length
         var n = year
         for (i in 0..2) {
-            data[8 - i] = EventManager.CHARS[n % size]
+            data[8 - i] = getChar(n % size)
             n /= size
         }
         return this
@@ -131,8 +137,7 @@ class EventBuilder {
      * @return 事件构造器
      */
     fun offset(days: Int): EventBuilder {
-        data[5] = EventManager.CHARS[31 + days]
-        return this
+        return setValue(5, days)
     }
 
     /**

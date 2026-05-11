@@ -1,12 +1,11 @@
 package com.tyme.festival
 
-import com.tyme.AbstractTyme
-import com.tyme.enums.FestivalType
+import com.tyme.enums.EventType
+import com.tyme.event.Event
 import com.tyme.lunar.LunarDay
 import com.tyme.solar.SolarTerm
-import com.tyme.util.pad2
+import com.tyme.solar.SolarTermDay
 import kotlin.jvm.JvmStatic
-import kotlin.math.abs
 
 /**
  * 农历传统节日（依据国家标准《农历的编算和颁行》GB/T 33661-2017）
@@ -14,50 +13,26 @@ import kotlin.math.abs
  * @author 6tail
  */
 class LunarFestival(
-    /** 类型 */
-    private var type: FestivalType,
-    /** 农历日 */
-    private var day: LunarDay,
-    /** 节气 */
-    private var solarTerm: SolarTerm?,
-    data: String
-) : AbstractTyme() {
-
-    /** 索引 */
-    private var index: Int = data.substring(1, 3).toInt(10)
-
-    /** 名称 */
-    private var name: String = NAMES[index]
-
-    override fun getName(): String {
-        return name
-    }
-
     /**
      * 索引
-     *
-     * @return 索引
      */
-    fun getIndex(): Int {
-        return index
-    }
-
+    private var index: Int,
+    /**
+     * 事件
+     */
+    event: Event,
+    /**
+     * 农历日
+     */
+    private var day: LunarDay
+) : AbstractFestival(index, event, day) {
     /**
      * 农历日
      *
      * @return 农历日
      */
-    fun getDay(): LunarDay {
+    override fun getDay(): LunarDay {
         return day
-    }
-
-    /**
-     * 类型
-     *
-     * @return 节日类型
-     */
-    fun getType(): FestivalType {
-        return type
     }
 
     /**
@@ -66,11 +41,8 @@ class LunarFestival(
      * @return 节气
      */
     fun getSolarTerm(): SolarTerm? {
-        return solarTerm
-    }
-
-    override fun toString(): String {
-        return "$day $name"
+        val t = getDay().getSolarDay().getTermDay()
+        return if (t.getDayIndex() == 0) t.getSolarTerm() else null
     }
 
     override fun next(n: Int): LunarFestival? {
@@ -89,63 +61,61 @@ class LunarFestival(
 
     companion object {
         val NAMES: Array<String> = arrayOf("春节", "元宵节", "龙头节", "上巳节", "清明节", "端午节", "七夕节", "中元节", "中秋节", "重阳节", "冬至节", "腊八节", "除夕")
-        var DATA: String = "@0000101@0100115@0200202@0300303@04107@0500505@0600707@0700715@0800815@0900909@10124@1101208@122"
+        var DATA: String = "2VV__0002Vj__0002WW__0002XX__0003b___0002ZZ__0002bb__0002bj__0002cj__0002dd__0003s___0002gc__0002hV_U000"
 
         @JvmStatic
         fun fromIndex(year: Int, index: Int): LunarFestival? {
             if (index < 0 || index >= NAMES.size) {
                 return null
             }
-            val regex = Regex("@${index.pad2()}\\d+")
-            val matchResult = regex.find(DATA)
-            if (matchResult != null) {
-                val data = matchResult.value
-                val type: Int = data[3].code - '0'.code
-                when (type) {
-                    0 -> {
-                        return LunarFestival(FestivalType.DAY, LunarDay(year, data.substring(4, 6).toInt(10), data.substring(6).toInt(10)), null, data)
-                    }
-
-                    1 -> {
-                        val term = SolarTerm(year, data.substring(4).toInt(10))
-                        return LunarFestival(FestivalType.TERM, term.getJulianDay().getSolarDay().getLunarDay(), term, data)
-                    }
-
-                    2 -> {
-                        return LunarFestival(FestivalType.EVE, LunarDay(year + 1, 1, 1).next(-1), null, data)
-                    }
-
-                    else -> return null
+            val start: Int = index * 8
+            val e = Event(NAMES[index], "@${DATA.substring(start, start + 8)}")
+            when (e.getType()) {
+                EventType.LUNAR_DAY -> {
+                    val m: IntArray = e.getMonth(year)
+                    val d: LunarDay = LunarDay.fromYmd(m[0], m[1], e.getValue(3))
+                    val offset: Int = e.getValue(5)
+                    return LunarFestival(index, e, if (0 == offset) d else d.next(offset))
                 }
+
+                EventType.TERM_DAY -> return LunarFestival(index, e, SolarTerm.fromIndex(year, e.getValue(2)).getSolarDay().getLunarDay())
+                else -> return null
             }
-            return null
         }
 
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): LunarFestival? {
-            var matchResult = Regex("@\\d{2}0${month.pad2()}${day.pad2()}").find(DATA)
-            if (matchResult != null) {
-                return LunarFestival(FestivalType.DAY, LunarDay(year, month, day), null, matchResult.value)
-            }
-            val lunarDay = LunarDay(year, month, day)
-            val solarDay = lunarDay.getSolarDay()
-            val regex = Regex("@\\d{2}1\\d{2}")
-            val matches = regex.findAll(DATA)
-            for (match in matches) {
-                val data: String = match.value
-                val term = SolarTerm(year, data.substring(4).toInt(10))
-                val termDay = term.getSolarDay()
-                if (termDay.year == solarDay.year && termDay.month == solarDay.month && termDay.day == solarDay.day) {
-                    return LunarFestival(FestivalType.TERM, lunarDay, term, data)
-                }
-            }
-            if (abs(month) == 12 && day > 28) {
-                matchResult = Regex("@\\d{2}2").find(DATA)
-                if (matchResult != null) {
-                    if (lunarDay.next(1).year != year) {
-                        return LunarFestival(FestivalType.EVE, lunarDay, null, matchResult.value)
+            val d: LunarDay = LunarDay.fromYmd(year, month, day)
+            var i = 0
+            val j: Int = NAMES.size
+            while (i < j) {
+                val start: Int = i * 8
+                val e = Event(NAMES[i], "@${DATA.substring(start, start + 8)}")
+                when (e.getType()) {
+                    EventType.LUNAR_DAY -> {
+                        val offset: Int = e.getValue(5)
+                        if (0 == offset) {
+                            if (d.month == e.getValue(2) && d.day == e.getValue(3)) {
+                                return LunarFestival(i, e, d)
+                            }
+                        } else {
+                            val m: IntArray = e.getMonth(d.year)
+                            val next: LunarDay = d.next(-offset)
+                            if (next.year == m[0] && next.month == m[1] && next.day == e.getValue(3)) {
+                                return LunarFestival(i, e, d)
+                            }
+                        }
                     }
+
+                    EventType.TERM_DAY -> {
+                        val term: SolarTermDay = d.getSolarDay().getTermDay()
+                        if (term.getDayIndex() == 0 && term.getSolarTerm().getIndex() == e.getValue(2) % 24) {
+                            return LunarFestival(i, e, d)
+                        }
+                    }
+                    else -> return null
                 }
+                i++
             }
             return null
         }

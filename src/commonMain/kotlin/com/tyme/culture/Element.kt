@@ -9,9 +9,13 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 open class Element: LoopTyme {
-    constructor(index: Int): super(NAMES, index)
+    constructor(names: Array<String>, index: Int): super(names, index)
 
-    constructor(name: String): super(NAMES, name)
+    constructor(names: Array<String>, name: String): super(names, name)
+
+    constructor(index: Int): this(NAMES, index)
+
+    constructor(name: String): this(NAMES, name)
 
     override fun next(n: Int): Element {
         return Element(nextIndex(n))

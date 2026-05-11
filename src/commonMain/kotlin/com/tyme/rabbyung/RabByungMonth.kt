@@ -1,5 +1,6 @@
 package com.tyme.rabbyung
 
+import com.tyme.lunar.LunarMonth
 import com.tyme.unit.MonthUnit
 import kotlin.jvm.JvmStatic
 import kotlin.math.abs
@@ -74,7 +75,7 @@ class RabByungMonth(
      * @return 名称
      */
     override fun getName(): String {
-        return (if (leap) "闰" else "") + NAMES[month - 1]
+        return (if (leap) "闰" else "") + LunarMonth.NAMES[month - 1]
     }
 
     /**
@@ -217,7 +218,6 @@ class RabByungMonth(
     }
 
     companion object {
-        val NAMES: Array<String> = arrayOf("正月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月")
         val ALIAS: Array<String> = arrayOf("神变月", "苦行月", "具香月", "萨嘎月", "作净月", "明净月", "具醉月", "具贤月", "天降月", "持众月", "庄严月", "满意月")
 
         protected val DAYS: MutableMap<Int, IntArray> = HashMap()

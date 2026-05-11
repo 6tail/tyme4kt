@@ -9,9 +9,9 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class RabByungElement: Element {
-    constructor(index: Int) : super(index)
+    constructor(index: Int) : super(NAMES, index)
 
-    constructor(name: String) : super(name.replace("铁", "金"))
+    constructor(name: String) : super(NAMES, name)
 
     override fun next(n: Int): RabByungElement {
         return RabByungElement(nextIndex(n))
@@ -53,11 +53,9 @@ class RabByungElement: Element {
         return next(-2)
     }
 
-    override fun getName(): String {
-        return super.getName().replace("金", "铁")
-    }
-
     companion object {
+        val NAMES: Array<String> = arrayOf("木", "火", "土", "铁", "水")
+
         @JvmStatic
         fun fromIndex(index: Int): RabByungElement {
             return RabByungElement(index)
