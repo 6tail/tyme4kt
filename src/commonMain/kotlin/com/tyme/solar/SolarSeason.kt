@@ -65,9 +65,7 @@ class SolarSeason(
 
         @JvmStatic
         fun validate(year: Int, index: Int) {
-            if (index !in 0..3) {
-                throw IllegalArgumentException("illegal solar season index: $index")
-            }
+            validateRange(index, 0, 3, "solar season index")
             SolarYear.validate(year)
         }
 

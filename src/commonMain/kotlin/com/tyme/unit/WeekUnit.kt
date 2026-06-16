@@ -22,12 +22,8 @@ abstract class WeekUnit(
 
         @JvmStatic
         fun validate(index: Int, start: Int) {
-            if (index !in 0..5) {
-                throw IllegalArgumentException("illegal week index: $index")
-            }
-            if (start !in 0..6) {
-                throw IllegalArgumentException("illegal week start: $start")
-            }
+            validateRange(index, 0, 5, "week index")
+            validateRange(start, 0, 6, "week start")
         }
     }
 }

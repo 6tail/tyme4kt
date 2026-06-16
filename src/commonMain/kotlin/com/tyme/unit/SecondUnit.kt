@@ -21,18 +21,25 @@ abstract class SecondUnit(
     /** 秒 */
     val second: Int,
 ) : DayUnit(year, month, day) {
+    /**
+     * 当天秒数
+     *
+     * @return 当天秒数
+     */
+    fun getSecondsInDay(): Int {
+        return hour * 3600 + minute * 60 + second
+    }
+
+    override fun getCompareIndex(): Long {
+        return super.getCompareIndex() * 86400L + getSecondsInDay()
+    }
+
     companion object {
         @JvmStatic
         fun validate(hour: Int, minute: Int, second: Int) {
-            if (hour !in 0..23) {
-                throw IllegalArgumentException("illegal hour: $hour")
-            }
-            if (minute !in 0..59) {
-                throw IllegalArgumentException("illegal minute: $minute")
-            }
-            if (second !in 0..59) {
-                throw IllegalArgumentException("illegal second: $second")
-            }
+            validateRange(hour, 0, 23, "hour")
+            validateRange(minute, 0, 59, "minute")
+            validateRange(second, 0, 59, "second")
         }
     }
 }

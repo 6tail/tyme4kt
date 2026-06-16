@@ -55,28 +55,10 @@ class SolarTime(
         if (n == 0) {
             return SolarTime(year, month, day, hour, minute, second)
         }
-        var ts: Int = second + n
-        var tm: Int = minute + ts / 60
-        ts %= 60
-        if (ts < 0) {
-            ts += 60
-            tm -= 1
-        }
-        var th: Int = hour + tm / 60
-        tm %= 60
-        if (tm < 0) {
-            tm += 60
-            th -= 1
-        }
-        var td: Int = th / 24
-        th %= 24
-        if (th < 0) {
-            th += 24
-            td -= 1
-        }
-
-        val d: SolarDay = getSolarDay().next(td)
-        return SolarTime(d.year, d.month, d.day, th, tm, ts)
+        val t = getSecondsInDay() + n
+        val s = indexOf(t, 86400)
+        val d = getSolarDay().next(t.floorDiv(86400))
+        return SolarTime(d.year, d.month, d.day, s / 3600, s % 3600 / 60, s % 60)
     }
 
     /**
@@ -86,15 +68,7 @@ class SolarTime(
      * @return true/false
      */
     fun isBefore(target: SolarTime): Boolean {
-        val aDay: SolarDay = getSolarDay()
-        val bDay: SolarDay = target.getSolarDay()
-        if (aDay != bDay) {
-            return aDay.isBefore(bDay)
-        }
-        if (hour != target.hour) {
-            return hour < target.hour
-        }
-        return if (minute != target.minute) minute < target.minute else second < target.second
+        return getCompareIndex() < target.getCompareIndex()
     }
 
     /**
@@ -104,15 +78,7 @@ class SolarTime(
      * @return true/false
      */
     fun isAfter(target: SolarTime): Boolean {
-        val aDay = getSolarDay()
-        val bDay = target.getSolarDay()
-        if (aDay != bDay) {
-            return aDay.isAfter(bDay)
-        }
-        if (hour != target.hour) {
-            return hour > target.hour
-        }
-        return if (minute != target.minute) minute > target.minute else second > target.second
+        return getCompareIndex() > target.getCompareIndex()
     }
 
     /**
@@ -157,16 +123,11 @@ class SolarTime(
      * @return 秒数
      */
     fun subtract(target: SolarTime): Int {
-        var days: Int = getSolarDay().subtract(target.getSolarDay())
-        val cs: Int = hour * 3600 + minute * 60 + second
-        val ts: Int = target.hour * 3600 + target.minute * 60 + target.second
-        var seconds: Int = cs - ts
-        if (seconds < 0) {
-            seconds += 86400
-            days--
+        val t = getSolarDay().subtract(target.getSolarDay()) * 86400L + getSecondsInDay() - target.getSecondsInDay()
+        if (t < Int.MIN_VALUE || t > Int.MAX_VALUE) {
+            throw ArithmeticException("seconds difference exceeds int range: $t")
         }
-        seconds += days * 86400
-        return seconds
+        return t.toInt()
     }
 
     /**

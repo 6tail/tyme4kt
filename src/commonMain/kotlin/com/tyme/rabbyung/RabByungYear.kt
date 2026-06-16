@@ -174,9 +174,7 @@ class RabByungYear(
     companion object {
         @JvmStatic
         fun validate(year: Int) {
-            if (year !in 1027..9999) {
-                throw IllegalArgumentException("illegal rab-byung year: $year")
-            }
+            validateRange(year, 1027, 9999, "rab-byung year")
         }
 
         @JvmStatic

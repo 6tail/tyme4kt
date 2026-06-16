@@ -1,5 +1,7 @@
 package com.tyme
 
+import kotlin.jvm.JvmStatic
+
 /**
  * 传统文化抽象
  *
@@ -20,11 +22,7 @@ abstract class AbstractCulture: Culture {
      * @return 索引，从0开始
      */
     protected fun indexOf(index: Int, size: Int): Int {
-        var i: Int = index % size
-        if (i < 0) {
-            i += size
-        }
-        return i
+        return index.mod(size)
     }
 
     override fun hashCode(): Int {
@@ -33,5 +31,14 @@ abstract class AbstractCulture: Culture {
 
     override fun equals(other: Any?): Boolean {
         return other is Culture && toString() == other.toString()
+    }
+
+    companion object {
+        @JvmStatic
+        fun validateRange(value: Int, min: Int, max: Int, field: String) {
+            if (value !in min..max) {
+                throw IllegalArgumentException("illegal $field: $value")
+            }
+        }
     }
 }

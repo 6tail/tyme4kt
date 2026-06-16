@@ -18,7 +18,7 @@ class SixtyCycleYear(
 ) : AbstractTyme() {
 
     init {
-        require(year in -1 .. 9999) { "illegal sixty cycle year: $year" }
+        validate(year)
     }
 
     /**
@@ -105,6 +105,11 @@ class SixtyCycleYear(
     }
 
     companion object {
+        @JvmStatic
+        fun validate(year: Int) {
+            validateRange(year, -1, 9999, "sixty cycle year")
+        }
+
         /**
          * 从年初始化
          *

@@ -106,9 +106,7 @@ class SolarYear(year: Int) : YearUnit(year) {
     companion object {
         @JvmStatic
         fun validate(year: Int) {
-            if (year !in 1..9999) {
-                throw IllegalArgumentException("illegal solar year: $year")
-            }
+            validateRange(year, 1, 9999, "solar year")
         }
 
         /**

@@ -1,5 +1,6 @@
 package com.tyme.util
 
+import com.tyme.jd.JulianDay
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.floor
@@ -577,83 +578,65 @@ object ShouXingUtil {
         return t * 36525 + ONE_THIRD
     }
 
-    fun calcShuo(njd: Double): Double {
-        var jd: Double = njd
-        val size: Int = SHUO_KB.size
+    private fun qiShuo(isQi: Boolean, isHigh: Boolean, jd: Double, pc: Int): Double {
+        // 2451259是1999.3.21，太阳视黄经为0，春分；2451551是2000.1.7的那个朔日，黄经差为0
+        val w: Double = if (isQi) floor((jd + pc - 2451259) / 365.2422 * 24) * PI / 12 else floor((jd + pc - 2451551) / 29.5306) * PI_2
+        val d: Double = if (isQi) (if (isHigh) qiHigh(w) else qiLow(w)) else if (isHigh) shuoHigh(w) else shuoLow(w)
+        return floor(d + 0.5)
+    }
+
+    /**
+     * @param isQi  true: 气, false: 朔
+     * @param jd    儒略日
+     * @param kb    平气/平朔表
+     * @param pc    偏差修正值
+     * @param fkb   定气/定朔修正表
+     */
+    private fun calc(isQi: Boolean, jd: Double, kb: DoubleArray, pc: Int, fkb: String): Double {
+        val size: Int = kb.size
         var d = 0.0
-        val pc = 14
-        var i: Int
-        jd += 2451545.0
-        val f1: Double = SHUO_KB[0] - pc
-        val f2: Double = SHUO_KB[size - 1] - pc
-        val f3 = 2436935.0
-        if (jd < f1 || jd >= f3) {
-            d = floor(shuoHigh(floor((jd + pc - 2451551) / 29.5306) * PI_2) + 0.5)
-        } else if (jd >= f1 && jd < f2) {
-            i = 0
+        val j: Double = jd + JulianDay.J2000
+        val f1: Double = kb[0] - pc
+        val f2: Double = kb[size - 1] - pc
+        // 2436935 = 1960.1.1
+        if (j !in f1..<2436935.0) {
+            // 平气表中首个之前，或1960.1.1之后，使用现代天文算法
+            d = qiShuo(isQi, true, j, pc)
+        } else if (j in f1..<f2) {
+            // 平气/平朔
+            var i = 0
             while (i < size) {
-                if (jd + pc < SHUO_KB[i + 2]) {
+                if (j + pc < kb[i + 2]) {
                     break
                 }
                 i += 2
             }
-            d = SHUO_KB[i] + SHUO_KB[i + 1] * floor((jd + pc - SHUO_KB[i]) / SHUO_KB[i + 1])
-            d = floor(d + 0.5)
-            if (d == 1683460.0) {
-                d++
-            }
-            d -= 2451545.0
-        } else if (jd >= f2) {
-            d = floor(shuoLow(floor((jd + pc - 2451551) / 29.5306) * PI_2) + 0.5)
-            val from: Int = ((jd - f2) / 29.5306).toInt()
-            val n = SB.substring(from, from + 1)
-            if ("1" == n) {
+            d = floor(kb[i] + kb[i + 1] * floor((j + pc - kb[i]) / kb[i + 1]) + 0.5)
+            // 平朔特殊处理，如果使用太初历计算-103年1月24日的朔日，结果得到的是23日，这里修正为24日(实历)。修正后仍不影响-103的无中置闰。如果使用秦汉历，得到的是24日。
+            if (!isQi && d == 1683460.0) {
                 d += 1.0
-            } else if ("2" == n) {
+            }
+            d -= JulianDay.J2000
+        } else if (j >= f2) {
+            // 定气/定朔
+            d = qiShuo(isQi, false, j, pc)
+            val n: Char = fkb[(if (isQi) (j - f2) / 365.2422 * 24 else (j - f2) / 29.5306).toInt()]
+            // 修正
+            if ('1' == n) {
+                d += 1.0
+            } else if ('2' == n) {
                 d -= 1.0
             }
         }
         return d
     }
 
-    fun calcQi(njd: Double): Double {
-        var jd: Double = njd
-        val size: Int = QI_KB.size
-        var d = 0.0
-        val pc = 7
-        var i: Int
-        jd += 2451545.0
-        val f1: Double = QI_KB[0] - pc
-        val f2: Double = QI_KB[size - 1] - pc
-        val f3 = 2436935.0
-        if (jd < f1 || jd >= f3) {
-            d = floor(qiHigh(floor((jd + pc - 2451259) / 365.2422 * 24) * PI / 12) + 0.5)
-        } else if (jd >= f1 && jd < f2) {
-            i = 0
-            while (i < size) {
-                if (jd + pc < QI_KB[i + 2]) {
-                    break
-                }
-                i += 2
-            }
-            d = QI_KB[i] + QI_KB[i + 1] * floor((jd + pc - QI_KB[i]) / QI_KB[i + 1])
-            d = floor(d + 0.5)
-            if (d == 1683460.0) {
-                d++
-            }
-            d -= 2451545.0
-        } else if (jd >= f2) {
-            d = floor(qiLow(floor((jd + pc - 2451259) / 365.2422 * 24) * PI / 12) + 0.5)
-            val from: Int = ((jd - f2) / 365.2422 * 24).toInt()
-            val n = QB.substring(from, from + 1)
-            if ("1" == n) {
-                d += 1.0
-            }
-            else if ("2" == n) {
-                d -= 1.0
-            }
-        }
-        return d
+    fun calcShuo(jd: Double): Double {
+        return calc(false, jd, SHUO_KB, 14, SB)
+    }
+
+    fun calcQi(jd: Double): Double {
+        return calc(true, jd, QI_KB, 7, QB)
     }
 
     fun qiAccurate(w: Double): Double {

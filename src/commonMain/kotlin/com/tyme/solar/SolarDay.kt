@@ -16,6 +16,7 @@ import com.tyme.culture.star.nine.NineStar
 import com.tyme.enums.HideHeavenStemType
 import com.tyme.event.Event
 import com.tyme.festival.SolarFestival
+import com.tyme.hijri.HijriDay
 import com.tyme.holiday.LegalHoliday
 import com.tyme.jd.JulianDay
 import com.tyme.lunar.LunarDay
@@ -27,6 +28,7 @@ import com.tyme.sixtycycle.SixtyCycleDay
 import com.tyme.unit.DayUnit
 import kotlin.jvm.JvmStatic
 import kotlin.math.ceil
+import kotlin.math.floor
 
 
 /**
@@ -63,8 +65,10 @@ class SolarDay(
      * @return 星座
      */
     fun getConstellation(): Constellation {
-        val y = month * 100 + day
-        return Constellation(if (y !in 120..1221) 9 else if (y < 219) 10 else if (y < 321) 11 else if (y < 420) 0 else if (y < 521) 1 else if (y < 622) 2 else if (y < 723) 3 else if (y < 823) 4 else if (y < 923) 5 else if (y < 1024) 6 else if (y < 1123) 7 else 8)
+        val days = intArrayOf(19, 18, 20, 19, 20, 21, 22, 22, 22, 23, 22, 21)
+        val m = month - 1
+        val offset = if (day > days[m]) 1 else 0
+        return Constellation(9 + m + offset)
     }
 
     override fun getName(): String {
@@ -86,10 +90,7 @@ class SolarDay(
      * @return true/false
      */
     fun isBefore(target: SolarDay): Boolean {
-        if (year != target.year) {
-            return year < target.year
-        }
-        return if (month != target.month) month < target.month else day < target.day
+        return getCompareIndex() < target.getCompareIndex()
     }
 
     /**
@@ -99,10 +100,7 @@ class SolarDay(
      * @return true/false
      */
     fun isAfter(target: SolarDay): Boolean {
-        if (year != target.year) {
-            return year > target.year
-        }
-        return if (month != target.month) month > target.month else day > target.day
+        return getCompareIndex() > target.getCompareIndex()
     }
 
     /**
@@ -396,6 +394,22 @@ class SolarDay(
         return NineStar(if (isBefore(n)) n.subtract(this) - 1 else subtract(n))
     }
 
+    /**
+     * 回历日
+     *
+     * @return 回历日
+     */
+    fun getHijriDay(): HijriDay {
+        var d: Int = subtract(SolarDay(622, 7, 16))
+        val z: Int = d.floorDiv(10631)
+        d -= z * 10631
+        val y: Int = floor((d + 0.5) / 354.366).toInt()
+        d -= floor(y * 354.366 + 0.5).toInt()
+        val m: Int = floor((d + 0.11) / 29.51).toInt()
+        d -= floor(m * 29.5 + 0.5).toInt()
+        return HijriDay(z * 30 + y + 1, m + 1, d + 1)
+    }
+
     override fun equals(other: Any?): Boolean {
         return other is SolarDay && toString() == other.toString()
     }
@@ -409,14 +423,15 @@ class SolarDay(
 
         @JvmStatic
         fun validate(year: Int, month: Int, day: Int) {
-            if (day < 1) {
-                throw IllegalArgumentException("illegal solar day: ${year}-${month}-${day}")
-            }
-            if (1582 == year && 10 == month) {
-                if ((day in 5..<15) || day > 31) {
-                    throw IllegalArgumentException("illegal solar day: ${year}-${month}-${day}")
+            var illegal = day < 1
+            if (!illegal) {
+                illegal = if (1582 == year && 10 == month) {
+                    (day in 5..<15) || day > 31
+                } else {
+                    day > SolarMonth(year, month).getDayCount()
                 }
-            } else if (day > SolarMonth(year, month).getDayCount()) {
+            }
+            if (illegal) {
                 throw IllegalArgumentException("illegal solar day: ${year}-${month}-${day}")
             }
         }

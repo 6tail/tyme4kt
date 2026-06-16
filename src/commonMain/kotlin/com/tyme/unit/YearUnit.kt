@@ -10,4 +10,14 @@ import com.tyme.AbstractTyme
 abstract class YearUnit(
     /** 年 */
     val year: Int
-) : AbstractTyme()
+) : AbstractTyme() {
+
+    /**
+     * 用于比较大小的索引
+     *
+     * @return 索引
+     */
+    open fun getCompareIndex(): Long {
+        return year * 10000L
+    }
+}

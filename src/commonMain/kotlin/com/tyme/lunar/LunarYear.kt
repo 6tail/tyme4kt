@@ -194,9 +194,7 @@ class LunarYear(
 
         @JvmStatic
         fun validate(year: Int) {
-            if (year < -1 || year > 9999) {
-                throw IllegalArgumentException("illegal lunar year: $year")
-            }
+            validateRange(year, -1, 9999, "lunar year")
         }
 
         @JvmStatic

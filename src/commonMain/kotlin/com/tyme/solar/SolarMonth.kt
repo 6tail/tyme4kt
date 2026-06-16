@@ -139,9 +139,7 @@ class SolarMonth(
 
         @JvmStatic
         fun validate(year: Int, month: Int) {
-            if (month !in 1..12) {
-                throw IllegalArgumentException("illegal solar month: $month")
-            }
+            validateRange(month, 1, 12, "solar month")
             SolarYear.validate(year)
         }
 

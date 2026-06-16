@@ -59,14 +59,7 @@ class LunarDay(
      * @return true/false
      */
     fun isBefore(target: LunarDay): Boolean {
-        if (year != target.year) {
-            return year < target.year
-        }
-        if (month != target.month) {
-            val t: Int = abs(target.month)
-            return month == t || abs(month) < t
-        }
-        return day < target.day
+        return getCompareIndex() < target.getCompareIndex()
     }
 
     /**
@@ -76,14 +69,7 @@ class LunarDay(
      * @return true/false
      */
     fun isAfter(target: LunarDay): Boolean {
-        if (year != target.year) {
-            return year > target.year
-        }
-        if (month != target.month) {
-            val t: Int = abs(month)
-            return t == target.month || t > abs(target.month)
-        }
-        return day > target.day
+        return getCompareIndex() > target.getCompareIndex()
     }
 
     /**

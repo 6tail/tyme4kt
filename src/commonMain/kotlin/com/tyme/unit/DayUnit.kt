@@ -12,4 +12,8 @@ abstract class DayUnit(
     month: Int,
     /** 日 */
     val day: Int,
-) : MonthUnit(year, month)
+) : MonthUnit(year, month) {
+    override fun getCompareIndex(): Long {
+        return super.getCompareIndex() + day
+    }
+}

@@ -16,7 +16,6 @@ import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTime
 import com.tyme.unit.SecondUnit
 import kotlin.jvm.JvmStatic
-import kotlin.math.abs
 
 /**
  * 农历时辰
@@ -67,16 +66,8 @@ class LunarHour(
             return LunarHour(year, month, day, hour, minute, second)
         }
         val h: Int = hour + n * 2
-        val diff: Int = if (h < 0) -1 else 1
-        var hour: Int = abs(h)
-        var days: Int = hour / 24 * diff
-        hour = (hour % 24) * diff
-        if (hour < 0) {
-            hour += 24
-            days--
-        }
-        val d: LunarDay = getLunarDay().next(days)
-        return LunarHour(d.year, d.month, d.day, hour, minute, second)
+        val d: LunarDay = getLunarDay().next(h.floorDiv(24))
+        return LunarHour(d.year, d.month, d.day, indexOf(h, 24), minute, second)
     }
 
     /**
@@ -86,15 +77,7 @@ class LunarHour(
      * @return true/false
      */
     fun isBefore(target: LunarHour): Boolean {
-        val aDay = getLunarDay()
-        val bDay = target.getLunarDay()
-        if (aDay != bDay) {
-            return aDay.isBefore(bDay)
-        }
-        if (hour != target.hour) {
-            return hour < target.hour
-        }
-        return if (minute != target.minute) minute < target.minute else second < target.second
+        return getCompareIndex() < target.getCompareIndex()
     }
 
     /**
@@ -104,15 +87,7 @@ class LunarHour(
      * @return true/false
      */
     fun isAfter(target: LunarHour): Boolean {
-        val aDay = getLunarDay()
-        val bDay = target.getLunarDay()
-        if (aDay != bDay) {
-            return aDay.isAfter(bDay)
-        }
-        if (hour != target.hour) {
-            return hour > target.hour
-        }
-        return if (minute != target.minute) minute > target.minute else second > target.second
+        return getCompareIndex() > target.getCompareIndex()
     }
 
     /**

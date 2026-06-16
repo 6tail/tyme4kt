@@ -1,18 +1,18 @@
 # Tyme [![License](https://img.shields.io/badge/license-MIT-4EB1BA.svg?style=flat-square)](https://github.com/6tail/tyme4kt/blob/master/LICENSE)
 
-Tyme是一个非常强大的日历工具库，可以看作 [Lunar](https://6tail.cn/calendar/api.html "https://6tail.cn/calendar/api.html") 的升级版，拥有更优的设计和扩展性，支持公历、农历、藏历、星座、干支、生肖、节气、法定假日等。
+Tyme是一个非常强大的日历工具库，可以看作 [Lunar](https://6tail.cn/calendar/api.html "https://6tail.cn/calendar/api.html") 的升级版，拥有更优的设计和扩展性，支持公历、农历、藏历、回历、星座、干支、生肖、节气、月相、法定假日等。
 
 ### Gradle
 
 ```
 // build.gradle.kts
 dependencies {
-    implementation("cn.6tail:tyme4kt:1.4.5")
+    implementation("cn.6tail:tyme4kt:1.5.0")
 }
 
 // build.gradle
 dependencies {
-    implementation 'cn.6tail:tyme4kt:1.4.5'
+    implementation 'cn.6tail:tyme4kt:1.5.0'
 }
 ```
 
@@ -23,15 +23,18 @@ dependencies {
     fun main() {
         // 公历
         val solarDay = SolarDay.fromYmd(1986, 5, 29)
-     
+         
         // 1986年5月29日
         println(solarDay)
-     
+         
         // 农历丙寅年四月廿一
         println(solarDay.getLunarDay())
-     
+         
         // 第十七饶迥火虎年四月廿一
         println(solarDay.getRabByungDay())
+         
+        // 1406年赖买丹月20日
+        println(solarDay.getHijriDay())
     }
      
 
