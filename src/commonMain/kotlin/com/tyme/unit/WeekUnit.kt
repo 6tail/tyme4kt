@@ -1,5 +1,6 @@
 package com.tyme.unit
 
+import com.tyme.culture.Week
 import kotlin.jvm.JvmStatic
 
 /**
@@ -8,15 +9,33 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 abstract class WeekUnit(
-    /** 年 */
+    /**
+     * 年
+     */
     year: Int,
-    /** 月 */
+    /**
+     * 月
+     */
     month: Int,
-    /** 索引，0-5 */
+    /**
+     * 索引，0-5
+     */
     val index: Int,
-    /** 起始星期，1234560分别代表星期一至星期天 */
-    val start: Int,
-) : MonthUnit(year, month) {
+    /**
+     * 起始星期，1234560分别代表星期一至星期天
+     */
+    val start: Int
+): MonthUnit(year, month) {
+
+    /**
+     * 起始星期
+     *
+     * @return 星期
+     */
+    fun getStart(): Week {
+        return Week(start)
+    }
+
     companion object {
         val NAMES: Array<String> = arrayOf("第一周", "第二周", "第三周", "第四周", "第五周", "第六周")
 

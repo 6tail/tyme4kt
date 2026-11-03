@@ -7,13 +7,11 @@ import com.tyme.lunar.LunarMonth
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTime
 import com.tyme.util.ShouXingUtil
-import com.tyme.util.ShouXingUtil.dtT
-import com.tyme.util.ShouXingUtil.msaLonT
 import kotlin.jvm.JvmStatic
 import kotlin.math.floor
 
 /**
- * 月相
+ * 月相（月日黄经差：新月0，蛾眉月0-90，上弦月90，盈凸月90-180，满月180，亏凸月180-270，下弦月270，残月270-360）
  *
  * @author 6tail
  */
@@ -22,9 +20,9 @@ class Phase: LoopTyme {
     private var lunarMonth: Int
 
     constructor(lunarYear: Int, lunarMonth: Int, index: Int): super(NAMES, index) {
-        val m: LunarMonth = LunarMonth.fromYm(lunarYear, lunarMonth).next(index / getSize())
+        val m: LunarMonth = LunarMonth(lunarYear, lunarMonth).next(index / getSize())
         this.lunarYear = m.year
-        this.lunarMonth = m.getMonthWithLeap()
+        this.lunarMonth = m.monthValue
     }
 
     constructor(lunarYear: Int, lunarMonth: Int, name: String): super(NAMES, name) {
@@ -34,32 +32,32 @@ class Phase: LoopTyme {
 
     override fun next(n: Int): Phase {
         val size: Int = getSize()
-        var i: Int = getIndex() + n
+        var i: Int = index + n
         if (i < 0) {
             i -= size
         }
         i /= size
-        var m: LunarMonth = LunarMonth.fromYm(lunarYear, lunarMonth)
+        var m: LunarMonth = LunarMonth(lunarYear, lunarMonth)
         if (i != 0) {
             m = m.next(i)
         }
-        return fromIndex(m.year, m.getMonthWithLeap(), nextIndex(n))
+        return Phase(m.year, m.monthValue, nextIndex(n))
     }
 
-    protected fun getStartSolarTime(): SolarTime {
+    private fun getStartSolarTime(): SolarTime {
         val n: Int = floor((lunarYear - 2000) * 365.2422 / 29.53058886).toInt()
         var i = 0
-        val d: SolarDay = LunarDay.fromYmd(lunarYear, lunarMonth, 1).getSolarDay()
+        val d: SolarDay = LunarDay(lunarYear, lunarMonth, 1).getSolarDay()
         val jd: Double = JulianDay.J2000 + ShouXingUtil.ONE_THIRD
         while (true) {
-            val t: Double = msaLonT((n + i) * ShouXingUtil.PI_2) * 36525
-            if (!JulianDay.fromJulianDay(jd + t - dtT(t)).getSolarDay().isBefore(d)) {
+            val t: Double = ShouXingUtil.msaLonT((n + i) * ShouXingUtil.PI_2) * 36525
+            if (!JulianDay(jd + t - ShouXingUtil.dtT(t)).getSolarDay().isBefore(d)) {
                 break
             }
             i++
         }
-        val t: Double = msaLonT((n + i + intArrayOf(0, 90, 180, 270)[getIndex() / 2] / 360.0) * ShouXingUtil.PI_2) * 36525
-        return JulianDay.fromJulianDay(jd + t - dtT(t)).getSolarTime()
+        val t: Double = ShouXingUtil.msaLonT((n + i + intArrayOf(0, 90, 180, 270)[index / 2] / 360.0) * ShouXingUtil.PI_2) * 36525
+        return JulianDay(jd + t - ShouXingUtil.dtT(t)).getSolarTime()
     }
 
     /**
@@ -69,7 +67,7 @@ class Phase: LoopTyme {
      */
     fun getSolarTime(): SolarTime {
         val t: SolarTime = getStartSolarTime()
-        return if (getIndex() % 2 == 1) t.next(1) else t
+        return if (index.and(1) == 1) t.next(1) else t
     }
 
     /**
@@ -78,8 +76,8 @@ class Phase: LoopTyme {
      * @return 公历日
      */
     fun getSolarDay(): SolarDay {
-        val d: SolarDay = getStartSolarTime().getSolarDay()
-        return if (getIndex() % 2 == 1) d.next(1) else d
+        val d: SolarDay = getStartSolarTime().solarDay
+        return if (index.and(1) == 1) d.next(1) else d
     }
 
     companion object {

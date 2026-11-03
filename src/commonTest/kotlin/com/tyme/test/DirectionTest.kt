@@ -1,5 +1,6 @@
 package com.tyme.test
 
+import com.tyme.culture.Direction
 import com.tyme.solar.SolarDay
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,5 +33,10 @@ class DirectionTest {
     @Test
     fun test3() {
         assertEquals("东", SolarDay(2023, 11, 6).getLunarDay().getJupiterDirection().getName())
+    }
+
+    @Test
+    fun test4() {
+        assertEquals("玄天", Direction("北").getLand().getName())
     }
 }

@@ -1,8 +1,12 @@
 package com.tyme.test
 
 import com.tyme.lunar.LunarDay
+import com.tyme.solar.SolarDay
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+
 /**
  * 农历日测试
  *
@@ -116,12 +120,12 @@ class LunarDayTest {
 
     @Test
     fun test22() {
-        assertEquals("甲辰", LunarDay(2024, 1, 1).getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("甲辰", LunarDay(2024, 1, 1).lunarMonth.lunarYear.getSixtyCycle().getName())
     }
 
     @Test
     fun test23() {
-        assertEquals("癸卯", LunarDay(2023, 12, 30).getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("癸卯", LunarDay(2023, 12, 30).lunarMonth.lunarYear.getSixtyCycle().getName())
     }
 
     /**
@@ -160,8 +164,8 @@ class LunarDayTest {
     @Test
     fun test26() {
         val lunar = LunarDay(2005, 11, 23)
-        assertEquals("戊子", lunar.getLunarMonth().getSixtyCycle().getName())
-        assertEquals("戊子", lunar.getSixtyCycleDay().getMonth().getName())
+        assertEquals("戊子", lunar.lunarMonth.getSixtyCycle().getName())
+        assertEquals("戊子", lunar.getSixtyCycleDay().month.getName())
     }
 
     @Test
@@ -174,5 +178,70 @@ class LunarDayTest {
     fun test28() {
         val lunar = LunarDay(2024, 3, 5)
         assertEquals("大安", lunar.getMinorRen().getName())
+    }
+
+    @Test
+    fun test29() {
+        val lunar = SolarDay.fromYmd(2026, 2, 5).getLunarDay()
+        assertEquals("己丑", lunar.lunarMonth.getSixtyCycle().getName())
+
+        // 正月初一
+        assertEquals("马", LunarDay(2026, 1, 1).lunarMonth.lunarYear.getSixtyCycle().getEarthBranch().getZodiac().getName())
+
+        // 2026年2月16日
+        assertEquals("蛇", SolarDay(2026, 2, 16).getLunarDay().lunarMonth.lunarYear.getSixtyCycle().getEarthBranch().getZodiac().getName())
+    }
+
+    @Test
+    fun test30() {
+        val d0 = LunarDay(2028, 4, 2)
+        val d1 = LunarDay(2028, 5, 2)
+        val d2 = LunarDay(2028, -5, 2)
+        val d3 = LunarDay(2028, 6, 2)
+        assertTrue(d0.isBefore(d1))
+        assertTrue(d0.isBefore(d2))
+        assertTrue(d0.isBefore(d3))
+        assertTrue(d1.isBefore(d2))
+        assertTrue(d1.isBefore(d3))
+        assertTrue(d2.isBefore(d3))
+
+        assertFalse(d3.isBefore(d2))
+        assertFalse(d3.isBefore(d1))
+        assertFalse(d3.isBefore(d0))
+        assertFalse(d2.isBefore(d1))
+        assertFalse(d2.isBefore(d0))
+        assertFalse(d1.isBefore(d0))
+    }
+
+    @Test
+    fun test31() {
+        val d0 = LunarDay.fromYmd(2028, 4, 2)
+        val d1 = LunarDay.fromYmd(2028, 5, 2)
+        val d2 = LunarDay.fromYmd(2028, -5, 2)
+        val d3 = LunarDay.fromYmd(2028, 6, 2)
+        assertTrue(d3.isAfter(d2))
+        assertTrue(d3.isAfter(d1))
+        assertTrue(d3.isAfter(d0))
+        assertTrue(d2.isAfter(d1))
+        assertTrue(d2.isAfter(d0))
+        assertTrue(d1.isAfter(d0))
+
+        assertFalse(d0.isAfter(d1))
+        assertFalse(d0.isAfter(d2))
+        assertFalse(d0.isAfter(d3))
+        assertFalse(d1.isAfter(d2))
+        assertFalse(d1.isAfter(d3))
+        assertFalse(d2.isAfter(d3))
+    }
+
+    @Test
+    fun test32() {
+        val d: LunarDay = LunarDay(2026, 1, 1)
+        assertEquals(true, d.isBefore(LunarDay(2027, 1, 1)))
+        assertEquals(true, d.isAfter(LunarDay(2024, 1, 1)))
+        assertEquals(13, d.getHours().size)
+        assertEquals("丙午 庚寅 壬戌", d.getThreePillars().toString())
+        assertEquals("丙午", d.getSixtyCycleDay().year.toString())
+        assertEquals("庚寅", d.getSixtyCycleDay().month.toString())
     }
 }

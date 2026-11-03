@@ -1,7 +1,9 @@
 package com.tyme.rabbyung
 
+import com.tyme.culture.Week
+import com.tyme.lunar.LunarDay
 import com.tyme.solar.SolarDay
-import com.tyme.unit.DayUnit
+import com.tyme.unit.AbstractDay
 import kotlin.jvm.JvmStatic
 import kotlin.math.abs
 
@@ -10,16 +12,12 @@ import kotlin.math.abs
  *
  * @author 6tail
  */
-class RabByungDay(
-    year: Int,
-    month: Int,
-    day: Int
-) : DayUnit(year, month, abs(day)) {
+class RabByungDay(year: Int, month: Int, day: Int): AbstractDay(year, month, abs(day)) {
 
     /**
      * 是否闰日
      */
-    private var leap: Boolean
+    val leap: Boolean
 
     init {
         validate(year, month, day)
@@ -28,20 +26,12 @@ class RabByungDay(
 
     /**
      * 藏历月
-     *
-     * @return 藏历月
      */
-    fun getRabByungMonth(): RabByungMonth {
-        return RabByungMonth.fromYm(year, month)
-    }
+    val rabByungMonth: RabByungMonth
+        get() = RabByungMonth(year, month)
 
-    /**
-     * 是否闰日
-     *
-     * @return true/false
-     */
-    fun isLeap(): Boolean {
-        return leap
+    override fun getWeek(): Week {
+        return getSolarDay().getWeek()
     }
 
     /**
@@ -54,11 +44,11 @@ class RabByungDay(
     }
 
     override fun getName(): String {
-        return (if (leap) "闰" else "") + NAMES[day - 1]
+        return (if (leap) "闰" else "") + LunarDay.NAMES[day - 1]
     }
 
     override fun toString(): String {
-        return getRabByungMonth().toString() + getName()
+        return rabByungMonth.toString() + getName()
     }
 
     /**
@@ -77,11 +67,11 @@ class RabByungDay(
      * @return 公历日
      */
     fun getSolarDay(): SolarDay {
-        var m: RabByungMonth = RabByungMonth.fromYm(1950, 12)
-        val cm: RabByungMonth = getRabByungMonth()
+        var m: RabByungMonth = RabByungMonth(1950, 12)
+        val cm: RabByungMonth = rabByungMonth
         var n = 0
         while (m != cm) {
-            n += m.getDayCount()
+            n += m.dayCount
             m = m.next(1)
         }
         var t = day
@@ -107,19 +97,20 @@ class RabByungDay(
     }
 
     companion object {
-        val NAMES: Array<String> = arrayOf("初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十", "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十", "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十")
-
         @JvmStatic
         fun validate(year: Int, month: Int, day: Int) {
-            require(day in -30 .. 30 && day != 0) { "illegal day $day in $month" }
-            val leap: Boolean = day < 0
-            var d: Int = day
-            if (leap) {
-                d = -d
+            if (day == 0 || day < -30 || day > 30) {
+                throw IllegalArgumentException("illegal day $day in $month")
             }
-            val m: RabByungMonth = RabByungMonth.fromYm(year, month)
-            require(!(leap && !m.getLeapDays().contains(d))) { "illegal leap day $d in $m" }
-            require(!(!leap && m.getMissDays().contains(d))) { "illegal day $d in $m" }
+            val leap: Boolean = day < 0
+            val d: Int = abs(day)
+            val m: RabByungMonth = RabByungMonth(year, month)
+            if (leap && !m.getLeapDays().contains(d)) {
+                throw IllegalArgumentException("illegal leap day $d in $m")
+            }
+            if (!leap && m.getMissDays().contains(d)) {
+                throw IllegalArgumentException("illegal day $d in $m")
+            }
         }
 
         /**
@@ -137,12 +128,12 @@ class RabByungDay(
         @JvmStatic
         fun fromSolarDay(solarDay: SolarDay): RabByungDay {
             var days: Int = solarDay.subtract(SolarDay(1951, 1, 8))
-            var m: RabByungMonth = RabByungMonth.fromYm(1950, 12)
-            var count: Int = m.getDayCount()
+            var m: RabByungMonth = RabByungMonth(1950, 12)
+            var count: Int = m.dayCount
             while (days >= count) {
                 days -= count
                 m = m.next(1)
-                count = m.getDayCount()
+                count = m.dayCount
             }
             var day: Int = days + 1
             for (d in m.getSpecialDays()) {
@@ -159,7 +150,7 @@ class RabByungDay(
                     }
                 }
             }
-            return RabByungDay(m.year, m.getMonthWithLeap(), day)
+            return RabByungDay(m.year, m.monthValue, day)
         }
     }
 }

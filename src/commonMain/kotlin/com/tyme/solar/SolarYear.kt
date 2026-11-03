@@ -1,7 +1,7 @@
 package com.tyme.solar
 
 import com.tyme.rabbyung.RabByungYear
-import com.tyme.unit.YearUnit
+import com.tyme.unit.AbstractYear
 import kotlin.jvm.JvmStatic
 
 /**
@@ -9,7 +9,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class SolarYear(year: Int) : YearUnit(year) {
+class SolarYear(year: Int): AbstractYear(year) {
 
     init {
         validate(year)
@@ -17,15 +17,9 @@ class SolarYear(year: Int) : YearUnit(year) {
 
     /**
      * 天数（1582年355天，平年365天，闰年366天）
-     *
-     * @return 天数
      */
-    fun getDayCount(): Int {
-        if (1582 == year) {
-            return 355
-        }
-        return if (isLeap()) 366 else 365
-    }
+    val dayCount: Int
+        get() = getDayCount(year)
 
     /**
      * 是否闰年(1582年以前，使用儒略历，能被4整除即为闰年。以后采用格里历，四年一闰，百年不闰，四百年再闰。)
@@ -33,14 +27,7 @@ class SolarYear(year: Int) : YearUnit(year) {
      * @return true/false
      */
     fun isLeap(): Boolean {
-        if (year < 1600) {
-            return year % 4 == 0
-        }
-        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
-    }
-
-    override fun getName(): String {
-        return "${year}年"
+        return isLeap(year)
     }
 
     override fun next(n: Int): SolarYear {
@@ -92,15 +79,7 @@ class SolarYear(year: Int) : YearUnit(year) {
      * @return 藏历年
      */
     fun getRabByungYear(): RabByungYear {
-        return RabByungYear.fromYear(year)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is SolarYear && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
+        return RabByungYear(year)
     }
 
     companion object {
@@ -118,6 +97,33 @@ class SolarYear(year: Int) : YearUnit(year) {
         @JvmStatic
         fun fromYear(year: Int): SolarYear {
             return SolarYear(year)
+        }
+
+        /**
+         * 天数（1582年355天，平年365天，闰年366天）
+         *
+         * @param year 公历年
+         * @return 天数
+         */
+        @JvmStatic
+        fun getDayCount(year: Int): Int {
+            if (1582 == year) {
+                return 355
+            }
+            return if (isLeap(year)) 366 else 365
+        }
+
+        /**
+         * 是否闰年(1582年以前，使用儒略历，能被4整除即为闰年。以后采用格里历，四年一闰，百年不闰，四百年再闰。)
+         *
+         * @param year 公历年
+         * @return true/false
+         */
+        fun isLeap(year: Int): Boolean {
+            if (year < 1600) {
+                return year % 4 == 0
+            }
+            return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
         }
     }
 }

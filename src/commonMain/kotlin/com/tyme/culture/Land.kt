@@ -17,9 +17,13 @@ class Land: LoopTyme {
         return Land(nextIndex(n))
     }
 
-    /** 方位 */
+    /**
+     * 方位
+     *
+     * @return 方位
+     */
     fun getDirection(): Direction {
-        return Direction(getIndex())
+        return Direction(index)
     }
 
     companion object {

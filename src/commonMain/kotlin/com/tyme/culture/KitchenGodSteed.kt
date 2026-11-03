@@ -10,17 +10,17 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class KitchenGodSteed(lunarYear: Int) : AbstractCulture() {
+class KitchenGodSteed(lunarYear: Int): AbstractCulture() {
     /**
      * 正月初一的干支
      */
-    protected var firstDaySixtyCycle: SixtyCycle = LunarDay(lunarYear, 1, 1).getSixtyCycle()
+    private var firstDaySixtyCycle: SixtyCycle = LunarDay(lunarYear, 1, 1).getSixtyCycle()
 
-    protected fun byHeavenStem(n: Int): String {
+    private fun byHeavenStem(n: Int): String {
         return NUMBERS[firstDaySixtyCycle.getHeavenStem().stepsTo(n)]
     }
 
-    protected fun byEarthBranch(n: Int): String {
+    private fun byEarthBranch(n: Int): String {
         return NUMBERS[firstDaySixtyCycle.getEarthBranch().stepsTo(n)]
     }
 

@@ -25,37 +25,34 @@ import com.tyme.rabbyung.RabByungDay
 import com.tyme.sixtycycle.HideHeavenStem
 import com.tyme.sixtycycle.HideHeavenStemDay
 import com.tyme.sixtycycle.SixtyCycleDay
-import com.tyme.unit.DayUnit
+import com.tyme.unit.AbstractDay
 import kotlin.jvm.JvmStatic
 import kotlin.math.ceil
 import kotlin.math.floor
-
 
 /**
  * 公历日
  *
  * @author 6tail
  */
-class SolarDay(
-    year: Int,
-    month: Int,
-    day: Int
-) : DayUnit(year, month, day) {
+class SolarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
 
     init {
         validate(year, month, day)
     }
 
-    fun getSolarMonth(): SolarMonth {
-        return SolarMonth.fromYm(year, month)
-    }
+    /**
+     * 公历月
+     */
+    val solarMonth: SolarMonth
+        get() = SolarMonth(year, month)
 
     /**
      * 星期
      *
      * @return 星期
      */
-    fun getWeek(): Week {
+    override fun getWeek(): Week {
         return getJulianDay().getWeek()
     }
 
@@ -76,7 +73,7 @@ class SolarDay(
     }
 
     override fun toString(): String {
-        return getSolarMonth().toString() + getName()
+        return solarMonth.toString() + getName()
     }
 
     override fun next(n: Int): SolarDay {
@@ -140,7 +137,7 @@ class SolarDay(
      * @return 公历周
      */
     fun getSolarWeek(start: Int): SolarWeek {
-        return SolarWeek(year, month, ceil((day + SolarDay(year, month, 1).getWeek().next(-start).getIndex()) / 7.0).toInt() - 1, start)
+        return SolarWeek(year, month, ceil((day + SolarDay(year, month, 1).getWeek().next(-start).index) / 7.0).toInt() - 1, start)
     }
 
     /**
@@ -159,13 +156,13 @@ class SolarDay(
      */
     fun getPhenologyDay(): PhenologyDay {
         val d: SolarTermDay = getTermDay()
-        val dayIndex: Int = d.getDayIndex()
+        val dayIndex: Int = d.dayIndex
         var index: Int = dayIndex / 5
         if (index > 2) {
             index = 2
         }
         val term: SolarTerm = d.getSolarTerm()
-        return PhenologyDay(Phenology(term.getYear(), term.getIndex() * 3 + index), dayIndex - index * 5)
+        return PhenologyDay(Phenology(term.year, term.index * 3 + index), dayIndex - index * 5)
     }
 
     /**
@@ -235,7 +232,7 @@ class SolarDay(
             term = term.next(-1)
         }
         var dayIndex: Int = subtract(term.getSolarDay())
-        val startIndex: Int = (term.getIndex() - 1) * 3
+        val startIndex: Int = (term.index - 1) * 3
         val data: String = "93705542220504xx1513904541632524533533105544806564xx7573304542018584xx95".substring(startIndex, startIndex + 6)
         var days = 0
         var heavenStemIndex = 0
@@ -255,22 +252,14 @@ class SolarDay(
             }
             typeIndex++
         }
-        val type: HideHeavenStemType = when (typeIndex) {
-            0 -> HideHeavenStemType.RESIDUAL
-            1 -> HideHeavenStemType.MIDDLE
-            else -> HideHeavenStemType.MAIN
-        }
-        return HideHeavenStemDay(HideHeavenStem(heavenStemIndex, type), dayIndex)
+        return HideHeavenStemDay(HideHeavenStem(heavenStemIndex, HideHeavenStemType.fromCode(typeIndex)!!), dayIndex)
     }
 
     /**
      * 位于当年的索引
-     *
-     * @return 索引
      */
-    fun getIndexInYear(): Int {
-        return subtract(SolarDay(year, 1, 1))
-    }
+    val indexInYear: Int
+        get() = subtract(SolarDay(year, 1, 1))
 
     /**
      * 公历日期相减，获得相差天数
@@ -279,7 +268,7 @@ class SolarDay(
      * @return 天数
      */
     fun subtract(target: SolarDay): Int {
-        return (getJulianDay().subtract(target.getJulianDay())).toInt()
+        return getJulianDay().subtract(target.getJulianDay()).toInt()
     }
 
     /**
@@ -297,13 +286,13 @@ class SolarDay(
      * @return 农历日
      */
     fun getLunarDay(): LunarDay {
-        var m: LunarMonth = LunarMonth.fromYm(year, month)
+        var m: LunarMonth = LunarMonth(year, month)
         var days = subtract(m.getFirstJulianDay().getSolarDay())
         while (days < 0) {
             m = m.next(-1)
-            days += m.getDayCount()
+            days += m.dayCount
         }
-        return LunarDay(m.year, m.getMonthWithLeap(), days + 1)
+        return LunarDay(m.year, m.monthValue, days + 1)
     }
 
     /**
@@ -314,7 +303,6 @@ class SolarDay(
     fun getSixtyCycleDay(): SixtyCycleDay {
         return SixtyCycleDay(this)
     }
-
     /**
      * 藏历日
      *
@@ -348,8 +336,8 @@ class SolarDay(
      * @return 月相第几天
      */
     fun getPhaseDay(): PhaseDay {
-        val month = getLunarDay().getLunarMonth().next(1)
-        var p = Phase.fromIndex(month.year, month.getMonthWithLeap(), 0)
+        val month = getLunarDay().lunarMonth.next(1)
+        var p = Phase(month.year, month.monthValue, 0)
         var d = p.getSolarDay()
         while (d.isAfter(this)) {
             p = p.next(-1)
@@ -368,14 +356,14 @@ class SolarDay(
     }
 
     /**
-     * 九星
+     * 九星（在冬至前后找到最近的甲子日为一白，往后二黑依次顺推；在夏至前后找到最近的甲子日为九紫，往后八白依次逆推。）
      *
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        val winterSolstice: SolarDay = SolarTerm.fromIndex(year, 0).getSolarDay()
-        val summerSolstice: SolarDay = SolarTerm.fromIndex(year, 12).getSolarDay()
-        val nextWinterSolstice: SolarDay = SolarTerm.fromIndex(year + 1, 0).getSolarDay()
+        val winterSolstice: SolarDay = SolarTerm(year, 0).getSolarDay()
+        val summerSolstice: SolarDay = SolarTerm(year, 12).getSolarDay()
+        val nextWinterSolstice: SolarDay = SolarTerm(year + 1, 0).getSolarDay()
         // 距冬至最近的甲子日
         val w: SolarDay = winterSolstice.next(winterSolstice.getLunarDay().getSixtyCycle().stepsCloseTo(0))
         // 距夏至最近的甲子日
@@ -410,14 +398,6 @@ class SolarDay(
         return HijriDay(z * 30 + y + 1, m + 1, d + 1)
     }
 
-    override fun equals(other: Any?): Boolean {
-        return other is SolarDay && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
-
     companion object {
         val NAMES: Array<String> = arrayOf("1日", "2日", "3日", "4日", "5日", "6日", "7日", "8日", "9日", "10日", "11日", "12日", "13日", "14日", "15日", "16日", "17日", "18日", "19日", "20日", "21日", "22日", "23日", "24日", "25日", "26日", "27日", "28日", "29日", "30日", "31日")
 
@@ -428,7 +408,7 @@ class SolarDay(
                 illegal = if (1582 == year && 10 == month) {
                     (day in 5..<15) || day > 31
                 } else {
-                    day > SolarMonth(year, month).getDayCount()
+                    day > SolarMonth.getDayCount(year, month)
                 }
             }
             if (illegal) {

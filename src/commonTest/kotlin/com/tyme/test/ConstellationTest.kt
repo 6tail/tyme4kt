@@ -1,5 +1,6 @@
 package com.tyme.test
 
+import com.tyme.culture.Constellation
 import com.tyme.solar.SolarDay
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -96,5 +97,10 @@ class ConstellationTest {
         assertEquals("双鱼", solar.getConstellation().getName())
         solar = SolarDay(2021, 3, 20)
         assertEquals("双鱼", solar.getConstellation().getName())
+    }
+
+    @Test
+    fun test12() {
+        assertEquals(0, Constellation("白羊").index)
     }
 }

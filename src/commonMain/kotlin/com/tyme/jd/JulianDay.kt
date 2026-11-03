@@ -4,6 +4,7 @@ import com.tyme.AbstractTyme
 import com.tyme.culture.Week
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTime
+import com.tyme.unit.SecondUnit
 import kotlin.jvm.JvmStatic
 import kotlin.math.round
 
@@ -12,15 +13,7 @@ import kotlin.math.round
  *
  * @author 6tail
  */
-class JulianDay(private var day: Double) : AbstractTyme() {
-    /**
-     * 儒略日
-     *
-     * @return 儒略日
-     */
-    fun getDay(): Double{
-        return day
-    }
+class JulianDay(val day: Double): AbstractTyme() {
 
     override fun getName(): String {
         return day.toString()
@@ -35,8 +28,9 @@ class JulianDay(private var day: Double) : AbstractTyme() {
      *
      * @return 公历日
      */
-    fun getSolarDay(): SolarDay{
-        return getSolarTime().getSolarDay()
+    fun getSolarDay(): SolarDay {
+        val u: SecondUnit = getSecondUnit(false)
+        return SolarDay(u.year, u.month, u.day)
     }
 
     /**
@@ -45,6 +39,18 @@ class JulianDay(private var day: Double) : AbstractTyme() {
      * @return 公历时刻
      */
     fun getSolarTime(): SolarTime {
+        val u = getSecondUnit(true)
+        val y: Int = u.year
+        val m: Int = u.month
+        val d: Int = u.day
+        val hour: Int = u.hour
+        val minute: Int = u.minute
+        val second: Int = u.second
+        return if (second < 60) SolarTime(y, m, d, hour, minute, second)
+        else SolarTime(y, m, d, hour, minute, second - 60).next(60)
+    }
+
+    private fun getSecondUnit(withTime: Boolean): SecondUnit {
         var d: Int = (day + 0.5).toInt()
         var f: Double = day + 0.5 - d
 
@@ -64,17 +70,20 @@ class JulianDay(private var day: Double) : AbstractTyme() {
         }
         m -= 1
         y -= 4715
-        f *= 24.0
-        val hour: Int = f.toInt()
-
-        f -= hour
-        f *= 60.0
-        val minute: Int = f.toInt()
-
-        f -= minute
-        f *= 60.0
-        val second: Int = round(f).toInt()
-        return if (second < 60) SolarTime(y, m, d, hour, minute, second) else SolarTime(y, m, d, hour, minute, second - 60).next(60)
+        var hour: Int = 0
+        var minute: Int = 0
+        var second: Int = 0
+        if (withTime) {
+            f *= 24.0
+            hour = f.toInt()
+            f -= hour
+            f *= 60.0
+            minute = f.toInt()
+            f -= minute
+            f *= 60.0
+            second = round(f).toInt()
+        }
+        return SecondUnit(y, m, d, hour, minute, second)
     }
 
     /**
@@ -93,11 +102,13 @@ class JulianDay(private var day: Double) : AbstractTyme() {
      * @return 差
      */
     fun subtract(target: JulianDay): Double {
-        return day - target.getDay()
+        return day - target.day
     }
 
     companion object {
-        /** 2000年儒略日数(2000-1-1 12:00:00 UTC) */
+        /**
+         * 2000年儒略日数(2000-1-1 12:00:00 UTC)
+         */
         const val J2000: Double = 2451545.0
 
         @JvmStatic
@@ -109,7 +120,7 @@ class JulianDay(private var day: Double) : AbstractTyme() {
         fun fromYmdHms(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int): JulianDay {
             var y: Int = year
             var m: Int = month
-            val d = day + ((second * 1.0 / 60 + minute) / 60 + hour) / 24
+            val d = day + ((second / 60.0 + minute) / 60 + hour) / 24
             var n = 0
             val g: Boolean = y * 372 + m * 31 + d.toInt() >= 588829
             if (m <= 2) {

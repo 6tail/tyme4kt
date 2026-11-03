@@ -11,11 +11,15 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class DecadeFortune(
-    /** 童限 */
-    protected var childLimit: ChildLimit,
-    /** 序号 */
-    protected var index: Int
-) : AbstractTyme() {
+    /**
+     * 童限
+     */
+    private val childLimit: ChildLimit,
+    /**
+     * 序号
+     */
+    private val index: Int
+): AbstractTyme() {
 
     /**
      * 开始年龄
@@ -23,7 +27,7 @@ class DecadeFortune(
      * @return 开始年龄
      */
     fun getStartAge(): Int {
-        return childLimit.getEndSixtyCycleYear().getYear() - childLimit.getStartSixtyCycleYear().getYear() + 1 + index * 10
+        return childLimit.getEndSixtyCycleYear().year - childLimit.getStartSixtyCycleYear().year + 1 + index * 10
     }
 
     /**
@@ -59,7 +63,7 @@ class DecadeFortune(
      * @return 干支
      */
     fun getSixtyCycle(): SixtyCycle {
-        return childLimit.getEightChar().getMonth().next(if (childLimit.isForward()) index + 1 else -index - 1)
+        return childLimit.eightChar.month.next(if (childLimit.isForward()) index + 1 else -index - 1)
     }
 
     override fun getName(): String {
@@ -71,7 +75,8 @@ class DecadeFortune(
     }
 
     /**
-     * 本轮大运中开始的小运 Fortune
+     * 开始小运
+     *
      * @return 小运
      */
     fun getStartFortune(): Fortune {

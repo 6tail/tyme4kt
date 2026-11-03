@@ -27,7 +27,7 @@ open class Element: LoopTyme {
      * @return 五行
      */
     open fun getReinforce(): Element {
-        return this.next(1)
+        return next(1)
     }
 
     /**
@@ -36,7 +36,7 @@ open class Element: LoopTyme {
      * @return 五行
      */
     open fun getRestrain(): Element {
-        return this.next(2)
+        return next(2)
     }
 
     /**
@@ -45,7 +45,7 @@ open class Element: LoopTyme {
      * @return 五行
      */
     open fun getReinforced(): Element {
-        return this.next(-1)
+        return next(-1)
     }
 
     /**
@@ -54,7 +54,7 @@ open class Element: LoopTyme {
      * @return 五行
      */
     open fun getRestrained(): Element {
-        return this.next(-2)
+        return next(-2)
     }
 
     /**
@@ -63,7 +63,7 @@ open class Element: LoopTyme {
      * @return 方位
      */
     fun getDirection(): Direction {
-        return Direction(intArrayOf(2, 8, 4, 6, 0)[getIndex()])
+        return Direction(intArrayOf(2, 8, 4, 6, 0)[index])
     }
 
     companion object {

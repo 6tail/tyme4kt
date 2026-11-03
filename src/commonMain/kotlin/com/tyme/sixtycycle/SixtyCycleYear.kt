@@ -1,73 +1,21 @@
 package com.tyme.sixtycycle
 
-import com.tyme.AbstractTyme
-import com.tyme.culture.Direction
-import com.tyme.culture.Twenty
-import com.tyme.culture.star.nine.NineStar
+import com.tyme.unit.AbstractTraditionalYear
 import kotlin.jvm.JvmStatic
-import kotlin.math.floor
 
 /**
  * 干支年
  *
  * @author 6tail
  */
-class SixtyCycleYear(
-    /** 年，支持-1到9999年 */
-    private var year: Int
-) : AbstractTyme() {
+class SixtyCycleYear(year: Int): AbstractTraditionalYear(year) {
 
     init {
         validate(year)
     }
 
-    /**
-     * 年
-     *
-     * @return 年
-     */
-    fun getYear(): Int {
-        return year
-    }
-
-    /**
-     * 干支
-     *
-     * @return 干支
-     */
-    fun getSixtyCycle(): SixtyCycle {
-        return SixtyCycle(year - 4)
-    }
-
     override fun getName(): String {
         return "${getSixtyCycle().getName()}年"
-    }
-
-    /**
-     * 运
-     *
-     * @return 运
-     */
-    fun getTwenty(): Twenty {
-        return Twenty(floor((year - 1864) / 20.0).toInt())
-    }
-
-    /**
-     * 九星
-     *
-     * @return 九星
-     */
-    fun getNineStar(): NineStar {
-        return NineStar(63 + getTwenty().getSixty().getIndex() * 3 - getSixtyCycle().getIndex())
-    }
-
-    /**
-     * 太岁方位
-     *
-     * @return 方位
-     */
-    fun getJupiterDirection(): Direction {
-        return Direction(intArrayOf(0, 7, 7, 2, 3, 3, 8, 1, 1, 6, 0, 0)[getSixtyCycle().getEarthBranch().getIndex()])
     }
 
     /**
@@ -82,12 +30,9 @@ class SixtyCycleYear(
 
     /**
      * 首月（五虎遁：甲己之年丙作首，乙庚之岁戊为头，丙辛必定寻庚起，丁壬壬位顺行流，若问戊癸何方发，甲寅之上好追求。）
-     *
-     * @return 干支月
      */
-    fun getFirstMonth(): SixtyCycleMonth {
-        return SixtyCycleMonth(this, SixtyCycle(year * 12 - 46))
-    }
+    val firstMonth: SixtyCycleMonth
+        get() = SixtyCycleMonth(this, SixtyCycle(year * 12 - 46))
 
     /**
      * 干支月列表
@@ -95,8 +40,8 @@ class SixtyCycleYear(
      * @return 干支月列表
      */
     fun getMonths(): List<SixtyCycleMonth> {
-        val l: MutableList<SixtyCycleMonth> = mutableListOf()
-        val m: SixtyCycleMonth = getFirstMonth()
+        val l: MutableList<SixtyCycleMonth> = ArrayList(12)
+        val m: SixtyCycleMonth = firstMonth
         l.add(m)
         for (i in 1 until 12) {
             l.add(m.next(i))

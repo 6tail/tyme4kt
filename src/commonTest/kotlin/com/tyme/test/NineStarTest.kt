@@ -17,49 +17,49 @@ import kotlin.test.assertEquals
 class NineStarTest {
     @Test
     fun test0() {
-        val nineStar: NineStar = LunarYear(1985).getNineStar()
+        val nineStar: NineStar = LunarYear(1985).nineStar
         assertEquals("六", nineStar.getName())
         assertEquals("六白金", nineStar.toString())
     }
 
     @Test
     fun test1() {
-        val nineStar: NineStar = LunarYear(2022).getNineStar()
+        val nineStar: NineStar = LunarYear(2022).nineStar
         assertEquals("五黄土", nineStar.toString())
         assertEquals("玉衡", nineStar.getDipper().toString())
     }
 
     @Test
     fun test2() {
-        val nineStar: NineStar = LunarYear(2033).getNineStar()
+        val nineStar: NineStar = LunarYear(2033).nineStar
         assertEquals("三碧木", nineStar.toString())
         assertEquals("天玑", nineStar.getDipper().toString())
     }
 
     @Test
     fun test3() {
-        val nineStar: NineStar = LunarMonth.fromYm(1985, 2).getNineStar()
+        val nineStar: NineStar = LunarMonth(1985, 2).getNineStar()
         assertEquals("四绿木", nineStar.toString())
         assertEquals("天权", nineStar.getDipper().toString())
     }
 
     @Test
     fun test4() {
-        val nineStar: NineStar = LunarMonth.fromYm(1985, 2).getNineStar()
+        val nineStar: NineStar = LunarMonth(1985, 2).getNineStar()
         assertEquals("四绿木", nineStar.toString())
         assertEquals("天权", nineStar.getDipper().toString())
     }
 
     @Test
     fun test5() {
-        val nineStar: NineStar = LunarMonth.fromYm(2022, 1).getNineStar()
+        val nineStar: NineStar = LunarMonth(2022, 1).getNineStar()
         assertEquals("二黑土", nineStar.toString())
         assertEquals("天璇", nineStar.getDipper().toString())
     }
 
     @Test
     fun test6() {
-        val nineStar: NineStar = LunarMonth.fromYm(2033, 1).getNineStar()
+        val nineStar: NineStar = LunarMonth(2033, 1).getNineStar()
         assertEquals("五黄土", nineStar.toString())
         assertEquals("玉衡", nineStar.getDipper().toString())
     }
@@ -101,9 +101,19 @@ class NineStarTest {
 
     @Test
     fun test12() {
-        var m: LunarMonth = LunarMonth.fromYm(2024, 11)
+        var m: LunarMonth = LunarMonth(2024, 11)
         assertEquals("四绿木", m.getNineStar().toString())
-        m = LunarMonth.fromYm(2024, 12)
+        m = LunarMonth(2024, 12)
         assertEquals("三碧木", m.getNineStar().toString())
+    }
+
+    @Test
+    fun test13() {
+        assertEquals("九紫火", SolarDay(2026, 6, 19).getLunarDay().getNineStar().toString())
+    }
+
+    @Test
+    fun test14() {
+        assertEquals("一白水", SolarDay(2026, 12, 16).getLunarDay().getNineStar().toString())
     }
 }

@@ -17,14 +17,22 @@ class Zone: LoopTyme {
         return Zone(nextIndex(n))
     }
 
-    /** 方位 */
+    /**
+     * 方位
+     *
+     * @return 方位
+     */
     fun getDirection(): Direction {
-        return Direction(this.getName())
+        return Direction(getName())
     }
 
-    /** 神兽 */
+    /**
+     * 神兽
+     *
+     * @return 神兽
+     */
     fun getBeast(): Beast {
-        return Beast(getIndex())
+        return Beast(index)
     }
 
     companion object {

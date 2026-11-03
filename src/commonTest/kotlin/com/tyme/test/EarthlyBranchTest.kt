@@ -1,7 +1,12 @@
 package com.tyme.test
 
+import com.tyme.enums.HideHeavenStemType
+import com.tyme.enums.YinYang
 import com.tyme.sixtycycle.EarthBranch
+import com.tyme.sixtycycle.HeavenStem
+import com.tyme.sixtycycle.HideHeavenStem
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
@@ -18,7 +23,7 @@ class EarthlyBranchTest {
 
     @Test
     fun test1() {
-        assertEquals(0, EarthBranch("子").getIndex())
+        assertEquals(0, EarthBranch("子").index)
     }
 
     @Test
@@ -49,5 +54,33 @@ class EarthlyBranchTest {
         assertEquals("火", EarthBranch("戌").combine(EarthBranch("卯"))?.getName())
         // 卯子无法合化
         assertNull(EarthBranch("卯").combine(EarthBranch("子")))
+    }
+
+    @Test
+    fun test6() {
+        assertEquals(YinYang.YANG, EarthBranch(0).getYinYang())
+    }
+
+    @Test
+    fun test7() {
+        assertContentEquals(
+            EarthBranch("子").getHideHeavenStems(),
+            listOf(HideHeavenStem(HeavenStem("癸"), HideHeavenStemType.MAIN))
+        )
+    }
+
+    @Test
+    fun test8() {
+        assertEquals("北", EarthBranch("子").getDirection().getName())
+    }
+
+    @Test
+    fun test9() {
+        assertEquals("南", EarthBranch("子").getOminous().getName())
+    }
+
+    @Test
+    fun test10() {
+        assertEquals("子不问卜自惹祸殃", EarthBranch("子").getPengZuEarthBranch().getName())
     }
 }

@@ -15,13 +15,10 @@ import kotlin.test.assertNull
 class SolarFestivalTest {
     @Test
     fun test0() {
-        var i = 0
-        val j = SolarFestival.NAMES.size
-        while (i < j) {
+        for ((i, element) in SolarFestival.NAMES.withIndex()) {
             val f = SolarFestival.fromIndex(2023, i)
             assertNotNull(f)
-            assertEquals(SolarFestival.NAMES[i], f.getName())
-            i++
+            assertEquals(element, f.getName())
         }
     }
 
@@ -29,13 +26,10 @@ class SolarFestivalTest {
     fun test1() {
         val f = SolarFestival.fromIndex(2023, 0)
         assertNotNull(f)
-        var i = 0
-        val j = SolarFestival.NAMES.size
-        while (i < j) {
+        for ((i, element) in SolarFestival.NAMES.withIndex()) {
             val n = f.next(i)
             assertNotNull(n)
-            assertEquals(SolarFestival.NAMES[i], n.getName())
-            i++
+            assertEquals(element, n.getName())
         }
     }
 

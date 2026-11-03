@@ -22,14 +22,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class LunarHour(
-    year: Int,
-    month: Int,
-    day: Int,
-    hour: Int,
-    minute: Int,
-    second: Int
-) : SecondUnit(year, month, day, hour, minute, second) {
+class LunarHour(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int): SecondUnit(year, month, day, hour, minute, second) {
 
     init {
         validate(year, month, day, hour, minute, second)
@@ -37,36 +30,30 @@ class LunarHour(
 
     /**
      * 农历日
-     *
-     * @return 农历日
      */
-    fun getLunarDay(): LunarDay {
-        return LunarDay(year, month, day)
-    }
+    val lunarDay: LunarDay
+        get() = LunarDay(year, month, day)
 
     override fun getName(): String {
-        return "${EarthBranch(getIndexInDay()).getName()}时"
+        return "${EarthBranch(indexInDay).getName()}时"
     }
 
     override fun toString(): String {
-        return "${getLunarDay()}${getSixtyCycle().getName()}时"
+        return "${lunarDay}${getSixtyCycle().getName()}时"
     }
 
     /**
      * 位于当天的索引
-     *
-     * @return 索引
      */
-    fun getIndexInDay(): Int {
-        return (hour + 1) / 2
-    }
+    val indexInDay: Int
+        get() = (hour + 1) / 2
 
     override fun next(n: Int): LunarHour {
         if (n == 0) {
             return LunarHour(year, month, day, hour, minute, second)
         }
         val h: Int = hour + n * 2
-        val d: LunarDay = getLunarDay().next(h.floorDiv(24))
+        val d: LunarDay = lunarDay.next(h.floorDiv(24))
         return LunarHour(d.year, d.month, d.day, indexOf(h, 24), minute, second)
     }
 
@@ -96,13 +83,13 @@ class LunarHour(
      * @return 干支
      */
     fun getSixtyCycle(): SixtyCycle {
-        var e: Int = getIndexInDay()
-        var h: HeavenStem = getLunarDay().getSixtyCycle().getHeavenStem()
+        var e: Int = indexInDay
+        var h: HeavenStem = lunarDay.getSixtyCycle().getHeavenStem()
         if (hour >= 23) {
             h = h.next(1)
             e = 0
         }
-        return SixtyCycle.fromIndex(h.getIndex() * 12 + e)
+        return SixtyCycle(h.index * 12 + e)
     }
 
     /**
@@ -111,7 +98,7 @@ class LunarHour(
      * @return 黄道黑道十二神
      */
     fun getTwelveStar(): TwelveStar {
-        return TwelveStar(getSixtyCycle().getEarthBranch().getIndex() + (8 - getSixtyCycleHour().getDay().getEarthBranch().getIndex() % 6) * 2)
+        return TwelveStar(getSixtyCycle().getEarthBranch().index + (8 - getSixtyCycleHour().day.getEarthBranch().index % 6) * 2)
     }
 
     /**
@@ -120,11 +107,10 @@ class LunarHour(
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        val d: LunarDay = getLunarDay()
-        val solar: SolarDay = d.getSolarDay()
+        val solar: SolarDay = lunarDay.getSolarDay()
         val dongZhi = SolarTerm(solar.year, 0)
-        val earthBranchIndex: Int = getIndexInDay() % 12
-        var index: Int = 8 - 3 * (d.getSixtyCycle().getEarthBranch().getIndex() % 3)
+        val earthBranchIndex: Int = indexInDay % 12
+        var index: Int = 8 - 3 * (lunarDay.getSixtyCycle().getEarthBranch().index % 3)
         if (!solar.isBefore(dongZhi.getJulianDay().getSolarDay()) && solar.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {
             index = 8 + earthBranchIndex - index
         } else {
@@ -139,7 +125,7 @@ class LunarHour(
      * @return 公历时刻
      */
     fun getSolarTime(): SolarTime {
-        val d: SolarDay = getLunarDay().getSolarDay()
+        val d: SolarDay = lunarDay.getSolarDay()
         return SolarTime(d.year, d.month, d.day, hour, minute, second)
     }
 
@@ -167,7 +153,7 @@ class LunarHour(
      * @return 宜忌列表
      */
     fun getRecommends(): List<Taboo> {
-        return Taboo.getHourRecommends(getSixtyCycleHour().getDay(), getSixtyCycle())
+        return Taboo.getHourRecommends(getSixtyCycleHour().day, getSixtyCycle())
     }
 
     /**
@@ -176,7 +162,7 @@ class LunarHour(
      * @return 宜忌列表
      */
     fun getAvoids(): List<Taboo> {
-        return Taboo.getHourAvoids(getSixtyCycleHour().getDay(), getSixtyCycle())
+        return Taboo.getHourAvoids(getSixtyCycleHour().day, getSixtyCycle())
     }
 
     /**
@@ -185,19 +171,13 @@ class LunarHour(
      * @return 小六壬
      */
     fun getMinorRen(): MinorRen {
-        return getLunarDay().getMinorRen().next(getIndexInDay())
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is LunarHour && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
+        return lunarDay.getMinorRen().next(indexInDay)
     }
 
     companion object {
-        /** 八字计算接口 */
+        /**
+         * 八字计算接口
+         */
         var provider: EightCharProvider = DefaultEightCharProvider()
 
         @JvmStatic
@@ -206,6 +186,16 @@ class LunarHour(
             LunarDay.validate(year, month, day)
         }
 
+        /**
+         * 从农历年月日时分秒初始化
+         *
+         * @param year   农历年
+         * @param month  农历月，闰月为负
+         * @param day    农历日
+         * @param hour   时
+         * @param minute 分
+         * @param second 秒
+         */
         @JvmStatic
         fun fromYmdHms(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int): LunarHour {
             return LunarHour(year, month, day, hour, minute, second)

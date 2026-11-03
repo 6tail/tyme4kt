@@ -4,6 +4,7 @@ import com.tyme.lunar.LunarDay
 import com.tyme.solar.SolarDay
 import kotlin.test.Test
 import kotlin.test.assertEquals
+
 /**
  * 公历日测试
  *
@@ -24,9 +25,9 @@ class SolarDayTest {
 
     @Test
     fun test2() {
-        assertEquals(0, SolarDay(2023, 1, 1).getIndexInYear())
-        assertEquals(364, SolarDay(2023, 12, 31).getIndexInYear())
-        assertEquals(365, SolarDay(2020, 12, 31).getIndexInYear())
+        assertEquals(0, SolarDay(2023, 1, 1).indexInYear)
+        assertEquals(364, SolarDay(2023, 12, 31).indexInYear)
+        assertEquals(365, SolarDay(2020, 12, 31).indexInYear)
     }
 
     @Test
@@ -83,12 +84,12 @@ class SolarDayTest {
 
     @Test
     fun test22() {
-        assertEquals("甲辰", SolarDay(2024, 2, 10).getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("甲辰", SolarDay(2024, 2, 10).getLunarDay().lunarMonth.lunarYear.getSixtyCycle().getName())
     }
 
     @Test
     fun test23() {
-        assertEquals("癸卯", SolarDay(2024, 2, 9).getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("癸卯", SolarDay(2024, 2, 9).getLunarDay().lunarMonth.lunarYear.getSixtyCycle().getName())
     }
 
     @Test

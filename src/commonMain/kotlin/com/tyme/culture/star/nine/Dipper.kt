@@ -8,10 +8,10 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class Dipper : LoopTyme {
-    constructor(index: Int) : super(NAMES, index)
+class Dipper: LoopTyme {
+    constructor(index: Int): super(NAMES, index)
 
-    constructor(name: String) : super(NAMES, name)
+    constructor(name: String): super(NAMES, name)
 
     override fun next(n: Int): Dipper {
         return Dipper(nextIndex(n))

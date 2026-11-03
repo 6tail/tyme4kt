@@ -3,6 +3,7 @@ package com.tyme.eightchar.provider.impl
 import com.tyme.eightchar.ChildLimitInfo
 import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTime
+import com.tyme.unit.SecondUnit
 import kotlin.math.abs
 
 /**
@@ -10,8 +11,8 @@ import kotlin.math.abs
  *
  * @author 6tail
  */
-class LunarSect2ChildLimitProvider: AbstractChildLimitProvider() {
-    override fun getInfo(birthTime: SolarTime, term: SolarTerm): ChildLimitInfo {
+open class LunarSect2ChildLimitProvider: AbstractChildLimitProvider() {
+    protected fun compute(birthTime: SolarTime, term: SolarTerm): SecondUnit {
         // 出生时刻和节令时刻相差的分钟数
         var minutes = abs(term.getJulianDay().getSolarTime().subtract(birthTime)) / 60
         val year = minutes / 4320
@@ -21,7 +22,11 @@ class LunarSect2ChildLimitProvider: AbstractChildLimitProvider() {
         val day = minutes / 12
         minutes %= 12
         val hour = minutes * 2
+        return SecondUnit(year, month, day, hour, 0, 0)
+    }
 
-        return next(birthTime, year, month, day, hour, 0, 0)
+    override fun getInfo(birthTime: SolarTime, term: SolarTerm): ChildLimitInfo {
+        val t = compute(birthTime, term)
+        return next(birthTime, t.year, t.month, t.day, t.hour, 0, 0)
     }
 }

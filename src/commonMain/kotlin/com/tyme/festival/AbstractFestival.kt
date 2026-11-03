@@ -3,33 +3,33 @@ package com.tyme.festival
 import com.tyme.AbstractTyme
 import com.tyme.event.Event
 import com.tyme.unit.DayUnit
+import kotlin.jvm.JvmStatic
 
 /**
  * 节日抽象
  *
  * @author 6tail
  */
-abstract class AbstractFestival(
+abstract class AbstractFestival: AbstractTyme {
     /**
      * 索引
      */
-    private var index: Int,
-    /**
-     * 事件
-     */
-    private var event: Event,
+    protected val index: Int
+
     /**
      * 日
      */
-    private var day: DayUnit
-) : AbstractTyme() {
+    private val day: DayUnit
+
     /**
-     * 索引
-     *
-     * @return 索引
+     * 事件
      */
-    fun getIndex(): Int{
-        return index
+    protected val event: Event
+
+    constructor(index: Int, event: Event, day: DayUnit): super() {
+        this.index = index
+        this.event = event
+        this.day = day
     }
 
     /**
@@ -46,6 +46,17 @@ abstract class AbstractFestival(
     }
 
     override fun toString(): String {
-        return "${getDay()} ${getName()}"
+        return "$day ${getName()}"
+    }
+
+    companion object {
+        @JvmStatic
+        protected fun buildEvent(names: Array<String>, data: String, index: Int): Event? {
+            if (index < 0 || index >= names.size) {
+                return null
+            }
+            val start = index * 8
+            return Event(names[index], "@" + data.substring(start, start + 8))
+        }
     }
 }

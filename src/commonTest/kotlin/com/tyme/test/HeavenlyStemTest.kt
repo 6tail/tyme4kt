@@ -18,16 +18,20 @@ class HeavenlyStemTest {
 
     @Test
     fun test1() {
-        assertEquals(0, HeavenStem("甲").getIndex())
+        assertEquals(0, HeavenStem("甲").index)
     }
 
-    /** 天干的五行生克 */
+    /**
+     * 天干的五行生克
+     */
     @Test
     fun test2() {
         assertEquals(HeavenStem("丙").getElement(), HeavenStem("甲").getElement().getReinforce())
     }
 
-    /** 十神  */
+    /**
+     * 十神
+     */
     @Test
     fun test3() {
         val SHI_SHEN = mapOf(
@@ -130,19 +134,16 @@ class HeavenlyStemTest {
             "癸己" to "七杀",
             "癸戊" to "正官",
             "癸辛" to "偏印",
-            "癸庚" to "正印",
+            "癸庚" to "正印"
         )
         for ((gz, value) in SHI_SHEN) {
-            assertEquals(value,
-                gz.let {
-                    HeavenStem(it.substring(0, 1))
-                        .getTenStar(HeavenStem(gz.substring(1))).getName()
-                }
-            )
+            assertEquals(value, HeavenStem(gz.substring(0, 1)).getTenStar(HeavenStem(gz.substring(1))).getName())
         }
     }
 
-    /** 天干五合 */
+    /**
+     * 天干五合
+     */
     @Test
     fun test4() {
         assertEquals("乙", HeavenStem("庚").getCombine().getName())

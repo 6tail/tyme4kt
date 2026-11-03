@@ -12,21 +12,28 @@ import kotlin.math.floor
  * @author 6tail
  */
 class SolarTerm: LoopTyme {
-    /** 年 */
-    private var year: Int = 0
-    /** 儒略日（用于日历，只精确到日中午12:00） */
-    private var cursoryJulianDay: Double = 0.0
+    /**
+     * 年
+     */
+    var year: Int = 0
+        private set
 
-    constructor(year: Int, index: Int) : super(NAMES, index) {
+    /**
+     * 儒略日（用于日历，只精确到日中午12:00）
+     */
+    var cursoryJulianDay: Double = 0.0
+        private set
+
+    constructor(year: Int, index: Int): super(NAMES, index) {
         val size = getSize()
-        initByYear((year * size + index) / size, getIndex())
+        initByYear((year * size + index) / size, super.index)
     }
 
-    constructor(year: Int, name: String) : super(NAMES, name) {
-        initByYear(year, getIndex())
+    constructor(year: Int, name: String): super(NAMES, name) {
+        initByYear(year, super.index)
     }
 
-    protected fun initByYear(year: Int, offset: Int) {
+    private fun initByYear(year: Int, offset: Int) {
         val jd = floor((year - 2000) * 365.2422 + 180)
         // 355是2000.12冬至，得到较靠近jd的冬至估计值
         var w: Double = floor((jd - 355 + 183) / 365.2422) * 365.2422 + 355
@@ -34,12 +41,12 @@ class SolarTerm: LoopTyme {
             w -= 365.2422
         }
         this.year = year
-        this.cursoryJulianDay = ShouXingUtil.calcQi(w + 15.2184 * offset)
+        cursoryJulianDay = ShouXingUtil.calcQi(w + 15.2184 * offset)
     }
 
     override fun next(n: Int): SolarTerm {
         val size = getSize()
-        val i = getIndex() + n
+        val i = index + n
         return SolarTerm((year * size + i) / size, indexOf(i))
     }
 
@@ -49,7 +56,7 @@ class SolarTerm: LoopTyme {
      * @return true/false
      */
     fun isJie(): Boolean {
-        return getIndex() % 2 == 1
+        return index.and(1) == 1
     }
 
     /**
@@ -58,7 +65,7 @@ class SolarTerm: LoopTyme {
      * @return true/false
      */
     fun isQi(): Boolean {
-        return getIndex() % 2 == 0
+        return index.and(1) == 0
     }
 
     /**
@@ -76,33 +83,7 @@ class SolarTerm: LoopTyme {
      * @return 公历日
      */
     fun getSolarDay(): SolarDay {
-        return JulianDay.fromJulianDay(cursoryJulianDay + JulianDay.J2000).getSolarDay()
-    }
-
-    /**
-     * 年
-     *
-     * @return 年
-     */
-    fun getYear(): Int {
-        return year
-    }
-
-    /**
-     * 儒略日（用于日历，只精确到日中午12:00）
-     *
-     * @return 儒略日数
-     */
-    fun getCursoryJulianDay(): Double {
-        return cursoryJulianDay
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is SolarTerm && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
+        return JulianDay(cursoryJulianDay + JulianDay.J2000).getSolarDay()
     }
 
     companion object {

@@ -11,12 +11,20 @@ import kotlin.math.ceil
  * @author 6tail
  */
 class ThreePillars: AbstractCulture {
-    /** 年柱 */
-    private var year: SixtyCycle
-    /** 月柱 */
-    private var month: SixtyCycle
-    /** 日柱 */
-    private var day: SixtyCycle
+    /**
+     * 年柱
+     */
+    val year: SixtyCycle
+
+    /**
+     * 月柱
+     */
+    val month: SixtyCycle
+
+    /**
+     * 日柱
+     */
+    val day: SixtyCycle
 
     /**
      * 初始化
@@ -25,43 +33,16 @@ class ThreePillars: AbstractCulture {
      * @param month 月柱
      * @param day   日柱
      */
-    constructor(year: String, month: String, day: String): super() {
+    constructor(year: String, month: String, day: String) {
         this.year = SixtyCycle(year)
         this.month = SixtyCycle(month)
         this.day = SixtyCycle(day)
     }
 
-    constructor(year: SixtyCycle, month: SixtyCycle, day: SixtyCycle): super() {
+    constructor(year: SixtyCycle, month: SixtyCycle, day: SixtyCycle) {
         this.year = year
         this.month = month
         this.day = day
-    }
-
-    /**
-     * 年柱
-     *
-     * @return 年柱
-     */
-    fun getYear(): SixtyCycle {
-        return year
-    }
-
-    /**
-     * 月柱
-     *
-     * @return 月柱
-     */
-    fun getMonth(): SixtyCycle {
-        return month
-    }
-
-    /**
-     * 日柱
-     *
-     * @return 日柱
-     */
-    fun getDay(): SixtyCycle {
-        return day
     }
 
     /**
@@ -74,13 +55,13 @@ class ThreePillars: AbstractCulture {
     fun getSolarDays(startYear: Int, endYear: Int): List<SolarDay> {
         val l: MutableList<SolarDay> = ArrayList()
         // 月地支距寅月的偏移值
-        var m: Int = month.getEarthBranch().next(-2).getIndex()
+        var m: Int = month.getEarthBranch().next(-2).index
         // 月天干要一致
-        if (HeavenStem((year.getHeavenStem().getIndex() + 1) * 2 + m) != month.getHeavenStem()) {
+        if (HeavenStem((year.getHeavenStem().index + 1) * 2 + m) != month.getHeavenStem()) {
             return l
         }
         // 1年的立春是辛酉，序号57
-        var y: Int = year.next(-57).getIndex() + 1
+        var y: Int = year.next(-57).index + 1
         // 节令偏移值
         m *= 2
         val baseYear: Int = startYear - 1
@@ -97,7 +78,7 @@ class ThreePillars: AbstractCulture {
             var solarDay: SolarDay = term.getSolarDay()
             if (solarDay.year >= startYear) {
                 // 日干支和节令干支的偏移值
-                val d: Int = day.next(-solarDay.getLunarDay().getSixtyCycle().getIndex()).getIndex()
+                val d: Int = day.next(-solarDay.getLunarDay().getSixtyCycle().index).index
                 if (d > 0) {
                     // 从节令推移天数
                     solarDay = solarDay.next(d)
@@ -115,13 +96,4 @@ class ThreePillars: AbstractCulture {
     override fun getName(): String {
         return "$year $month $day"
     }
-
-    override fun equals(other: Any?): Boolean {
-        return other is ThreePillars && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return getName().hashCode()
-    }
-
 }

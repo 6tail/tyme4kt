@@ -24,7 +24,7 @@ class WeekTest{
 
     @Test
     fun test2() {
-        assertEquals(2, SolarDay(2023, 10, 31).getWeek().getIndex())
+        assertEquals(2, SolarDay(2023, 10, 31).getWeek().index)
     }
 
     @Test
@@ -86,69 +86,69 @@ class WeekTest{
     @Test
     fun test12() {
         val solar = SolarDay(1582, 10, 1)
-        assertEquals(1, solar.getWeek().getIndex().toLong())
+        assertEquals(1, solar.getWeek().index)
     }
 
     @Test
     fun test13() {
         val solar = SolarDay(1582, 10, 15)
-        assertEquals(5, solar.getWeek().getIndex().toLong())
+        assertEquals(5, solar.getWeek().index)
     }
 
     @Test
     fun test14() {
         val solar = SolarDay(1129, 11, 17)
-        assertEquals(0, solar.getWeek().getIndex().toLong())
+        assertEquals(0, solar.getWeek().index)
     }
 
     @Test
     fun test15() {
         val solar = SolarDay(1129, 11, 1)
-        assertEquals(5, solar.getWeek().getIndex().toLong())
+        assertEquals(5, solar.getWeek().index)
     }
 
     @Test
     fun test16() {
         val solar = SolarDay(8, 11, 1)
-        assertEquals(4, solar.getWeek().getIndex().toLong())
+        assertEquals(4, solar.getWeek().index)
     }
 
     @Test
     fun test17() {
         val solar = SolarDay(1582, 9, 30)
-        assertEquals(0, solar.getWeek().getIndex().toLong())
+        assertEquals(0, solar.getWeek().index)
     }
 
     @Test
     fun test18() {
         val solar = SolarDay(1582, 1, 1)
-        assertEquals(1, solar.getWeek().getIndex().toLong())
+        assertEquals(1, solar.getWeek().index)
     }
 
     @Test
     fun test19() {
         val solar = SolarDay(1500, 2, 29)
-        assertEquals(6, solar.getWeek().getIndex().toLong())
+        assertEquals(6, solar.getWeek().index)
     }
 
     @Test
     fun test20() {
         val solar = SolarDay(9865, 7, 26)
-        assertEquals(3, solar.getWeek().getIndex().toLong())
+        assertEquals(3, solar.getWeek().index)
     }
 
     @Test
     fun test21() {
         val week = LunarWeek(2023, 1, 0, 2)
         assertEquals("农历癸卯年正月第一周", week.toString())
-        assertEquals("农历壬寅年十二月廿六", week.getFirstDay().toString())
+        assertEquals("农历壬寅年十二月廿六", week.firstDay.toString())
     }
 
     @Test
     fun test22() {
         val week = SolarWeek(2023, 1, 0, 2)
         assertEquals("2023年1月第一周", week.toString())
-        assertEquals("2022年12月27日", week.getFirstDay().toString())
+        assertEquals("2022年12月27日", week.firstDay.toString())
     }
 
     @Test
@@ -156,7 +156,7 @@ class WeekTest{
         val start = 0
         var week = SolarWeek(2024, 2, 2, start)
         assertEquals("2024年2月第三周", week.toString())
-        assertEquals(6, week.getIndexInYear().toLong())
+        assertEquals(6, week.indexInYear)
 
         week = SolarDay(2024, 2, 11).getSolarWeek(start)
         assertEquals("2024年2月第三周", week.toString())
@@ -185,6 +185,6 @@ class WeekTest{
     fun test26() {
         val week = SolarDay(2025, 3, 6).getSolarWeek(0)
         assertEquals("2025年3月第二周", week.toString())
-        assertEquals("2025年3月2日", week.getFirstDay().toString())
+        assertEquals("2025年3月2日", week.firstDay.toString())
     }
 }

@@ -15,6 +15,7 @@ class SolarTimeTest {
         val time = SolarTime(2023, 1, 1, 13, 5, 20)
         assertEquals("13:05:20", time.getName())
         assertEquals("13:04:59", time.next(-21).getName())
+        assertEquals("13:03:59", time.next(-81).getName())
     }
 
     @Test

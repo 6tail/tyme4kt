@@ -13,21 +13,29 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class FetusDay(sixtyCycle: SixtyCycle) : AbstractCulture() {
-    /** 天干六甲胎神 */
-    private var fetusHeavenStem: FetusHeavenStem = FetusHeavenStem(sixtyCycle.getHeavenStem().getIndex() % 5)
+class FetusDay(sixtyCycle: SixtyCycle): AbstractCulture() {
+    /**
+     * 天干六甲胎神
+     */
+    val fetusHeavenStem: FetusHeavenStem = FetusHeavenStem(sixtyCycle.getHeavenStem().index % 5)
 
-    /** 地支六甲胎神 */
-    private var fetusEarthBranch: FetusEarthBranch = FetusEarthBranch(sixtyCycle.getEarthBranch().getIndex() % 6)
+    /**
+     * 地支六甲胎神
+     */
+    val fetusEarthBranch: FetusEarthBranch = FetusEarthBranch(sixtyCycle.getEarthBranch().index % 6)
 
-    /** 内外 */
-    private var side: Side
+    /**
+     * 内外
+     */
+    private val side: Side
 
-    /** 方位 */
-    private var direction: Direction
+    /**
+     * 方位
+     */
+    private val direction: Direction
 
     init {
-        val index = intArrayOf(3, 3, 8, 8, 8, 8, 8, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, -9, -9, -9, -9, -9, -5, -5, -1, -1, -1, -3, -7, -7, -7, -7, -5, 7, 7, 7, 7, 7, 7, 2, 2, 2, 2, 2, 3, 3, 3, 3)[sixtyCycle.getIndex()]
+        val index = intArrayOf(3, 3, 8, 8, 8, 8, 8, 1, 1, 1, 1, 1, 1, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, -9, -9, -9, -9, -9, -5, -5, -1, -1, -1, -3, -7, -7, -7, -7, -5, 7, 7, 7, 7, 7, 7, 2, 2, 2, 2, 2, 3, 3, 3, 3)[sixtyCycle.index]
         side = if (index < 0) Side.IN else Side.OUT
         direction = Direction(index)
     }
@@ -45,7 +53,6 @@ class FetusDay(sixtyCycle: SixtyCycle) : AbstractCulture() {
         }
         s += " "
         s += if (Side.IN == side) "房内" else "外"
-
         val directionName: String = direction.getName()
         if (Side.OUT == side && "北南西东".contains(directionName)) {
             s += "正"
@@ -54,20 +61,22 @@ class FetusDay(sixtyCycle: SixtyCycle) : AbstractCulture() {
         return s
     }
 
+    /**
+     * 内外
+     *
+     * @return 内外
+     */
     fun getSide(): Side {
         return side
     }
 
+    /**
+     * 方位
+     *
+     * @return 方位
+     */
     fun getDirection(): Direction {
         return direction
-    }
-
-    fun getFetusHeavenStem(): FetusHeavenStem {
-        return fetusHeavenStem
-    }
-
-    fun getFetusEarthBranch(): FetusEarthBranch {
-        return fetusEarthBranch
     }
 
     companion object {

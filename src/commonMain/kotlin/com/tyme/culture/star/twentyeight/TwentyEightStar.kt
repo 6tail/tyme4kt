@@ -22,29 +22,49 @@ class TwentyEightStar: LoopTyme {
         return TwentyEightStar(nextIndex(n))
     }
 
-    /** 七曜 */
+    /**
+     * 七曜
+     *
+     * @return 七曜
+     * */
     fun getSevenStar(): SevenStar {
-        return SevenStar(getIndex() % 7 + 4)
+        return SevenStar(index % 7 + 4)
     }
 
-    /** 九野 */
+    /**
+     * 九野
+     *
+     * @return 九野
+     * */
     fun getLand(): Land {
-        return Land(intArrayOf(4, 4, 4, 2, 2, 2, 7, 7, 7, 0, 0, 0, 0, 5, 5, 5, 6, 6, 6, 1, 1, 1, 8, 8, 8, 3, 3, 3)[getIndex()])
+        return Land(intArrayOf(4, 4, 4, 2, 2, 2, 7, 7, 7, 0, 0, 0, 0, 5, 5, 5, 6, 6, 6, 1, 1, 1, 8, 8, 8, 3, 3, 3)[index])
     }
 
-    /** 宫 */
+    /**
+     * 宫
+     *
+     * @return 宫
+     * */
     fun getZone(): Zone {
-        return Zone(getIndex() / 7)
+        return Zone(index / 7)
     }
 
-    /** 动物 */
+    /**
+     * 动物
+     *
+     * @return 动物
+     * */
     fun getAnimal(): Animal {
-        return Animal(getIndex())
+        return Animal(index)
     }
 
-    /** 吉凶 */
+    /**
+     * 吉凶
+     *
+     * @return 吉凶
+     * */
     fun getLuck(): Luck {
-        return Luck(intArrayOf(0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0)[getIndex()])
+        return Luck(intArrayOf(0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0)[index])
     }
 
     companion object {

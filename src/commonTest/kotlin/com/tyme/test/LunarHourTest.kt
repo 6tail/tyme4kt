@@ -64,17 +64,17 @@ class LunarHourTest {
         val h = LunarHour(2023, 11, 14, 23, 0, 0)
         val sixtyCycleHour = h.getSixtyCycleHour()
         assertEquals("甲子", h.getSixtyCycle().getName())
-        assertEquals("己未", sixtyCycleHour.getDay().getName())
-        assertEquals("戊午", h.getLunarDay().getSixtyCycle().getName())
-        assertEquals("农历癸卯年十一月十四", h.getLunarDay().toString())
+        assertEquals("己未", sixtyCycleHour.day.getName())
+        assertEquals("戊午", h.lunarDay.getSixtyCycle().getName())
+        assertEquals("农历癸卯年十一月十四", h.lunarDay.toString())
 
-        assertEquals("甲子", sixtyCycleHour.getMonth().getName())
-        assertEquals("农历癸卯年十一月", h.getLunarDay().getLunarMonth().toString())
-        assertEquals("甲子", h.getLunarDay().getLunarMonth().getSixtyCycle().getName())
+        assertEquals("甲子", sixtyCycleHour.month.getName())
+        assertEquals("农历癸卯年十一月", h.lunarDay.lunarMonth.toString())
+        assertEquals("甲子", h.lunarDay.lunarMonth.getSixtyCycle().getName())
 
-        assertEquals("癸卯", sixtyCycleHour.getYear().getName())
-        assertEquals("农历癸卯年", h.getLunarDay().getLunarMonth().getLunarYear().toString())
-        assertEquals("癸卯", h.getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("癸卯", sixtyCycleHour.year.getName())
+        assertEquals("农历癸卯年", h.lunarDay.lunarMonth.lunarYear.toString())
+        assertEquals("癸卯", h.lunarDay.lunarMonth.lunarYear.getSixtyCycle().getName())
     }
 
     @Test
@@ -83,17 +83,17 @@ class LunarHourTest {
         val sixtyCycleHour = h.getSixtyCycleHour()
         assertEquals("乙卯", h.getSixtyCycle().getName())
 
-        assertEquals("戊午", sixtyCycleHour.getDay().getName())
-        assertEquals("戊午", h.getLunarDay().getSixtyCycle().getName())
-        assertEquals("农历癸卯年十一月十四", h.getLunarDay().toString())
+        assertEquals("戊午", sixtyCycleHour.day.getName())
+        assertEquals("戊午", h.lunarDay.getSixtyCycle().getName())
+        assertEquals("农历癸卯年十一月十四", h.lunarDay.toString())
 
-        assertEquals("甲子", sixtyCycleHour.getMonth().getName())
-        assertEquals("农历癸卯年十一月", h.getLunarDay().getLunarMonth().toString())
-        assertEquals("甲子", h.getLunarDay().getLunarMonth().getSixtyCycle().getName())
+        assertEquals("甲子", sixtyCycleHour.month.getName())
+        assertEquals("农历癸卯年十一月", h.lunarDay.lunarMonth.toString())
+        assertEquals("甲子", h.lunarDay.lunarMonth.getSixtyCycle().getName())
 
-        assertEquals("癸卯", sixtyCycleHour.getYear().getName())
-        assertEquals("农历癸卯年", h.getLunarDay().getLunarMonth().getLunarYear().toString())
-        assertEquals("癸卯", h.getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("癸卯", sixtyCycleHour.year.getName())
+        assertEquals("农历癸卯年", h.lunarDay.lunarMonth.lunarYear.toString())
+        assertEquals("癸卯", h.lunarDay.lunarMonth.lunarYear.getSixtyCycle().getName())
     }
 
     @Test

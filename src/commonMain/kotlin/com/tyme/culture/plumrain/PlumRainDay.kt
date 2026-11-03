@@ -7,7 +7,7 @@ import com.tyme.AbstractCultureDay
  *
  * @author 6tail
  */
-class PlumRainDay(plumRain: PlumRain, dayIndex: Int) : AbstractCultureDay(plumRain, dayIndex) {
+class PlumRainDay(plumRain: PlumRain, dayIndex: Int): AbstractCultureDay(plumRain, dayIndex) {
 
     /**
      * 梅雨
@@ -19,6 +19,6 @@ class PlumRainDay(plumRain: PlumRain, dayIndex: Int) : AbstractCultureDay(plumRa
     }
 
     override fun toString(): String {
-        return if (this.getPlumRain().getIndex() == 0) super.toString() else culture.getName()
+        return if (getPlumRain().index == 0) super.toString() else culture.getName()
     }
 }

@@ -15,10 +15,33 @@ import kotlin.math.ceil
  * @author 6tail
  */
 class EightChar: AbstractCulture {
-    /** 三柱 */
-    private var threePillars: ThreePillars
-    /** 时柱 */
-    private var hour: SixtyCycle
+    /**
+     * 三柱
+     */
+    private val threePillars: ThreePillars
+
+    /**
+     * 年柱
+     */
+    val year: SixtyCycle
+        get() = threePillars.year
+
+    /**
+     * 月柱
+     */
+    val month: SixtyCycle
+        get() = threePillars.month
+
+    /**
+     * 日柱
+     */
+    val day: SixtyCycle
+        get() = threePillars.day
+
+    /**
+     * 时柱
+     */
+    val hour: SixtyCycle
 
     /**
      * 初始化
@@ -33,45 +56,17 @@ class EightChar: AbstractCulture {
         this.hour = SixtyCycle(hour)
     }
 
+    /**
+     * 初始化
+     *
+     * @param year  年柱
+     * @param month 月柱
+     * @param day   日柱
+     * @param hour  时柱
+     */
     constructor(year: SixtyCycle, month: SixtyCycle, day: SixtyCycle, hour: SixtyCycle): super() {
         threePillars = ThreePillars(year, month, day)
         this.hour = hour
-    }
-
-    /**
-     * 年柱
-     *
-     * @return 年柱
-     */
-    fun getYear(): SixtyCycle {
-        return threePillars.getYear()
-    }
-
-    /**
-     * 月柱
-     *
-     * @return 月柱
-     */
-    fun getMonth(): SixtyCycle {
-        return threePillars.getMonth()
-    }
-
-    /**
-     * 日柱
-     *
-     * @return 日柱
-     */
-    fun getDay(): SixtyCycle {
-        return threePillars.getDay()
-    }
-
-    /**
-     * 时柱
-     *
-     * @return 时柱
-     */
-    fun getHour(): SixtyCycle {
-        return hour
     }
 
     /**
@@ -80,8 +75,7 @@ class EightChar: AbstractCulture {
      * @return 胎元
      */
     fun getFetalOrigin(): SixtyCycle {
-        val m: SixtyCycle = getMonth()
-        return SixtyCycle(m.getHeavenStem().next(1).getIndex() * 6 - m.getEarthBranch().next(3).getIndex() * 5)
+        return SixtyCycle(month.getHeavenStem().next(1).index * 6 - month.getEarthBranch().next(3).index * 5)
     }
 
     /**
@@ -90,8 +84,7 @@ class EightChar: AbstractCulture {
      * @return 胎息
      */
     fun getFetalBreath(): SixtyCycle {
-        val d: SixtyCycle = getDay()
-        return SixtyCycle(d.getHeavenStem().next(5).getIndex() * 6 + d.getEarthBranch().getIndex() * 5 - 65)
+        return SixtyCycle(day.getHeavenStem().next(5).index * 6 + day.getEarthBranch().index * 5 - 65)
     }
 
     /**
@@ -100,7 +93,7 @@ class EightChar: AbstractCulture {
      * @return 命宫
      */
     fun getOwnSign(): SixtyCycle {
-        return SixtyCycle(getYear().getHeavenStem().getIndex() * 12 + (27 - getMonth().getEarthBranch().getIndex() - hour.getEarthBranch().getIndex()) % 12 + 2)
+        return SixtyCycle(year.getHeavenStem().index * 12 + (27 - month.getEarthBranch().index - hour.getEarthBranch().index) % 12 + 2)
     }
 
     /**
@@ -109,7 +102,7 @@ class EightChar: AbstractCulture {
      * @return 身宫
      */
     fun getBodySign(): SixtyCycle {
-        return SixtyCycle(getYear().getHeavenStem().getIndex() * 12 + (11 + getMonth().getEarthBranch().getIndex() + hour.getEarthBranch().getIndex()) % 12 + 2)
+        return SixtyCycle(year.getHeavenStem().index * 12 + (11 + month.getEarthBranch().index + hour.getEarthBranch().index) % 12 + 2)
     }
 
     /**
@@ -121,21 +114,18 @@ class EightChar: AbstractCulture {
      */
     fun getSolarTimes(startYear: Int, endYear: Int): List<SolarTime> {
         val l: MutableList<SolarTime> = ArrayList()
-        val year: SixtyCycle = getYear()
-        val month: SixtyCycle = getMonth()
-        val day: SixtyCycle = getDay()
         // 月地支距寅月的偏移值
-        var m: Int = month.getEarthBranch().next(-2).getIndex()
+        var m: Int = month.getEarthBranch().next(-2).index
         // 月天干要一致
-        if (HeavenStem((year.getHeavenStem().getIndex() + 1) * 2 + m) != month.getHeavenStem()) {
+        if (HeavenStem((year.getHeavenStem().index + 1) * 2 + m) != month.getHeavenStem()) {
             return l
         }
         // 1年的立春是辛酉，序号57
-        var y: Int = year.next(-57).getIndex() + 1
+        var y: Int = year.next(-57).index + 1
         // 节令偏移值
         m *= 2
         // 时辰地支转时刻
-        val h: Int = hour.getEarthBranch().getIndex() * 2
+        val h: Int = hour.getEarthBranch().index * 2
         // 兼容子时多流派
         val hours: IntArray = if (h == 0) intArrayOf(0, 23) else intArrayOf(h)
         val baseYear: Int = startYear - 1
@@ -152,8 +142,8 @@ class EightChar: AbstractCulture {
             val solarTime: SolarTime = term.getJulianDay().getSolarTime()
             if (solarTime.year >= startYear) {
                 // 日干支和节令干支的偏移值
-                var solarDay: SolarDay = solarTime.getSolarDay()
-                val d: Int = day.next(-solarDay.getLunarDay().getSixtyCycle().getIndex()).getIndex()
+                var solarDay: SolarDay = solarTime.solarDay
+                val d: Int = day.next(-solarDay.getLunarDay().getSixtyCycle().index).index
                 if (d > 0) {
                     // 从节令推移天数
                     solarDay = solarDay.next(d)
@@ -184,13 +174,4 @@ class EightChar: AbstractCulture {
     override fun getName(): String {
         return "$threePillars $hour"
     }
-
-    override fun equals(other: Any?): Boolean {
-        return other is EightChar && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return getName().hashCode()
-    }
-
 }

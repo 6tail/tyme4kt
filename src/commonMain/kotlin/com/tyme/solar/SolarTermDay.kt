@@ -7,7 +7,7 @@ import com.tyme.AbstractCultureDay
  *
  * @author 6tail
  */
-class SolarTermDay(solarTerm: SolarTerm, dayIndex: Int) : AbstractCultureDay(solarTerm, dayIndex) {
+class SolarTermDay(solarTerm: SolarTerm, dayIndex: Int): AbstractCultureDay(solarTerm, dayIndex) {
     /**
      * 节气
      *

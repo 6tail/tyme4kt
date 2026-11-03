@@ -17,18 +17,26 @@ class ThreePhenology: LoopTyme {
         return ThreePhenology(nextIndex(n))
     }
 
-    fun getThreePhenology(): ThreePhenology {
-        return ThreePhenology(getIndex() % 3)
-    }
-
     companion object {
         val NAMES: Array<String> = arrayOf("初候", "二候", "三候")
 
+        /**
+         * 从索引初始化
+         *
+         * @param index 索引
+         * @return 三候
+         */
         @JvmStatic
         fun fromIndex(index: Int): ThreePhenology {
             return ThreePhenology(index)
         }
 
+        /**
+         * 从名称初始化
+         *
+         * @param name 名称
+         * @return 三候
+         */
         @JvmStatic
         fun fromName(name: String): ThreePhenology {
             return ThreePhenology(name)

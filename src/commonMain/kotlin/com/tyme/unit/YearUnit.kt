@@ -7,10 +7,7 @@ import com.tyme.AbstractTyme
  *
  * @author 6tail
  */
-abstract class YearUnit(
-    /** 年 */
-    val year: Int
-) : AbstractTyme() {
+abstract class YearUnit(val year: Int): AbstractTyme() {
 
     /**
      * 用于比较大小的索引

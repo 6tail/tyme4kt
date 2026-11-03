@@ -9,7 +9,6 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class FetusHeavenStem: LoopTyme {
-
     constructor(name: String): super(NAMES, name)
 
     constructor(index: Int): super(NAMES, index)

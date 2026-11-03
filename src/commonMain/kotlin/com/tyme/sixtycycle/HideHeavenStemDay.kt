@@ -18,11 +18,11 @@ class HideHeavenStemDay(hideHeavenStem: HideHeavenStem, dayIndex: Int): Abstract
     }
 
     override fun getName(): String {
-        val heavenStem: HeavenStem = getHideHeavenStem().getHeavenStem()
+        val heavenStem: HeavenStem = getHideHeavenStem().heavenStem
         return heavenStem.getName() + heavenStem.getElement().getName()
     }
 
     override fun toString(): String {
-        return "${getName()}第${getDayIndex() + 1}天"
+        return "${getName()}第${dayIndex + 1}天"
     }
 }

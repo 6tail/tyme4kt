@@ -8,7 +8,9 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 abstract class AbstractCulture: Culture {
-    abstract override fun getName(): String
+    override fun getName(): String {
+        throw UnsupportedOperationException()
+    }
 
     override fun toString(): String {
         return getName()
@@ -34,6 +36,14 @@ abstract class AbstractCulture: Culture {
     }
 
     companion object {
+        /**
+         * 校验值是否在指定范围内
+         *
+         * @param value 待校验的值
+         * @param min   最小值（含）
+         * @param max   最大值（含）
+         * @param field 字段名称，用于异常提示
+         */
         @JvmStatic
         fun validateRange(value: Int, min: Int, max: Int, field: String) {
             if (value !in min..max) {

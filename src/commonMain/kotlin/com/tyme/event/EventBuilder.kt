@@ -39,7 +39,7 @@ class EventBuilder {
     }
 
     private fun content(type: EventType, a: Int, b: Int, c: Int): EventBuilder {
-        data[1] = getChar(type.getCode())
+        data[1] = getChar(type.code)
         return setValue(2, a).setValue(3, b).setValue(4, c)
     }
 

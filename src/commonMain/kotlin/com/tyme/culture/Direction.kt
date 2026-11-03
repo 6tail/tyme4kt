@@ -17,18 +17,28 @@ class Direction: LoopTyme {
         return Direction(nextIndex(n))
     }
 
-    /** 九野 */
+    /**
+     * 九野
+     *
+     * @return 九野
+     */
     fun getLand(): Land {
-        return Land(getIndex())
+        return Land(index)
     }
 
-    /** 五行 */
+    /**
+     * 五行
+     *
+     * @return 五行
+     */
     fun getElement(): Element {
-        return Element(intArrayOf(4, 2, 0, 0, 2, 3, 3, 2, 1)[getIndex()])
+        return Element(intArrayOf(4, 2, 0, 0, 2, 3, 3, 2, 1)[index])
     }
 
     companion object {
-        /** 依据后天八卦排序（0坎北, 1坤西南, 2震东, 3巽东南, 4中, 5乾西北, 6兑西, 7艮东北, 8离南） */
+        /**
+         * 依据后天八卦排序（0坎北, 1坤西南, 2震东, 3巽东南, 4中, 5乾西北, 6兑西, 7艮东北, 8离南）
+         */
         val NAMES: Array<String> = arrayOf("北", "西南", "东", "东南", "中", "西北", "西", "东北", "南")
 
         @JvmStatic

@@ -29,6 +29,6 @@ class DefaultChildLimitProvider: AbstractChildLimitProvider() {
         // 1秒 = 2分，1秒/2=0.5秒 = 1分
         val minute = seconds * 2
 
-        return this.next(birthTime, year, month, day, hour, minute, 0)
+        return next(birthTime, year, month, day, hour, minute, 0)
     }
 }

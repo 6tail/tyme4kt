@@ -9,20 +9,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class SolarFestival(
-    /**
-     * 索引
-     */
-    private var index: Int,
-    /**
-     * 事件
-     */
-    private var event: Event,
-    /**
-     * 公历日
-     */
-    private var day: SolarDay
-) : AbstractFestival(index, event, day) {
+class SolarFestival(index: Int, event: Event, private val day: SolarDay): AbstractFestival(index, event, day) {
 
     /**
      * 公历日
@@ -45,15 +32,7 @@ class SolarFestival(
     override fun next(n: Int): SolarFestival? {
         val size = NAMES.size
         val i = index + n
-        return fromIndex((day.year * size + i) / size, indexOf(i, size))
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is SolarFestival && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
+        return fromIndex((getDay().year * size + i) / size, indexOf(i, size))
     }
 
     companion object {
@@ -62,17 +41,16 @@ class SolarFestival(
 
         @JvmStatic
         fun fromIndex(year: Int, index: Int): SolarFestival? {
-            if (index < 0 || index >= NAMES.size) {
+            val e = buildEvent(NAMES, DATA, index)
+            if (null == e || year < e.getStartYear()) {
                 return null
             }
-            val start: Int = index * 8
-            val e = Event(NAMES[index], "@${DATA.substring(start, start + 8)}")
-            return if (year < e.getStartYear()) null else SolarFestival(index, e, SolarDay.fromYmd(year, e.getValue(2), e.getValue(3)))
+            return SolarFestival(index, e, SolarDay(year, e.getValue(2), e.getValue(3)))
         }
 
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): SolarFestival? {
-            val d: SolarDay = SolarDay.fromYmd(year, month, day)
+            val d: SolarDay = SolarDay(year, month, day)
             var i = 0
             val j: Int = NAMES.size
             while (i < j) {

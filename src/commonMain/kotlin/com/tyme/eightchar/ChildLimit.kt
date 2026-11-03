@@ -14,17 +14,24 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
-    /** 八字 */
-    private var eightChar: EightChar = birthTime.getLunarHour().getEightChar()
+class ChildLimit(birthTime: SolarTime, val gender: Gender) {
+    /**
+     * 八字
+     */
+    val eightChar: EightChar = birthTime.getLunarHour().getEightChar()
 
-    /** 顺逆 */
-    private var forward: Boolean
-    /** 童限信息 */
-    private var info: ChildLimitInfo
+    /**
+     * 顺逆
+     */
+    private val forward: Boolean
+
+    /**
+     * 童限信息
+     */
+    private val info: ChildLimitInfo
 
     init {
-        val yang: Boolean = YinYang.YANG == eightChar.getYear().getHeavenStem().getYinYang()
+        val yang: Boolean = YinYang.YANG == eightChar.year.getHeavenStem().getYinYang()
         val man: Boolean = Gender.MAN == gender
         forward = (yang && man) || (!yang && !man)
         var term: SolarTerm = birthTime.getTerm()
@@ -38,30 +45,12 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
     }
 
     /**
-     * 获取八字
-     *
-     * @return 八字 eightChar
-     */
-    fun getEightChar(): EightChar {
-        return eightChar
-    }
-
-    /**
-     * 获取性别
-     *
-     * @return 性别 Gender
-     */
-    fun getGender(): Gender {
-        return gender
-    }
-
-    /**
      * 年数
      *
      * @return 年数
      */
     fun getYearCount(): Int {
-        return info.getYearCount()
+        return info.yearCount
     }
 
     /**
@@ -70,7 +59,7 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
      * @return 月数
      */
     fun getMonthCount(): Int {
-        return info.getMonthCount()
+        return info.monthCount
     }
 
     /**
@@ -79,7 +68,7 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
      * @return 日数
      */
     fun getDayCount(): Int {
-        return info.getDayCount()
+        return info.dayCount
     }
 
     /**
@@ -88,7 +77,7 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
      * @return 小时数
      */
     fun getHourCount(): Int {
-        return info.getHourCount()
+        return info.hourCount
     }
 
     /**
@@ -97,7 +86,7 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
      * @return 分钟数
      */
     fun getMinuteCount(): Int {
-        return info.getMinuteCount()
+        return info.minuteCount
     }
 
     /**
@@ -106,7 +95,7 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
      * @return 公历时刻
      */
     fun getStartTime(): SolarTime {
-        return info.getStartTime()
+        return info.startTime
     }
 
     /**
@@ -115,11 +104,12 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
      * @return 公历时刻
      */
     fun getEndTime(): SolarTime {
-        return info.getEndTime()
+        return info.endTime
     }
 
     /**
      * 是否顺推
+     *
      * @return true/false
      */
     fun isForward(): Boolean {
@@ -186,14 +176,23 @@ class ChildLimit (birthTime: SolarTime, private var gender: Gender) {
      * @return 结束年龄
      */
     fun getEndAge(): Int {
-        val n: Int = getEndSixtyCycleYear().getYear() - getStartSixtyCycleYear().getYear()
+        val n: Int = getEndSixtyCycleYear().year - getStartSixtyCycleYear().year
         return n.coerceAtLeast(1)
     }
 
     companion object {
-        /** 童限计算接口 */
+        /**
+         * 童限计算接口
+         */
         var provider: ChildLimitProvider = DefaultChildLimitProvider()
 
+        /**
+         * 通过出生公历时刻初始化
+         *
+         * @param birthTime 出生公历时刻
+         * @param gender    性别
+         * @return 童限
+         */
         @JvmStatic
         fun fromSolarTime(birthTime: SolarTime, gender: Gender): ChildLimit {
             return ChildLimit(birthTime, gender)

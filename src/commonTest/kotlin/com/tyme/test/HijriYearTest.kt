@@ -1,6 +1,6 @@
 package com.tyme.test
 
-import com.tyme.hijri.HijriYear.Companion.fromYear
+import com.tyme.hijri.HijriYear
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -13,9 +13,9 @@ import kotlin.test.assertTrue
 class HijriYearTest {
     @Test
     fun test1() {
-        assertFalse(fromYear(1).isLeap())
-        assertTrue(fromYear(2).isLeap())
-        assertFalse(fromYear(0).isLeap())
-        assertTrue(fromYear(-1).isLeap())
+        assertFalse(HijriYear(1).isLeap())
+        assertTrue(HijriYear(2).isLeap())
+        assertFalse(HijriYear(0).isLeap())
+        assertTrue(HijriYear(-1).isLeap())
     }
 }

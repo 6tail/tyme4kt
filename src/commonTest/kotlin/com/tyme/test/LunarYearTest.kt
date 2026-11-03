@@ -33,23 +33,22 @@ class LunarYearTest {
         assertEquals("庚子", LunarYear(2020).getSixtyCycle().getName())
     }
 
-    /** 农历年的生肖(农历年.干支.地支.生肖) */
+    /**
+     * 农历年的生肖(农历年.干支.地支.生肖)
+     */
     @Test
     fun test4() {
-        assertEquals(
-            "虎",
-            LunarYear(1986).getSixtyCycle().getEarthBranch().getZodiac().getName()
-        )
+        assertEquals("虎", LunarYear(1986).getSixtyCycle().getEarthBranch().getZodiac().getName())
     }
 
     @Test
     fun test5() {
-        assertEquals(12, LunarYear(151).getLeapMonth())
+        assertEquals(12, LunarYear(151).leapMonth)
     }
 
     @Test
     fun test6() {
-        assertEquals(1, LunarYear(2357).getLeapMonth())
+        assertEquals(1, LunarYear(2357).leapMonth)
     }
 
     @Test
@@ -61,84 +60,86 @@ class LunarYearTest {
 
     @Test
     fun test8() {
-        assertEquals("上元", LunarYear(1864).getTwenty().getSixty().getName())
+        assertEquals("上元", LunarYear(1864).twenty.getSixty().getName())
     }
 
     @Test
     fun test9() {
-        assertEquals("上元", LunarYear(1923).getTwenty().getSixty().getName())
+        assertEquals("上元", LunarYear(1923).twenty.getSixty().getName())
     }
 
     @Test
     fun test10() {
-        assertEquals("中元", LunarYear(1924).getTwenty().getSixty().getName())
+        assertEquals("中元", LunarYear(1924).twenty.getSixty().getName())
     }
 
     @Test
     fun test11() {
-        assertEquals("中元", LunarYear(1983).getTwenty().getSixty().getName())
+        assertEquals("中元", LunarYear(1983).twenty.getSixty().getName())
     }
 
     @Test
     fun test12() {
-        assertEquals("下元", LunarYear(1984).getTwenty().getSixty().getName())
+        assertEquals("下元", LunarYear(1984).twenty.getSixty().getName())
     }
 
     @Test
     fun test13() {
-        assertEquals("下元", LunarYear(2043).getTwenty().getSixty().getName())
+        assertEquals("下元", LunarYear(2043).twenty.getSixty().getName())
     }
 
     @Test
     fun test14() {
-        assertEquals("一运", LunarYear(1864).getTwenty().getName())
+        assertEquals("一运", LunarYear(1864).twenty.getName())
     }
 
     @Test
     fun test15() {
-        assertEquals("一运", LunarYear(1883).getTwenty().getName())
+        assertEquals("一运", LunarYear(1883).twenty.getName())
     }
 
     @Test
     fun test16() {
-        assertEquals("二运", LunarYear(1884).getTwenty().getName())
+        assertEquals("二运", LunarYear(1884).twenty.getName())
     }
 
     @Test
     fun test17() {
-        assertEquals("二运", LunarYear(1903).getTwenty().getName())
+        assertEquals("二运", LunarYear(1903).twenty.getName())
     }
 
     @Test
     fun test18() {
-        assertEquals("三运", LunarYear(1904).getTwenty().getName())
+        assertEquals("三运", LunarYear(1904).twenty.getName())
     }
 
     @Test
     fun test19() {
-        assertEquals("三运", LunarYear(1923).getTwenty().getName())
+        assertEquals("三运", LunarYear(1923).twenty.getName())
     }
 
     @Test
     fun test20() {
-        assertEquals("八运", LunarYear(2004).getTwenty().getName())
+        assertEquals("八运", LunarYear(2004).twenty.getName())
     }
 
     @Test
     fun test21() {
         val year = LunarYear(1)
-        assertEquals("六运", year.getTwenty().getName())
-        assertEquals("中元", year.getTwenty().getSixty().getName())
+        assertEquals("六运", year.twenty.getName())
+        assertEquals("中元", year.twenty.getSixty().getName())
     }
 
     @Test
     fun test22() {
         val year = LunarYear(1863)
-        assertEquals("九运", year.getTwenty().getName())
-        assertEquals("下元", year.getTwenty().getSixty().getName())
+        assertEquals("九运", year.twenty.getName())
+        assertEquals("下元", year.twenty.getSixty().getName())
     }
 
-    /** 生成农历年历示例 */
+    /**
+     * 生成农历年历示例
+     */
     @Test
     fun test23() {
         val year = LunarYear(2023)

@@ -34,7 +34,7 @@ class SolarYearTest {
 
     @Test
     fun test4() {
-        assertEquals(365, SolarYear(2023).getDayCount())
+        assertEquals(365, SolarYear(2023).dayCount)
     }
 
     @Test

@@ -7,12 +7,16 @@ import kotlin.math.abs
  *
  * @author 6tail
  */
-abstract class LoopTyme : AbstractTyme {
-    /** 名称列表 */
+abstract class LoopTyme: AbstractTyme {
+    /**
+     * 名称列表
+     */
     protected var names: Array<String>
 
-    /** 索引，从0开始 */
-    protected var _index: Int
+    /**
+     * 索引，从0开始
+     */
+    val index: Int
 
     /**
      * 通过索引初始化
@@ -22,7 +26,7 @@ abstract class LoopTyme : AbstractTyme {
      */
     protected constructor(names: Array<String>, index: Int) {
         this.names = names
-        this._index = indexOf(index)
+        this.index = indexOf(index)
     }
 
     /**
@@ -33,7 +37,7 @@ abstract class LoopTyme : AbstractTyme {
      */
     protected constructor(names: Array<String>, name: String) {
         this.names = names
-        this._index = indexOf(name)
+        this.index = indexOf(name)
     }
 
     /**
@@ -42,16 +46,15 @@ abstract class LoopTyme : AbstractTyme {
      * @return 名称
      */
     override fun getName(): String {
-        return names[_index]
+        return names[index]
     }
 
-    /** 索引，从0开始 */
-    fun getIndex(): Int{
-        return _index
-    }
-
-    /** 数量 */
-    fun getSize(): Int{
+    /**
+     * 数量
+     *
+     * @return 数量
+     */
+    fun getSize(): Int {
         return names.size
     }
 
@@ -62,13 +65,10 @@ abstract class LoopTyme : AbstractTyme {
      * @return 索引，从0开始
      */
     protected fun indexOf(name: String): Int {
-        var i = 0
-        val j = getSize()
-        while (i < j) {
+        for (i in 0 until getSize()) {
             if (names[i] == name) {
                 return i
             }
-            i++
         }
         throw IllegalArgumentException("illegal name: $name")
     }
@@ -90,17 +90,17 @@ abstract class LoopTyme : AbstractTyme {
      * @return 索引，从0开始
      */
     protected fun nextIndex(n: Int): Int {
-        return indexOf(_index + n)
+        return indexOf(index + n)
     }
 
     /**
      * 到目标索引的步数
      *
      * @param targetIndex 目标索引
-     * @return 步数
+     * @return 步数(>=0)
      */
     fun stepsTo(targetIndex: Int): Int {
-        return indexOf(targetIndex - _index)
+        return indexOf(targetIndex - index)
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class LoopTyme : AbstractTyme {
      */
     fun stepsBackTo(targetIndex: Int): Int {
         val n = getSize()
-        return -((_index - targetIndex + n) % n)
+        return -((index - targetIndex + n) % n)
     }
 
     /**
@@ -121,7 +121,7 @@ abstract class LoopTyme : AbstractTyme {
      * @return 步数（从左往右顺序>=0，从右往左逆序<=0）
      */
     fun stepsCloseTo(targetIndex: Int): Int {
-        val d1 = stepsTo(targetIndex)
+        val d1: Int = stepsTo(targetIndex)
         val d2: Int = stepsBackTo(targetIndex)
         return if (d1 <= abs(d2)) d1 else d2
     }

@@ -7,7 +7,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-enum class EventType(private val code: Int) {
+enum class EventType(val code: Int) {
     SOLAR_DAY(0),
     SOLAR_WEEK(1),
     LUNAR_DAY(2),
@@ -26,10 +26,6 @@ enum class EventType(private val code: Int) {
         }
     }
 
-    fun getCode(): Int {
-        return code
-    }
-
     override fun toString(): String {
         return getName()
     }
@@ -44,12 +40,12 @@ enum class EventType(private val code: Int) {
          */
         @JvmStatic
         fun fromName(name: String): EventType? {
-            return EventType.entries.find { it.getName() == name }
+            return entries.find { it.getName() == name }
         }
 
         @JvmStatic
         fun fromCode(code: Int): EventType? {
-            return EventType.entries.find { it.code == code }
+            return entries.find { it.code == code }
         }
     }
 }

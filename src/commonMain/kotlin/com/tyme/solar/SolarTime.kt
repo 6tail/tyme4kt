@@ -9,40 +9,39 @@ import com.tyme.unit.SecondUnit
 import com.tyme.util.pad2
 import kotlin.jvm.JvmStatic
 
-
 /**
  * 公历时刻
  *
  * @author 6tail
  */
-class SolarTime(
-    year: Int,
-    month: Int,
-    day: Int,
-    hour: Int,
-    minute: Int,
-    second: Int
-) : SecondUnit(year, month, day, hour, minute, second) {
+class SolarTime: SecondUnit {
 
-    init {
+    /**
+     * 初始化
+     *
+     * @param year   年
+     * @param month  月
+     * @param day    日
+     * @param hour   时
+     * @param minute 分
+     * @param second 秒
+     */
+    constructor(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int): super(year, month, day, hour, minute, second) {
         validate(year, month, day, hour, minute, second)
     }
 
     /**
      * 公历日
-     *
-     * @return 公历日
      */
-    fun getSolarDay(): SolarDay{
-        return SolarDay.fromYmd(year, month, day)
-    }
+    val solarDay: SolarDay
+        get() = SolarDay(year, month, day)
 
     override fun getName(): String {
         return "${hour.pad2()}:${minute.pad2()}:${second.pad2()}"
     }
 
     override fun toString(): String {
-        return "${getSolarDay()} ${getName()}"
+        return "${solarDay} ${getName()}"
     }
 
     /**
@@ -57,7 +56,7 @@ class SolarTime(
         }
         val t = getSecondsInDay() + n
         val s = indexOf(t, 86400)
-        val d = getSolarDay().next(t.floorDiv(86400))
+        val d = solarDay.next(t.floorDiv(86400))
         return SolarTime(d.year, d.month, d.day, s / 3600, s % 3600 / 60, s % 60)
     }
 
@@ -87,7 +86,7 @@ class SolarTime(
      * @return 节气
      */
     fun getTerm(): SolarTerm {
-        var term: SolarTerm = getSolarDay().getTerm()
+        var term: SolarTerm = solarDay.getTerm()
         if (isBefore(term.getJulianDay().getSolarTime())) {
             term = term.next(-1)
         }
@@ -100,7 +99,7 @@ class SolarTime(
      * @return 候
      */
     fun getPhenology(): Phenology {
-        var p: Phenology = getSolarDay().getPhenology()
+        var p: Phenology = solarDay.getPhenology()
         if (isBefore(p.getJulianDay().getSolarTime())) {
             p = p.next(-1)
         }
@@ -123,7 +122,7 @@ class SolarTime(
      * @return 秒数
      */
     fun subtract(target: SolarTime): Int {
-        val t = getSolarDay().subtract(target.getSolarDay()) * 86400L + getSecondsInDay() - target.getSecondsInDay()
+        val t = solarDay.subtract(target.solarDay) * 86400L + getSecondsInDay() - target.getSecondsInDay()
         if (t < Int.MIN_VALUE || t > Int.MAX_VALUE) {
             throw ArithmeticException("seconds difference exceeds int range: $t")
         }
@@ -136,7 +135,7 @@ class SolarTime(
      * @return 农历时辰
      */
     fun getLunarHour(): LunarHour {
-        val d = getSolarDay().getLunarDay()
+        val d = solarDay.getLunarDay()
         return LunarHour(d.year, d.month, d.day, hour, minute, second)
     }
 
@@ -155,20 +154,12 @@ class SolarTime(
      * @return 月相
      */
     fun getPhase(): Phase {
-        val month = getLunarHour().getLunarDay().getLunarMonth().next(1)
-        var p = Phase.fromIndex(month.year, month.getMonthWithLeap(), 0)
+        val month = getLunarHour().lunarDay.lunarMonth.next(1)
+        var p = Phase(month.year, month.monthValue, 0)
         while (p.getSolarTime().isAfter(this)) {
             p = p.next(-1)
         }
         return p
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is SolarTime && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
     }
 
     companion object {

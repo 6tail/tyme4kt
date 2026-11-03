@@ -6,23 +6,15 @@ package com.tyme
  * @author 6tail
  */
 abstract class AbstractCultureDay(
-    /** 传统文化 */
-    protected var culture: AbstractCulture,
-    /** 天索引 */
-    private var dayIndex: Int
-) : AbstractCulture() {
+    /**
+     * 传统文化
+     */
+    protected val culture: AbstractCulture,
     /**
      * 天索引
-     *
-     * @return 索引
      */
-    fun getDayIndex(): Int {
-        return dayIndex
-    }
-
-    protected fun getCulture(): Culture {
-        return culture
-    }
+    val dayIndex: Int
+): AbstractCulture() {
 
     override fun toString(): String {
         return "${culture}第${dayIndex + 1}天"

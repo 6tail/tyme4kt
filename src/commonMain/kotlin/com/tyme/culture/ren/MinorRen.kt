@@ -10,10 +10,10 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class MinorRen : LoopTyme {
-    constructor(index: Int) : super(NAMES, index)
+class MinorRen: LoopTyme {
+    constructor(index: Int): super(NAMES, index)
 
-    constructor(name: String) : super(NAMES, name)
+    constructor(name: String): super(NAMES, name)
 
     override fun next(n: Int): MinorRen {
         return MinorRen(nextIndex(n))
@@ -25,7 +25,7 @@ class MinorRen : LoopTyme {
      * @return 吉凶
      */
     fun getLuck(): Luck {
-        return Luck(getIndex() % 2)
+        return Luck(index.and(1))
     }
 
     /**
@@ -34,7 +34,7 @@ class MinorRen : LoopTyme {
      * @return 五行
      */
     fun getElement(): Element {
-        return Element(intArrayOf(0, 4, 1, 3, 0, 2)[getIndex()])
+        return Element(intArrayOf(0, 4, 1, 3, 0, 2)[index])
     }
 
     companion object {

@@ -20,25 +20,25 @@ class SolarMonthTest {
     @Test
     fun test1() {
         val m = SolarMonth(2023, 1)
-        assertEquals(5, m.getWeekCount(0).toLong())
-        assertEquals(6, m.getWeekCount(1).toLong())
-        assertEquals(6, m.getWeekCount(2).toLong())
-        assertEquals(5, m.getWeekCount(3).toLong())
-        assertEquals(5, m.getWeekCount(4).toLong())
-        assertEquals(5, m.getWeekCount(5).toLong())
-        assertEquals(5, m.getWeekCount(6).toLong())
+        assertEquals(5, m.getWeekCount(0))
+        assertEquals(6, m.getWeekCount(1))
+        assertEquals(6, m.getWeekCount(2))
+        assertEquals(5, m.getWeekCount(3))
+        assertEquals(5, m.getWeekCount(4))
+        assertEquals(5, m.getWeekCount(5))
+        assertEquals(5, m.getWeekCount(6))
     }
 
     @Test
     fun test2() {
         val m = SolarMonth(2023, 2)
-        assertEquals(5, m.getWeekCount(0).toLong())
-        assertEquals(5, m.getWeekCount(1).toLong())
-        assertEquals(5, m.getWeekCount(2).toLong())
-        assertEquals(4, m.getWeekCount(3).toLong())
-        assertEquals(5, m.getWeekCount(4).toLong())
-        assertEquals(5, m.getWeekCount(5).toLong())
-        assertEquals(5, m.getWeekCount(6).toLong())
+        assertEquals(5, m.getWeekCount(0))
+        assertEquals(5, m.getWeekCount(1))
+        assertEquals(5, m.getWeekCount(2))
+        assertEquals(4, m.getWeekCount(3))
+        assertEquals(5, m.getWeekCount(4))
+        assertEquals(5, m.getWeekCount(5))
+        assertEquals(5, m.getWeekCount(6))
     }
 
     @Test

@@ -9,18 +9,22 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class SevenStar : LoopTyme {
-    constructor(index: Int) : super(NAMES, index)
+class SevenStar: LoopTyme {
+    constructor(index: Int): super(NAMES, index)
 
-    constructor(name: String) : super(NAMES, name)
+    constructor(name: String): super(NAMES, name)
 
     override fun next(n: Int): SevenStar {
         return SevenStar(nextIndex(n))
     }
 
-    /** 星期 */
+    /**
+     * 星期
+     *
+     * @return 星期
+     */
     fun getWeek(): Week {
-        return Week(getIndex())
+        return Week(index)
     }
 
     companion object {

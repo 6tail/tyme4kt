@@ -26,7 +26,7 @@ class FetusMonth(index: Int): LoopTyme(NAMES, index) {
          */
         @JvmStatic
         fun fromLunarMonth(lunarMonth: LunarMonth): FetusMonth? {
-            return if (lunarMonth.isLeap()) null else FetusMonth(lunarMonth.month - 1)
+            return if (lunarMonth.leap) null else FetusMonth(lunarMonth.month - 1)
         }
     }
 }
