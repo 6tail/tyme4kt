@@ -20,7 +20,7 @@ class SixtyCycleTest {
 
     @Test
     fun test1() {
-        assertEquals(13, SixtyCycle("丁丑").getIndex())
+        assertEquals(13, SixtyCycle("丁丑").index)
     }
 
     /**

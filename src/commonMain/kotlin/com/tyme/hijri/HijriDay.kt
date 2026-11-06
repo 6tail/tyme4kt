@@ -1,21 +1,17 @@
 package com.tyme.hijri
 
+import com.tyme.culture.Week
 import com.tyme.jd.JulianDay
 import com.tyme.solar.SolarDay
-import com.tyme.unit.DayUnit
+import com.tyme.unit.AbstractDay
 import kotlin.jvm.JvmStatic
-
 
 /**
  * 回历日（公元622年7月16日为伊斯兰历元年元旦）
  *
  * @author 6tail
  */
-class HijriDay(
-    year: Int,
-    month: Int,
-    day: Int
-) : DayUnit(year, month, day) {
+class HijriDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
 
     init {
         validate(year, month, day)
@@ -23,19 +19,16 @@ class HijriDay(
 
     /**
      * 回历月
-     *
-     * @return 回历月
      */
-    fun getHijriMonth(): HijriMonth {
-        return HijriMonth(year, month)
-    }
+    val hijriMonth: HijriMonth
+        get() = HijriMonth(year, month)
 
     override fun getName(): String {
         return NAMES[day - 1]
     }
 
     override fun toString(): String {
-        return this.getHijriMonth().toString() + getName()
+        return hijriMonth.toString() + getName()
     }
 
     override fun next(n: Int): HijriDay {
@@ -64,12 +57,9 @@ class HijriDay(
 
     /**
      * 位于当年的索引
-     *
-     * @return 索引
      */
-    fun getIndexInYear(): Int {
-        return subtract(HijriDay(year, 1, 1))
-    }
+    val indexInYear: Int
+        get() = subtract(HijriDay(year, 1, 1))
 
     /**
      * 回历日期相减，获得相差天数
@@ -78,7 +68,7 @@ class HijriDay(
      * @return 天数
      */
     fun subtract(target: HijriDay): Int {
-        return (this.getJulianDay().subtract(target.getJulianDay())).toInt()
+        return (getJulianDay().subtract(target.getJulianDay())).toInt()
     }
 
     /**
@@ -99,12 +89,8 @@ class HijriDay(
         return SolarDay(622, 7, 16).next(subtract(HijriDay(1, 1, 1)))
     }
 
-    override fun equals(other: Any?): Boolean {
-        return other is HijriDay && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
+    override fun getWeek(): Week {
+        return getJulianDay().getWeek()
     }
 
     companion object {
@@ -112,9 +98,7 @@ class HijriDay(
 
         @JvmStatic
         fun validate(year: Int, month: Int, day: Int) {
-            if (day < 1 || day > HijriMonth(year, month).getDayCount()) {
-                throw IllegalArgumentException("illegal hijri day: ${year}-${month}-${day}")
-            }
+            validateRange(day, 1, HijriMonth(year, month).dayCount, "hijri day")
         }
 
         @JvmStatic

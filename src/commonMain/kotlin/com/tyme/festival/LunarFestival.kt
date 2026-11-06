@@ -5,6 +5,7 @@ import com.tyme.event.Event
 import com.tyme.lunar.LunarDay
 import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTermDay
+import com.tyme.unit.MonthUnit
 import kotlin.jvm.JvmStatic
 
 /**
@@ -12,20 +13,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class LunarFestival(
-    /**
-     * 索引
-     */
-    private var index: Int,
-    /**
-     * 事件
-     */
-    event: Event,
-    /**
-     * 农历日
-     */
-    private var day: LunarDay
-) : AbstractFestival(index, event, day) {
+class LunarFestival(index: Int, event: Event, private val day: LunarDay): AbstractFestival(index, event, day) {
     /**
      * 农历日
      *
@@ -42,21 +30,13 @@ class LunarFestival(
      */
     fun getSolarTerm(): SolarTerm? {
         val t = getDay().getSolarDay().getTermDay()
-        return if (t.getDayIndex() == 0) t.getSolarTerm() else null
+        return if (t.dayIndex == 0) t.getSolarTerm() else null
     }
 
     override fun next(n: Int): LunarFestival? {
         val size = NAMES.size
         val i = index + n
-        return fromIndex((day.year * size + i) / size, indexOf(i, size))
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is LunarFestival && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
+        return fromIndex((getDay().year * size + i) / size, indexOf(i, size))
     }
 
     companion object {
@@ -65,27 +45,29 @@ class LunarFestival(
 
         @JvmStatic
         fun fromIndex(year: Int, index: Int): LunarFestival? {
-            if (index < 0 || index >= NAMES.size) {
-                return null
-            }
-            val start: Int = index * 8
-            val e = Event(NAMES[index], "@${DATA.substring(start, start + 8)}")
-            when (e.getType()) {
-                EventType.LUNAR_DAY -> {
-                    val m: IntArray = e.getMonth(year)
-                    val d: LunarDay = LunarDay.fromYmd(m[0], m[1], e.getValue(3))
-                    val offset: Int = e.getValue(5)
-                    return LunarFestival(index, e, if (0 == offset) d else d.next(offset))
-                }
+            val e: Event? = buildEvent(NAMES, DATA, index)
+            if (null != e) {
+                when (e.getType()) {
+                    EventType.LUNAR_DAY -> {
+                        val m = e.getMonth(year)
+                        val d = LunarDay(m.year, m.month, e.getValue(3))
+                        val offset = e.getValue(5)
+                        return LunarFestival(index, e, if (0 == offset) d else d.next(offset))
+                    }
 
-                EventType.TERM_DAY -> return LunarFestival(index, e, SolarTerm.fromIndex(year, e.getValue(2)).getSolarDay().getLunarDay())
-                else -> return null
+                    EventType.TERM_DAY -> {
+                        return LunarFestival(index, e, SolarTerm(year, e.getValue(2)).getSolarDay().getLunarDay())
+                    }
+
+                    else -> {}
+                }
             }
+            return null
         }
 
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): LunarFestival? {
-            val d: LunarDay = LunarDay.fromYmd(year, month, day)
+            val d: LunarDay = LunarDay(year, month, day)
             var i = 0
             val j: Int = NAMES.size
             while (i < j) {
@@ -99,9 +81,9 @@ class LunarFestival(
                                 return LunarFestival(i, e, d)
                             }
                         } else {
-                            val m: IntArray = e.getMonth(d.year)
+                            val m: MonthUnit = e.getMonth(d.year)
                             val next: LunarDay = d.next(-offset)
-                            if (next.year == m[0] && next.month == m[1] && next.day == e.getValue(3)) {
+                            if (next.year == m.year && next.month == m.month && next.day == e.getValue(3)) {
                                 return LunarFestival(i, e, d)
                             }
                         }
@@ -109,7 +91,7 @@ class LunarFestival(
 
                     EventType.TERM_DAY -> {
                         val term: SolarTermDay = d.getSolarDay().getTermDay()
-                        if (term.getDayIndex() == 0 && term.getSolarTerm().getIndex() == e.getValue(2) % 24) {
+                        if (term.dayIndex == 0 && term.getSolarTerm().index == e.getValue(2) % 24) {
                             return LunarFestival(i, e, d)
                         }
                     }

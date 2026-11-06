@@ -15,9 +15,9 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class HeavenStem: LoopTyme {
-    constructor(index: Int) : super(NAMES, index)
+    constructor(index: Int): super(NAMES, index)
 
-    constructor(name: String) : super(NAMES, name)
+    constructor(name: String): super(NAMES, name)
 
     override fun next(n: Int): HeavenStem {
         return HeavenStem(nextIndex(n))
@@ -29,7 +29,7 @@ class HeavenStem: LoopTyme {
      * @return 五行
      */
     fun getElement(): Element {
-        return Element(getIndex() / 2)
+        return Element(index / 2)
     }
 
     /**
@@ -38,7 +38,7 @@ class HeavenStem: LoopTyme {
      * @return 阴阳
      */
     fun getYinYang(): YinYang {
-        return if (getIndex() % 2 == 0) YinYang.YANG else YinYang.YIN
+        return if (index.and(1) == 0) YinYang.YANG else YinYang.YIN
     }
 
     /**
@@ -48,10 +48,10 @@ class HeavenStem: LoopTyme {
      * @return 十神
      */
     fun getTenStar(target: HeavenStem): TenStar {
-        val index: Int = getIndex()
-        val targetIndex: Int = target.getIndex()
+        val index: Int = index
+        val targetIndex: Int = target.index
         var offset: Int = targetIndex - index
-        if (index % 2 != 0 && targetIndex % 2 == 0) {
+        if (index.and(1) != 0 && targetIndex.and(1) == 0) {
             offset += 2
         }
         return TenStar(offset)
@@ -72,7 +72,7 @@ class HeavenStem: LoopTyme {
      * @return 方位
      */
     fun getJoyDirection(): Direction {
-        return Direction(intArrayOf(7, 5, 1, 8, 3)[getIndex() % 5])
+        return Direction(intArrayOf(7, 5, 1, 8, 3)[index % 5])
     }
 
     /**
@@ -81,7 +81,7 @@ class HeavenStem: LoopTyme {
      * @return 方位
      */
     fun getYangDirection(): Direction {
-        return Direction(intArrayOf(1, 1, 6, 5, 7, 0, 8, 7, 2, 3)[getIndex()])
+        return Direction(intArrayOf(1, 1, 6, 5, 7, 0, 8, 7, 2, 3)[index])
     }
 
     /**
@@ -90,7 +90,7 @@ class HeavenStem: LoopTyme {
      * @return 方位
      */
     fun getYinDirection(): Direction {
-        return Direction(intArrayOf(7, 0, 5, 6, 1, 1, 7, 8, 3, 2)[getIndex()])
+        return Direction(intArrayOf(7, 0, 5, 6, 1, 1, 7, 8, 3, 2)[index])
     }
 
     /**
@@ -99,7 +99,7 @@ class HeavenStem: LoopTyme {
      * @return 方位
      */
     fun getWealthDirection(): Direction {
-        return Direction(intArrayOf(7, 1, 0, 2, 8)[getIndex() / 2])
+        return Direction(intArrayOf(7, 1, 0, 2, 8)[index / 2])
     }
 
     /**
@@ -108,7 +108,7 @@ class HeavenStem: LoopTyme {
      * @return 方位
      */
     fun getMascotDirection(): Direction {
-        return Direction(intArrayOf(3, 3, 2, 2, 0, 8, 1, 1, 5, 6)[getIndex()])
+        return Direction(intArrayOf(3, 3, 2, 2, 0, 8, 1, 1, 5, 6)[index])
     }
 
     /**
@@ -117,7 +117,7 @@ class HeavenStem: LoopTyme {
      * @return 天干彭祖百忌
      */
     fun getPengZuHeavenStem(): PengZuHeavenStem {
-        return PengZuHeavenStem(getIndex())
+        return PengZuHeavenStem(index)
     }
 
     /**
@@ -127,8 +127,8 @@ class HeavenStem: LoopTyme {
      * @return 地势(长生十二神)
      */
     fun getTerrain(earthBranch: EarthBranch): Terrain {
-        val earthBranchIndex: Int = earthBranch.getIndex()
-        return Terrain(intArrayOf(1, 6, 10, 9, 10, 9, 7, 0, 4, 3)[getIndex()] + (if (YinYang.YANG == getYinYang()) earthBranchIndex else -earthBranchIndex))
+        val earthBranchIndex: Int = earthBranch.index
+        return Terrain(intArrayOf(1, 6, 10, 9, 10, 9, 7, 0, 4, 3)[index] + (if (YinYang.YANG == getYinYang()) earthBranchIndex else -earthBranchIndex))
     }
 
     /**
@@ -147,7 +147,7 @@ class HeavenStem: LoopTyme {
      * @return 五行，如果无法合化，返回null
      */
     fun combine(target: HeavenStem?): Element? {
-        return if (getCombine() == target) Element(getIndex() + 2) else null
+        return if (getCombine() == target) Element(index + 2) else null
     }
 
     companion object {

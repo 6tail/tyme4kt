@@ -14,10 +14,10 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class EarthBranch : LoopTyme {
-    constructor(index: Int) : super(NAMES, index)
+class EarthBranch: LoopTyme {
+    constructor(index: Int): super(NAMES, index)
 
-    constructor(name: String) : super(NAMES, name)
+    constructor(name: String): super(NAMES, name)
 
     override fun next(n: Int): EarthBranch {
         return EarthBranch(nextIndex(n))
@@ -29,7 +29,7 @@ class EarthBranch : LoopTyme {
      * @return 五行
      */
     fun getElement(): Element {
-        return Element(intArrayOf(4, 2, 0, 0, 2, 1, 1, 2, 3, 3, 2, 4)[getIndex()])
+        return Element(intArrayOf(4, 2, 0, 0, 2, 1, 1, 2, 3, 3, 2, 4)[index])
     }
 
     /**
@@ -38,7 +38,7 @@ class EarthBranch : LoopTyme {
      * @return 阴阳
      */
     fun getYinYang(): YinYang {
-        return if (getIndex() % 2 == 0) YinYang.YANG else YinYang.YIN
+        return if (index.and(1) == 0) YinYang.YANG else YinYang.YIN
     }
 
     /**
@@ -47,7 +47,7 @@ class EarthBranch : LoopTyme {
      * @return 天干
      */
     fun getHideHeavenStemMain(): HeavenStem {
-        return HeavenStem(intArrayOf(9, 5, 0, 1, 4, 2, 3, 5, 6, 7, 4, 8)[getIndex()])
+        return HeavenStem(intArrayOf(9, 5, 0, 1, 4, 2, 3, 5, 6, 7, 4, 8)[index])
     }
 
     /**
@@ -56,8 +56,8 @@ class EarthBranch : LoopTyme {
      * @return 天干
      */
     fun getHideHeavenStemMiddle(): HeavenStem? {
-        val n: Int = intArrayOf(-1, 9, 2, -1, 1, 6, 5, 3, 8, -1, 7, 0)[getIndex()]
-        return if (n == -1)  null else HeavenStem(n)
+        val n: Int = intArrayOf(-1, 9, 2, -1, 1, 6, 5, 3, 8, -1, 7, 0)[index]
+        return if (n == -1) null else HeavenStem(n)
     }
 
     /**
@@ -66,7 +66,7 @@ class EarthBranch : LoopTyme {
      * @return 天干
      */
     fun getHideHeavenStemResidual(): HeavenStem? {
-        val n: Int = intArrayOf(-1, 7, 4, -1, 9, 4, -1, 1, 4, -1, 3, -1)[getIndex()]
+        val n: Int = intArrayOf(-1, 7, 4, -1, 9, 4, -1, 1, 4, -1, 3, -1)[index]
         return if (n == -1) null else HeavenStem(n)
     }
 
@@ -95,7 +95,7 @@ class EarthBranch : LoopTyme {
      * @return 生肖
      */
     fun getZodiac(): Zodiac {
-        return Zodiac(getIndex())
+        return Zodiac(index)
     }
 
     /**
@@ -104,7 +104,7 @@ class EarthBranch : LoopTyme {
      * @return 方位
      */
     fun getDirection(): Direction {
-        return Direction(intArrayOf(0, 4, 2, 2, 4, 8, 8, 4, 6, 6, 4, 0)[getIndex()])
+        return Direction(intArrayOf(0, 4, 2, 2, 4, 8, 8, 4, 6, 6, 4, 0)[index])
     }
 
     /**
@@ -113,7 +113,7 @@ class EarthBranch : LoopTyme {
      * @return 方位
      */
     fun getOminous(): Direction {
-        return Direction(intArrayOf(8, 2, 0, 6)[getIndex() % 4])
+        return Direction(intArrayOf(8, 2, 0, 6)[index % 4])
     }
 
     /**
@@ -131,7 +131,7 @@ class EarthBranch : LoopTyme {
      * @return 地支
      */
     fun getCombine(): EarthBranch {
-        return EarthBranch(1 - getIndex())
+        return EarthBranch(1 - index)
     }
 
     /**
@@ -140,7 +140,7 @@ class EarthBranch : LoopTyme {
      * @return 地支
      */
     fun getHarm(): EarthBranch {
-        return EarthBranch(19 - getIndex())
+        return EarthBranch(19 - index)
     }
 
     /**
@@ -150,7 +150,7 @@ class EarthBranch : LoopTyme {
      * @return 五行，如果无法合化，返回null
      */
     fun combine(target: EarthBranch): Element? {
-        return if (getCombine() == target) Element(intArrayOf(2, 2, 0, 1, 3, 4, 2, 2, 4, 3, 1, 0)[getIndex()]) else null
+        return if (getCombine() == target) Element(intArrayOf(2, 2, 0, 1, 3, 4, 2, 2, 4, 3, 1, 0)[index]) else null
     }
 
     /**
@@ -159,7 +159,7 @@ class EarthBranch : LoopTyme {
      * @return 地支彭祖百忌
      */
     fun getPengZuEarthBranch(): PengZuEarthBranch {
-        return PengZuEarthBranch(getIndex())
+        return PengZuEarthBranch(index)
     }
 
     companion object {

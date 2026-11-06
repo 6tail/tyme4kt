@@ -1,5 +1,6 @@
 package com.tyme.test
 
+import com.tyme.culture.dog.Dog
 import com.tyme.culture.dog.DogDay
 import com.tyme.solar.SolarDay
 import kotlin.test.Test
@@ -92,5 +93,10 @@ class DogDayTest {
         assertEquals("末伏", d?.getName())
         assertEquals("末伏", d?.getDog().toString())
         assertEquals("末伏第2天", d.toString())
+    }
+
+    @Test
+    fun test11() {
+        assertEquals(0, Dog("初伏").index)
     }
 }

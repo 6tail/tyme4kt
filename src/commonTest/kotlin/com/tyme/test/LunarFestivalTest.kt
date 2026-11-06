@@ -15,13 +15,10 @@ import kotlin.test.assertNotNull
 class LunarFestivalTest {
     @Test
     fun test0() {
-        var i = 0
-        val j = LunarFestival.NAMES.size
-        while (i < j) {
+        for ((i, element) in LunarFestival.NAMES.withIndex()) {
             val f = LunarFestival.fromIndex(2023, i)
             assertNotNull(f)
-            assertEquals(LunarFestival.NAMES[i], f.getName())
-            i++
+            assertEquals(element, f.getName())
         }
     }
 
@@ -29,13 +26,10 @@ class LunarFestivalTest {
     fun test1() {
         val f = LunarFestival.fromIndex(2023, 0)
         assertNotNull(f)
-        var i = 0
-        val j = LunarFestival.NAMES.size
-        while (i < j) {
+        for ((i, element) in LunarFestival.NAMES.withIndex()) {
             val n = f.next(i)
             assertNotNull(n)
-            assertEquals(LunarFestival.NAMES[i], n.getName())
-            i++
+            assertEquals(element, n.getName())
         }
     }
 
@@ -88,6 +82,6 @@ class LunarFestivalTest {
     fun test8() {
         val f = SolarDay(2025, 12, 21).getLunarDay().getFestival()
         assertNotNull(f)
-        assertEquals(f.toString(), "农历乙巳年十一月初二 冬至节")
+        assertEquals("农历乙巳年十一月初二 冬至节", f.toString())
     }
 }

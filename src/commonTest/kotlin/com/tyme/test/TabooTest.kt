@@ -17,8 +17,7 @@ class TabooTest {
         for (t in SolarDay(2024, 6, 26).getSixtyCycleDay().getRecommends()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("嫁娶", "祭祀", "理发", "作灶", "修饰垣墙", "平治道涂", "整手足甲", "沐浴", "冠笄"), taboos)
+        assertEquals(listOf("嫁娶", "祭祀", "理发", "作灶", "修饰垣墙", "平治道涂", "整手足甲", "沐浴", "冠笄"), taboos)
     }
 
     @Test
@@ -27,8 +26,7 @@ class TabooTest {
         for (t in SolarDay(2024, 6, 26).getSixtyCycleDay().getAvoids()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("破土", "出行", "栽种"), taboos)
+        assertEquals(listOf("破土", "出行", "栽种"), taboos)
     }
 
     @Test
@@ -37,8 +35,7 @@ class TabooTest {
         for (t in SolarTime(2024, 6, 25, 4, 0, 0).getSixtyCycleHour().getRecommends()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(emptyList<Any>(), taboos)
+        assertEquals(emptyList<String>(), taboos)
     }
 
     @Test
@@ -47,7 +44,6 @@ class TabooTest {
         for (t in SolarTime(2024, 6, 25, 4, 0, 0).getSixtyCycleHour().getAvoids()) {
             taboos.add(t.getName())
         }
-
         assertEquals(listOf("诸事不宜"), taboos)
     }
 
@@ -57,8 +53,7 @@ class TabooTest {
         for (t in SolarTime(2024, 4, 22, 0, 0, 0).getSixtyCycleHour().getRecommends()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("嫁娶", "交易", "开市", "安床", "祭祀", "求财"), taboos)
+        assertEquals(listOf("嫁娶", "交易", "开市", "安床", "祭祀", "求财"), taboos)
     }
 
     @Test
@@ -67,8 +62,7 @@ class TabooTest {
         for (t in SolarTime(2024, 4, 22, 0, 0, 0).getSixtyCycleHour().getAvoids()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("出行", "移徙", "赴任", "词讼", "祈福", "修造", "求嗣"), taboos)
+        assertEquals(listOf("出行", "移徙", "赴任", "词讼", "祈福", "修造", "求嗣"), taboos)
     }
 
     @Test
@@ -77,8 +71,7 @@ class TabooTest {
         for (t in SolarDay(2021, 3, 7).getSixtyCycleDay().getRecommends()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("裁衣", "经络", "伐木", "开柱眼", "拆卸", "修造", "动土", "上梁", "合脊", "合寿木", "入殓", "除服", "成服", "移柩", "破土", "安葬", "启钻", "修坟", "立碑"), taboos)
+        assertEquals(listOf("裁衣", "经络", "伐木", "开柱眼", "拆卸", "修造", "动土", "上梁", "合脊", "合寿木", "入殓", "除服", "成服", "移柩", "破土", "安葬", "启钻", "修坟", "立碑"), taboos)
     }
 
     @Test
@@ -87,8 +80,7 @@ class TabooTest {
         for (t in SolarDay(2024, 6, 26).getLunarDay().getRecommends()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("嫁娶", "祭祀", "理发", "作灶", "修饰垣墙", "平治道涂", "整手足甲", "沐浴", "冠笄"), taboos)
+        assertEquals(listOf("嫁娶", "祭祀", "理发", "作灶", "修饰垣墙", "平治道涂", "整手足甲", "沐浴", "冠笄"), taboos)
     }
 
     @Test
@@ -97,8 +89,7 @@ class TabooTest {
         for (t in SolarDay(2024, 6, 26).getLunarDay().getAvoids()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("破土", "出行", "栽种"), taboos)
+        assertEquals(listOf("破土", "出行", "栽种"), taboos)
     }
 
     @Test
@@ -107,7 +98,6 @@ class TabooTest {
         for (t in SolarTime(2024, 6, 25, 4, 0, 0).getLunarHour().getRecommends()) {
             taboos.add(t.getName())
         }
-
         assertEquals(emptyList<String>(), taboos)
     }
 
@@ -117,7 +107,6 @@ class TabooTest {
         for (t in SolarTime(2024, 6, 25, 4, 0, 0).getLunarHour().getAvoids()) {
             taboos.add(t.getName())
         }
-
         assertEquals(listOf("诸事不宜"), taboos)
     }
 
@@ -127,8 +116,7 @@ class TabooTest {
         for (t in SolarTime(2024, 4, 22, 0, 0, 0).getLunarHour().getRecommends()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("嫁娶", "交易", "开市", "安床", "祭祀", "求财"), taboos)
+        assertEquals(listOf("嫁娶", "交易", "开市", "安床", "祭祀", "求财"), taboos)
     }
 
     @Test
@@ -137,8 +125,7 @@ class TabooTest {
         for (t in SolarTime(2024, 4, 22, 0, 0, 0).getLunarHour().getAvoids()) {
             taboos.add(t.getName())
         }
-
-        assertEquals(mutableListOf("出行", "移徙", "赴任", "词讼", "祈福", "修造", "求嗣"), taboos)
+        assertEquals(listOf("出行", "移徙", "赴任", "词讼", "祈福", "修造", "求嗣"), taboos)
     }
 
     @Test
@@ -147,7 +134,15 @@ class TabooTest {
         for (t in SolarDay(2021, 3, 7).getLunarDay().getRecommends()) {
             taboos.add(t.getName())
         }
+        assertEquals(listOf("裁衣", "经络", "伐木", "开柱眼", "拆卸", "修造", "动土", "上梁", "合脊", "合寿木", "入殓", "除服", "成服", "移柩", "破土", "安葬", "启钻", "修坟", "立碑"), taboos)
+    }
 
-        assertEquals(mutableListOf("裁衣", "经络", "伐木", "开柱眼", "拆卸", "修造", "动土", "上梁", "合脊", "合寿木", "入殓", "除服", "成服", "移柩", "破土", "安葬", "启钻", "修坟", "立碑"), taboos)
+    @Test
+    fun test14() {
+        val taboos: MutableList<String?> = ArrayList()
+        for (t in SolarDay(2026, 1, 6).getLunarDay().getAvoids()) {
+            taboos.add(t.getName())
+        }
+        assertEquals(emptyList(), taboos)
     }
 }

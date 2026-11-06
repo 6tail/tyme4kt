@@ -8,21 +8,13 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class LunarSeason : LoopTyme {
+class LunarSeason: LoopTyme {
     constructor(index: Int): super(NAMES, index)
 
     constructor(name: String): super(NAMES, name)
 
     override fun next(n: Int): LunarSeason {
         return LunarSeason(nextIndex(n))
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is LunarSeason && this.toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
     }
 
     companion object {

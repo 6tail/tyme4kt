@@ -59,4 +59,32 @@ class LegalHolidayTest {
         assertNotNull(d)
         assertEquals("2010年10月1日 国庆节(休)", d.toString())
     }
+
+    @Test
+    fun test6() {
+        val d: LegalHoliday = SolarDay(2025, 1, 26).getLegalHoliday()!!
+        assertNotNull(d)
+        assertEquals("2025年1月26日 春节(班)", d.toString())
+        assertEquals("2025年1月29日", d.target.toString())
+    }
+
+    @Test
+    fun test7() {
+        var d: LegalHoliday = SolarDay(2026, 9, 20).getLegalHoliday()!!
+        assertNotNull(d)
+        assertEquals("2026年9月20日 国庆节(班)", d.toString())
+        assertEquals("2026年10月1日", d.target.toString())
+
+        d = SolarDay(2026, 9, 25).getLegalHoliday()!!
+        assertNotNull(d)
+        assertEquals("2026年9月25日 中秋节(休)", d.toString())
+
+        d = SolarDay(2026, 9, 27).getLegalHoliday()!!
+        assertNotNull(d)
+        assertEquals("2026年9月27日 中秋节(休)", d.toString())
+
+        d = SolarDay(2026, 10, 1).getLegalHoliday()!!
+        assertNotNull(d)
+        assertEquals("2026年10月1日 国庆节(休)", d.toString())
+    }
 }

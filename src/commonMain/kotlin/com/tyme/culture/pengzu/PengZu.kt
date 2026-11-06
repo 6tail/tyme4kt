@@ -9,27 +9,29 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class PengZu(sixtyCycle: SixtyCycle) : AbstractCulture() {
+class PengZu(sixtyCycle: SixtyCycle): AbstractCulture() {
 
-    /** 天干彭祖百忌 */
-    private var pengZuHeavenStem: PengZuHeavenStem = PengZuHeavenStem(sixtyCycle.getHeavenStem().getIndex())
+    /**
+     * 天干彭祖百忌
+     */
+    val pengZuHeavenStem: PengZuHeavenStem = PengZuHeavenStem(sixtyCycle.getHeavenStem().index)
 
-    /** 地支彭祖百忌 */
-    private var pengZuEarthBranch: PengZuEarthBranch = PengZuEarthBranch(sixtyCycle.getEarthBranch().getIndex())
-
-    fun getPengZuHeavenStem(): PengZuHeavenStem {
-        return pengZuHeavenStem
-    }
-
-    fun getPengZuEarthBranch(): PengZuEarthBranch {
-        return pengZuEarthBranch
-    }
+    /**
+     * 地支彭祖百忌
+     */
+    val pengZuEarthBranch: PengZuEarthBranch = PengZuEarthBranch(sixtyCycle.getEarthBranch().index)
 
     override fun getName(): String {
         return "$pengZuHeavenStem $pengZuEarthBranch"
     }
 
     companion object {
+        /**
+         * 从干支初始化
+         *
+         * @param sixtyCycle 干支
+         * @return 彭祖百忌
+         */
         @JvmStatic
         fun fromSixtyCycle(sixtyCycle: SixtyCycle): PengZu {
             return PengZu(sixtyCycle)

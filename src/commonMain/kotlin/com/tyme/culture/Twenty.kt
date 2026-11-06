@@ -23,7 +23,7 @@ class Twenty: LoopTyme {
      * @return 元
      */
     fun getSixty(): Sixty {
-        return Sixty(getIndex() / 3)
+        return Sixty(index / 3)
     }
 
     companion object {

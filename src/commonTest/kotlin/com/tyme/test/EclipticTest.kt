@@ -1,5 +1,6 @@
 package com.tyme.test
 
+import com.tyme.culture.star.twelve.Ecliptic
 import com.tyme.culture.star.twelve.TwelveStar
 import com.tyme.solar.SolarDay
 import kotlin.test.Test
@@ -17,6 +18,7 @@ class EclipticTest {
         assertEquals("天德", star.getName())
         assertEquals("黄道", star.getEcliptic().getName())
         assertEquals("吉", star.getEcliptic().getLuck().getName())
+
         star = SolarDay(2023, 10, 30).getSixtyCycleDay().getTwelveStar()
         assertEquals("天德", star.getName())
         assertEquals("黄道", star.getEcliptic().getName())
@@ -29,6 +31,7 @@ class EclipticTest {
         assertEquals("白虎", star.getName())
         assertEquals("黑道", star.getEcliptic().getName())
         assertEquals("凶", star.getEcliptic().getLuck().getName())
+
         star = SolarDay(2023, 10, 19).getSixtyCycleDay().getTwelveStar()
         assertEquals("白虎", star.getName())
         assertEquals("黑道", star.getEcliptic().getName())
@@ -41,6 +44,7 @@ class EclipticTest {
         assertEquals("天牢", star.getName())
         assertEquals("黑道", star.getEcliptic().getName())
         assertEquals("凶", star.getEcliptic().getLuck().getName())
+
         star = SolarDay(2023, 10, 7).getSixtyCycleDay().getTwelveStar()
         assertEquals("天牢", star.getName())
         assertEquals("黑道", star.getEcliptic().getName())
@@ -53,9 +57,15 @@ class EclipticTest {
         assertEquals("玉堂", star.getName())
         assertEquals("黄道", star.getEcliptic().getName())
         assertEquals("吉", star.getEcliptic().getLuck().getName())
+
         star = SolarDay(2023, 10, 8).getSixtyCycleDay().getTwelveStar()
         assertEquals("玉堂", star.getName())
         assertEquals("黄道", star.getEcliptic().getName())
         assertEquals("吉", star.getEcliptic().getLuck().getName())
+    }
+
+    @Test
+    fun test4() {
+        assertEquals(0, Ecliptic("黄道").index)
     }
 }

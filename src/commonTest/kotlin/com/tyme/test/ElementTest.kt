@@ -12,13 +12,17 @@ import kotlin.test.assertEquals
  * @author 6tail
  */
 class ElementTest {
-    /** 金克木  */
+    /**
+     * 金克木
+     */
     @Test
     fun test0() {
         assertEquals(Element("木"), Element("金").getRestrain())
     }
 
-    /** 火生土 */
+    /**
+     * 火生土
+     */
     @Test
     fun test1() {
         assertEquals(Element("土"), Element("火").getReinforce())
@@ -31,14 +35,18 @@ class ElementTest {
 
     @Test
     fun test3() {
+        val e: Element = EarthBranch("寅").getElement()
         // 地支寅的五行为木
-        assertEquals("木", EarthBranch("寅").getElement().getName())
-
+        assertEquals("木", e.getName())
         // 地支寅的五行(木)生火
-        assertEquals(Element("火"), EarthBranch("寅").getElement().getReinforce())
+        assertEquals(e.getReinforce().getName(), Element("火").getName())
+        assertEquals("水", e.getReinforced().getName())
+        assertEquals("金", e.getRestrained().getName())
     }
 
-    /** 生我的：火生土 */
+    /**
+     * 生我的：火生土
+     */
     @Test
     fun test4() {
         assertEquals(Element("火"), Element("土").getReinforced())

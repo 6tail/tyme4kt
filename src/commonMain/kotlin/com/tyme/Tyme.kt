@@ -5,7 +5,7 @@ package com.tyme
  *
  * @author 6tail
  */
-interface Tyme : Culture {
+interface Tyme: Culture {
     /**
      * 推移
      *

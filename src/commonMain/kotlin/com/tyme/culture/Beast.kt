@@ -17,9 +17,13 @@ class Beast: LoopTyme {
         return Beast(nextIndex(n))
     }
 
-    /** 宫 */
+    /**
+     * 宫
+     *
+     * @return 宫
+     */
     fun getZone(): Zone {
-        return Zone(getIndex())
+        return Zone(index)
     }
 
     companion object {

@@ -16,7 +16,7 @@ class SolarTermTest {
         // 冬至在去年，2022-12-22 05:48:01
         val dongZhi = SolarTerm(2023, "冬至")
         assertEquals("冬至", dongZhi.getName())
-        assertEquals(0, dongZhi.getIndex().toLong())
+        assertEquals(0, dongZhi.index)
         // 公历日
         assertEquals("2022年12月22日", dongZhi.getJulianDay().getSolarDay().toString())
         assertEquals("2022年12月22日", dongZhi.getSolarDay().toString())
@@ -24,21 +24,21 @@ class SolarTermTest {
         // 冬至顺推23次，就是大雪 2023-12-07 17:32:44
         val daXue = dongZhi.next(23)
         assertEquals("大雪", daXue.getName())
-        assertEquals(23, daXue.getIndex().toLong())
+        assertEquals(23, daXue.index)
         assertEquals("2023年12月7日", daXue.getJulianDay().getSolarDay().toString())
         assertEquals("2023年12月7日", daXue.getSolarDay().toString())
 
         // 冬至逆推2次，就是上一年的小雪 2022-11-22 16:20:18
         val xiaoXue = dongZhi.next(-2)
         assertEquals("小雪", xiaoXue.getName())
-        assertEquals(22, xiaoXue.getIndex().toLong())
+        assertEquals(22, xiaoXue.index)
         assertEquals("2022年11月22日", xiaoXue.getJulianDay().getSolarDay().toString())
         assertEquals("2022年11月22日", xiaoXue.getSolarDay().toString())
 
         // 冬至顺推24次，就是下一个冬至 2023-12-22 11:27:09
         val dongZhi2 = dongZhi.next(24)
         assertEquals("冬至", dongZhi2.getName())
-        assertEquals(0, dongZhi2.getIndex().toLong())
+        assertEquals(0, dongZhi2.index)
         assertEquals("2023年12月22日", dongZhi2.getJulianDay().getSolarDay().toString())
         assertEquals("2023年12月22日", dongZhi2.getSolarDay().toString())
     }
@@ -48,7 +48,7 @@ class SolarTermTest {
         // 公历2023年的雨水，2023-02-19 06:34:05
         val jq = SolarTerm(2023, "雨水")
         assertEquals("雨水", jq.getName())
-        assertEquals(4, jq.getIndex().toLong())
+        assertEquals(4, jq.index)
     }
 
     @Test
@@ -57,12 +57,12 @@ class SolarTermTest {
         val jq = SolarTerm(2023, "大雪")
         assertEquals("大雪", jq.getName())
         // 索引
-        assertEquals(23, jq.getIndex().toLong())
+        assertEquals(23, jq.index)
         // 公历
         assertEquals("2023年12月7日", jq.getJulianDay().getSolarDay().toString())
         assertEquals("2023年12月7日", jq.getSolarDay().toString())
         // 农历
-        assertEquals("农历癸卯年十月廿五", jq.getJulianDay().getSolarDay().getLunarDay().toString())
+        assertEquals("农历癸卯年十月廿五", jq.getSolarDay().getLunarDay().toString())
         // 推移
         assertEquals("雨水", jq.next(5).getName())
     }
@@ -77,7 +77,7 @@ class SolarTermTest {
         // 大雪当天
         assertEquals("大雪第1天", SolarDay(2023, 12, 7).getTermDay().toString())
         // 天数索引
-        assertEquals(0, SolarDay(2023, 12, 7).getTermDay().getDayIndex())
+        assertEquals(0, SolarDay(2023, 12, 7).getTermDay().dayIndex)
 
         assertEquals("大雪第2天", SolarDay(2023, 12, 8).getTermDay().toString())
         assertEquals("大雪第15天", SolarDay(2023, 12, 21).getTermDay().toString())
@@ -92,9 +92,24 @@ class SolarTermTest {
     }
 
     @Test
-    fun test6(){
-        assertEquals("1034年10月1日", SolarTerm.fromName(1034, "寒露").getSolarDay().toString())
-        assertEquals("1034年10月3日", SolarTerm.fromName(1034, "寒露").getJulianDay().getSolarDay().toString())
-        assertEquals("1034年10月3日 06:02:28", SolarTerm.fromName(1034, "寒露").getJulianDay().getSolarTime().toString())
+    fun test6() {
+        assertEquals("1034年10月1日", SolarTerm(1034, "寒露").getSolarDay().toString())
+        assertEquals("1034年10月3日", SolarTerm(1034, "寒露").getJulianDay().getSolarDay().toString())
+        assertEquals("1034年10月3日 06:02:28", SolarTerm(1034, "寒露").getJulianDay().getSolarTime().toString())
+    }
+
+    @Test
+    fun test7() {
+        assertEquals("立春", SolarDay(1150, 1, 30).getTerm().toString())
+    }
+
+    @Test
+    fun test8() {
+        // 日历
+        assertEquals("1008年1月31日", SolarTerm(1008, "立春").getSolarDay().toString())
+
+        // 精确的
+        assertEquals("1008年1月30日", SolarTerm(1008, "立春").getJulianDay().getSolarDay().toString())
+        assertEquals("1008年1月30日 01:55:22", SolarTerm(1008, "立春").getJulianDay().getSolarTime().toString())
     }
 }

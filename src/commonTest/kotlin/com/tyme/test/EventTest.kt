@@ -2,9 +2,12 @@ package com.tyme.test
 
 import com.tyme.event.Event
 import com.tyme.event.EventManager
+import com.tyme.solar.SolarDay
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 /**
  * 事件测试
@@ -12,6 +15,7 @@ import kotlin.test.assertNotNull
  * @author 6tail
  */
 class EventTest {
+    @BeforeTest
     fun init() {
         // 公历现代节日
         // EventManager.DATA = "@0VV__0Ux公历现代节日:元旦@0Xc__0Ux公历现代节日:妇女节@0Xg__0_Q公历现代节日:植树节@0ZV__0Ux公历现代节日:劳动节@0ZY__0Ux公历现代节日:青年节@0aV__0Ux公历现代节日:儿童节@0bV__0Uo公历现代节日:建党节@0cV__0Ug公历现代节日:建军节@0de__0_V公历现代节日:教师节@0eV__0Ux公历现代节日:国庆节";
@@ -81,13 +85,16 @@ class EventTest {
 
         // 如果没有2月29，则倒推1天
         EventManager.update("公历生日", Event.builder().solarDay(2, 29, -1).startYear(2004).build())
+        // 同公历生日数据
+        EventManager.updateData("生日", "@0WxU_0_o")
+        // 删除生日
+        EventManager.remove("生日")
 
         EventManager.update("农历生日", Event.builder().lunarDay(4, 21, 0).startYear(1986).build())
     }
 
     @Test
     fun test0() {
-        init()
         var e = Event.fromName("公历生日")
         assertNotNull(e)
 
@@ -109,13 +116,52 @@ class EventTest {
 
     @Test
     fun test1() {
-        init()
-        val e = Event.fromName("国际消费者权益日")
+        val e: Event? = Event.fromName("公历生日")
+        assertNotNull(e)
+
+        val d: SolarDay? = e.getSolarDay(1985)
+        assertNull(d)
+    }
+
+    @Test
+    fun test2() {
+        val e: Event = Event.fromName("国际消费者权益日")!!
         assertNotNull(e)
         assertEquals("国际消费者权益日", e.getName())
 
-        val d = e.getSolarDay(2026)
-        assertNotNull(d)
+        val d: SolarDay? = e.getSolarDay(2026)
         assertEquals("2026年3月15日", d.toString())
+
+        val events = Event.fromSolarDay(d!!)
+        assertEquals("[国际消费者权益日]", events.toString())
+
+        // 打印2026年的所有事件
+        for (event in Event.all()) {
+            println(event.toString() + " = " + event.getSolarDay(2026))
+        }
+    }
+
+    @Test
+    fun test3() {
+        val e: Event? = Event.fromName("全国中小学生安全教育日")
+        assertNotNull(e)
+        assertEquals("全国中小学生安全教育日", e.getName())
+
+        val days: Map<Int, String> = mapOf(
+            Pair(2008, "2008年3月31日"),
+            Pair(2015, "2015年3月30日"),
+            Pair(2018, "2018年3月26日"),
+            Pair(2019, "2019年3月25日"),
+            Pair(2021, "2021年3月29日"),
+            Pair(2023, "2023年3月27日"),
+            Pair(2024, "2024年3月25日"),
+            Pair(2025, "2025年3月31日")
+        )
+
+        for ((key, value) in days) {
+            val d: SolarDay? = e.getSolarDay(key)
+            assertNotNull(d)
+            assertEquals(value, d.toString())
+        }
     }
 }

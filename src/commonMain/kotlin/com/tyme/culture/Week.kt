@@ -18,9 +18,13 @@ class Week: LoopTyme {
         return Week(nextIndex(n))
     }
 
-    /** 七曜 */
+    /**
+     * 七曜
+     *
+     * @return 七曜
+     */
     fun getSevenStar(): SevenStar {
-        return SevenStar(getIndex())
+        return SevenStar(index)
     }
 
     companion object {

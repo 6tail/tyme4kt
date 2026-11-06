@@ -6,7 +6,6 @@ import com.tyme.solar.SolarTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 /**
  * 物候测试
  *
@@ -26,7 +25,7 @@ class PhenologyTest {
         assertEquals("2020年4月19日", phenology.getPhenology().getJulianDay().getSolarDay().toString())
         assertEquals("2020年4月19日 22:45:29", phenology.getPhenology().getJulianDay().getSolarTime().toString())
         // 该候的第5天
-        assertEquals(4, phenology.getDayIndex().toLong())
+        assertEquals(4, phenology.dayIndex)
     }
 
     @Test
@@ -43,7 +42,7 @@ class PhenologyTest {
         assertEquals("2021年12月26日", phenology.getPhenology().getJulianDay().getSolarDay().toString())
         assertEquals("2021年12月26日 21:48:55", phenology.getPhenology().getJulianDay().getSolarTime().toString())
         // 该候的第1天
-        assertEquals(0, phenology.getDayIndex().toLong())
+        assertEquals(0, phenology.dayIndex)
     }
 
     @Test

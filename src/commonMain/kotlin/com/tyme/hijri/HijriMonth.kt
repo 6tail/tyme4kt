@@ -1,6 +1,8 @@
 package com.tyme.hijri
 
-import com.tyme.unit.MonthUnit
+import com.tyme.unit.AbstractDay
+import com.tyme.unit.AbstractMonth
+import com.tyme.unit.AbstractYear
 import kotlin.jvm.JvmStatic
 
 /**
@@ -8,10 +10,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class HijriMonth(
-    year: Int,
-    month: Int
-) : MonthUnit(year, month) {
+class HijriMonth(year: Int, month: Int): AbstractMonth(year, month) {
 
     init {
         validate(year, month)
@@ -19,42 +18,36 @@ class HijriMonth(
 
     /**
      * 回历年
-     *
-     * @return 回历年
      */
-    fun getHijriYear(): HijriYear {
-        return HijriYear(year)
-    }
+    val hijriYear: HijriYear
+        get() = HijriYear(year)
+
+    override val abstractYear: AbstractYear
+        get() = hijriYear
 
     /**
      * 天数（单数月30天，双数月29天，闰年第12月30天)
      *
      * @return 天数
      */
-    fun getDayCount(): Int {
-        var d: Int = if (month % 2 == 0) 29 else 30
-        // 闰年第12月30天
-        if (12 == month && this.getHijriYear().isLeap()) {
-            d++
+    override val dayCount: Int
+        get() {
+            var d: Int = if (month.and(1) == 0) 29 else 30
+            // 闰年第12月30天
+            if (12 == month && hijriYear.isLeap()) {
+                d++
+            }
+            return d
         }
-        return d
-    }
 
     /**
      * 位于当年的索引(0-11)
-     *
-     * @return 索引
      */
-    fun getIndexInYear(): Int {
-        return month - 1
-    }
+    val indexInYear: Int
+        get() = month - 1
 
     override fun getName(): String {
-        return NAMES[getIndexInYear()]
-    }
-
-    override fun toString(): String {
-        return "${getHijriYear()}${getName()}"
+        return NAMES[indexInYear]
     }
 
     override fun next(n: Int): HijriMonth {
@@ -68,7 +61,7 @@ class HijriMonth(
      * @return 回历日列表
      */
     fun getDays(): List<HijriDay> {
-        val size: Int = getDayCount()
+        val size: Int = dayCount
         val l: MutableList<HijriDay> = ArrayList(size)
         for (i in 1..size) {
             l.add(HijriDay(year, month, i))
@@ -76,22 +69,8 @@ class HijriMonth(
         return l
     }
 
-    /**
-     * 本月第一天
-     *
-     * @return 回历日
-     */
-    fun getFirstDay(): HijriDay {
-        return HijriDay(year, month, 1)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is HijriMonth && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
+    override val firstDay: AbstractDay
+        get() = HijriDay(year, month, 1)
 
     companion object {
         val NAMES: Array<String> = arrayOf<String>("穆哈兰姆月", "色法尔月", "赖比尔·敖外鲁月", "赖比尔·阿色尼月", "主马达·敖外鲁月", "主马达·阿色尼月", "赖哲卜月", "舍尔邦月", "赖买丹月", "闪瓦鲁月", "都尔喀尔德月", "都尔黑哲月")

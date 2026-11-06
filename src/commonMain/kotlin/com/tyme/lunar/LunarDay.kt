@@ -12,7 +12,7 @@ import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.sixtycycle.SixtyCycleDay
 import com.tyme.sixtycycle.ThreePillars
 import com.tyme.solar.SolarDay
-import com.tyme.unit.DayUnit
+import com.tyme.unit.AbstractDay
 import kotlin.jvm.JvmStatic
 import kotlin.math.abs
 
@@ -21,11 +21,7 @@ import kotlin.math.abs
  *
  * @author 6tail
  */
-class LunarDay(
-    year: Int,
-    month: Int,
-    day: Int
-) : DayUnit(year, month, day) {
+class LunarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
 
     init {
         validate(year, month, day)
@@ -33,19 +29,16 @@ class LunarDay(
 
     /**
      * 农历月
-     *
-     * @return 农历月
      */
-    fun getLunarMonth(): LunarMonth {
-        return LunarMonth(year, month)
-    }
+    val lunarMonth: LunarMonth
+        get() = LunarMonth(year, month)
 
     override fun getName(): String {
         return NAMES[day - 1]
     }
 
     override fun toString(): String {
-        return getLunarMonth().toString() + getName()
+        return lunarMonth.toString() + getName()
     }
 
     override fun next(n: Int): LunarDay {
@@ -72,12 +65,7 @@ class LunarDay(
         return getCompareIndex() > target.getCompareIndex()
     }
 
-    /**
-     * 星期
-     *
-     * @return 星期
-     */
-    fun getWeek(): Week {
+    override fun getWeek(): Week {
         return getSolarDay().getWeek()
     }
 
@@ -87,14 +75,14 @@ class LunarDay(
      * @return 干支
      */
     fun getSixtyCycle(): SixtyCycle {
-        return SixtyCycle(getLunarMonth().getFirstJulianDay().next(day - 12).getDay().toInt())
+        return SixtyCycle(lunarMonth.getFirstJulianDay().next(day - 12).day.toInt())
     }
 
     /**
      * 建除十二值神
      *
      * @return 建除十二值神
-     * @see SixtyCycleDay
+     * @see SixtyCycleDay.getDuty
      */
     fun getDuty(): Duty {
         return getSixtyCycleDay().getDuty()
@@ -104,14 +92,14 @@ class LunarDay(
      * 黄道黑道十二神
      *
      * @return 黄道黑道十二神
-     * @see SixtyCycleDay
+     * @see SixtyCycleDay.getTwelveStar
      */
     fun getTwelveStar(): TwelveStar {
         return getSixtyCycleDay().getTwelveStar()
     }
 
     /**
-     * 九星
+     * 九星（在冬至前后找到最近的甲子日为一白，往后二黑依次顺推；在夏至前后找到最近的甲子日为九紫，往后八白依次逆推。）
      *
      * @return 九星
      */
@@ -125,8 +113,8 @@ class LunarDay(
      * @return 方位
      */
     fun getJupiterDirection(): Direction {
-        val index: Int = getSixtyCycle().getIndex()
-        return if (index % 12 < 6) Element(index / 12).getDirection() else getLunarMonth().getLunarYear().getJupiterDirection()
+        val index: Int = getSixtyCycle().index
+        return if (index % 12 < 6) Element(index / 12).getDirection() else LunarYear(year).jupiterDirection
     }
 
     /**
@@ -145,8 +133,8 @@ class LunarDay(
      */
     fun getPhaseDay(): PhaseDay {
         val today: SolarDay = getSolarDay()
-        val m: LunarMonth = getLunarMonth().next(1)
-        var p: Phase = Phase.fromIndex(m.year, m.getMonthWithLeap(), 0)
+        val m: LunarMonth = lunarMonth.next(1)
+        var p: Phase = Phase(m.year, m.monthValue, 0)
         var d: SolarDay = p.getSolarDay()
         while (d.isAfter(today)) {
             p = p.next(-1)
@@ -179,7 +167,7 @@ class LunarDay(
      * @return 公历日
      */
     fun getSolarDay(): SolarDay {
-        return getLunarMonth().getFirstJulianDay().next(day - 1).getSolarDay()
+        return lunarMonth.getFirstJulianDay().next(day - 1).getSolarDay()
     }
 
     /**
@@ -197,7 +185,7 @@ class LunarDay(
      * @return 二十八宿
      */
     fun getTwentyEightStar(): TwentyEightStar {
-        return TwentyEightStar(intArrayOf(10, 18, 26, 6, 14, 22, 2)[getSolarDay().getWeek().getIndex()]).next(-7 * getSixtyCycle().getEarthBranch().getIndex())
+        return TwentyEightStar(10 + 8 * getWeek().index).next(-7 * getSixtyCycle().getEarthBranch().index)
     }
 
     /**
@@ -215,12 +203,10 @@ class LunarDay(
      * @return 农历时辰列表
      */
     fun getHours(): List<LunarHour> {
-        val l: MutableList<LunarHour> = ArrayList()
+        val l: MutableList<LunarHour> = ArrayList(13)
         l.add(LunarHour(year, month, day, 0, 0, 0))
-        var i = 0
-        while (i < 24) {
+        for (i in 0..23 step 2) {
             l.add(LunarHour(year, month, day, i + 1, 0, 0))
-            i += 2
         }
         return l
     }
@@ -229,6 +215,7 @@ class LunarDay(
      * 神煞列表(吉神宜趋，凶神宜忌)
      *
      * @return 神煞列表
+     * @see SixtyCycleDay.getGods
      */
     fun getGods(): List<God> {
         return getSixtyCycleDay().getGods()
@@ -238,6 +225,7 @@ class LunarDay(
      * 宜
      *
      * @return 宜忌列表
+     * @see SixtyCycleDay.getRecommends
      */
     fun getRecommends(): List<Taboo> {
         return getSixtyCycleDay().getRecommends()
@@ -247,6 +235,7 @@ class LunarDay(
      * 忌
      *
      * @return 宜忌列表
+     * @see SixtyCycleDay.getAvoids
      */
     fun getAvoids(): List<Taboo> {
         return getSixtyCycleDay().getAvoids()
@@ -258,7 +247,7 @@ class LunarDay(
      * @return 小六壬
      */
     fun getMinorRen(): MinorRen {
-        return getLunarMonth().getMinorRen().next(day - 1)
+        return lunarMonth.getMinorRen().next(day - 1)
     }
 
     /**
@@ -270,47 +259,8 @@ class LunarDay(
         return getSixtyCycleDay().getThreePillars()
     }
 
-    override fun equals(other: Any?): Boolean {
-        return other is LunarDay && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
-
     companion object {
-        val NAMES: Array<String> = arrayOf(
-            "初一",
-            "初二",
-            "初三",
-            "初四",
-            "初五",
-            "初六",
-            "初七",
-            "初八",
-            "初九",
-            "初十",
-            "十一",
-            "十二",
-            "十三",
-            "十四",
-            "十五",
-            "十六",
-            "十七",
-            "十八",
-            "十九",
-            "二十",
-            "廿一",
-            "廿二",
-            "廿三",
-            "廿四",
-            "廿五",
-            "廿六",
-            "廿七",
-            "廿八",
-            "廿九",
-            "三十"
-        )
+        val NAMES: Array<String> = arrayOf("初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十", "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十", "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十")
 
         @JvmStatic
         fun validate(year: Int, month: Int, day: Int) {
@@ -318,11 +268,18 @@ class LunarDay(
                 throw IllegalArgumentException("illegal lunar day: $day")
             }
             val m = LunarMonth(year, month)
-            if (day > m.getDayCount()) {
+            if (day > m.dayCount) {
                 throw IllegalArgumentException("illegal day $day in $m")
             }
         }
 
+        /**
+         * 从农历年月日初始化
+         *
+         * @param year  农历年
+         * @param month 农历月，闰月为负
+         * @param day   农历日
+         */
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): LunarDay {
             return LunarDay(year, month, day)

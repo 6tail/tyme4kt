@@ -11,29 +11,38 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class LegalHoliday(year: Int, month: Int, day: Int, data: String) : AbstractTyme() {
-    /** 公历日 */
-    private var day: SolarDay = SolarDay(year, month, day)
-    /** 名称 */
-    private var name: String = NAMES[data[9].code - '0'.code]
-    /** 是否上班 */
-    private var work: Boolean = '0' == data[8]
+class LegalHoliday: AbstractTyme {
+    /**
+     * 公历日
+     */
+    val day: SolarDay
 
-    override fun getName(): String {
-        return name
-    }
-
-    fun getDay(): SolarDay {
-        return day
-    }
+    /**
+     * 名称
+     */
+    private var name: String
 
     /**
      * 是否上班
-     *
-     * @return true/false
      */
-    fun isWork(): Boolean {
-        return work
+    val work: Boolean
+
+    /**
+     * 节假日当天的公历日
+     */
+    val target: SolarDay
+
+    constructor(year: Int, month: Int, day: Int, data: String): super() {
+        val d: SolarDay = SolarDay(year, month, day)
+        this.day = d
+        work = '0' == data[8]
+        name = NAMES[data[9].code - '0'.code]
+        val offset: Int = data.substring(data.length - 2).toInt()
+        target = d.next(if (data[10] == '-') -offset else offset)
+    }
+
+    override fun getName(): String {
+        return name
     }
 
     override fun toString(): String {
@@ -41,63 +50,39 @@ class LegalHoliday(year: Int, month: Int, day: Int, data: String) : AbstractTyme
     }
 
     override fun next(n: Int): LegalHoliday? {
-        val year: Int = this.day.year
-        val month: Int = this.day.month
-        val day: Int = this.day.day
+        val year = day.year
+        val month = day.month
         if (n == 0) {
-            return fromYmd(year, month, day)
+            return fromYmd(year, month, day.day)
         }
-        val data: MutableList<String> = ArrayList()
-        val reg = "\\d{4}[0-1][0-8][+|-]\\d{2}"
-        val today = "${year.pad4()}${month.pad2()}${day.pad2()}"
-        var matchResult = Regex(year.pad4() + reg).findAll(DATA)
-        for (result in matchResult) {
-            data.add(result.value)
-        }
-        var index = -1
-        var size = data.size
-        for (i in 0 until size) {
-            if (data[i].startsWith(today)) {
-                index = i
-                break
-            }
-        }
+        val reg = "\\d{4}[0-1][0-8][\\+|-]\\d{2}"
+        val today = "${year.pad4()}${month.pad2()}${day.day.pad2()}"
+        var data = Regex("${year.pad4()}$reg").findAll(DATA).map { it.value }.toList()
+        var index = data.indexOfFirst { it.startsWith(today) }
         if (index == -1) {
             return null
         }
         index += n
-        var y: Int = year
-        if (n > 0) {
-            while (index >= size) {
+        var y = year
+        var size = data.size
+        while (index !in 0..<size) {
+            if (index >= size) {
                 index -= size
                 y += 1
-                data.clear()
-                matchResult = Regex(y.pad4() + reg).findAll(DATA)
-                for (result in matchResult) {
-                    data.add(result.value)
-                }
-                size = data.size
-                if (size < 1) {
-                    return null
-                }
-            }
-        } else {
-            while (index < 0) {
+            } else {
                 y -= 1
-                data.clear()
-                matchResult = Regex(y.pad4() + reg).findAll(DATA)
-                for (result in matchResult) {
-                    data.add(result.value)
-                }
-                size = data.size
-                if (size < 1) {
-                    return null
-                }
+            }
+            data = Regex("${y.pad4()}$reg").findAll(DATA).map { it.value }.toMutableList()
+            size = data.size
+            if (data.isEmpty()) {
+                return null
+            }
+            if (index < 0) {
                 index += size
             }
         }
-        val d: String = data[index]
-        return LegalHoliday(d.take(4).toInt(10), d.substring(4, 6).toInt(10), d.substring(6, 8).toInt(10), d)
+        val d = data[index]
+        return LegalHoliday(d.substring(0, 4).toInt(), d.substring(4, 6).toInt(), d.substring(6, 8).toInt(), d)
     }
 
     companion object {

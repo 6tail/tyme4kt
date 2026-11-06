@@ -7,98 +7,72 @@ import com.tyme.culture.star.nine.NineStar
 import com.tyme.jd.JulianDay
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarTerm
-import com.tyme.unit.MonthUnit
+import com.tyme.unit.AbstractDay
+import com.tyme.unit.AbstractLeapMonth
+import com.tyme.unit.AbstractYear
 import com.tyme.util.ShouXingUtil
 import kotlin.jvm.JvmStatic
-import kotlin.math.abs
-import kotlin.math.ceil
 
 /**
  * 农历月
  *
  * @author 6tail
  */
-class LunarMonth(
-    year: Int,
-    month: Int,
-) : MonthUnit(year, abs(month)) {
-
-    /** 是否闰月 */
-    private var leap: Boolean
+class LunarMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
 
     init {
         validate(year, month)
-        leap = month < 0
     }
 
-    protected fun getNewMoon(): Double {
-        // 冬至
-        val dongZhiJd = SolarTerm.fromIndex(year, 0).getCursoryJulianDay()
-
-        // 冬至前的初一，今年首朔的日月黄经差
-        var w: Double = ShouXingUtil.calcShuo(dongZhiJd)
-        if (w > dongZhiJd) {
-            w -= 29.53
+    private fun getNewMoon(): Double {
+        val m: Int = indexInYear
+        var months: DoubleArray? = NEW_MOON_CACHE[year]
+        if (months == null) {
+            months = DoubleArray(13) { Double.NaN }
+            NEW_MOON_CACHE[year] = months
         }
+        var v = months[m]
+        if (v.isNaN()) {
+            // 冬至
+            val dongZhiJd = SolarTerm(year, 0).cursoryJulianDay
 
-        // 正常情况正月初一为第3个朔日，但有些特殊的
-        var offset = 2
-        if (year in 9..<24) {
-            offset = 1
-        } else if (LunarYear.fromYear(year - 1).getLeapMonth() > 10 && year != 239 && year != 240) {
-            offset = 3
+            // 冬至前的初一，今年首朔的日月黄经差
+            var w = ShouXingUtil.calcShuo(dongZhiJd)
+            if (w > dongZhiJd) {
+                w -= 29.53
+            }
+
+            // 正常情况正月初一为第3个朔日，但有些特殊的
+            var offset = 2
+            if (year in 9..<24) {
+                offset = 1
+            } else if (LunarYear(year - 1).leapMonth > 10 && year != 239 && year != 240) {
+                offset = 3
+            }
+
+            // 本月初一
+            v = w + 29.5306 * (offset + m)
+            months[m] = v
         }
-
-        // 本月初一
-        return w + 29.5306 * (offset + getIndexInYear())
+        return v
     }
 
     /**
      * 农历年
-     *
-     * @return 农历年
      */
-    fun getLunarYear(): LunarYear {
-        return LunarYear(year)
-    }
+    val lunarYear: LunarYear
+        get() = LunarYear(year)
 
-    /**
-     * 月
-     *
-     * @return 月，当月为闰月时，返回负数
-     */
-    fun getMonthWithLeap(): Int {
-        return if (leap) -month else month
-    }
+    override val abstractYear: AbstractYear
+        get() = lunarYear
 
-    /**
-     * 天数(大月30天，小月29天)
-     *
-     * @return 天数
-     */
-    fun getDayCount(): Int{
-        val w = getNewMoon()
-        // 本月天数 = 下月初一 - 本月初一
-        return (ShouXingUtil.calcShuo(w + 29.5306) - ShouXingUtil.calcShuo(w)).toInt()
-    }
-
-    /**
-     * 位于当年的索引(0-12)
-     *
-     * @return 索引
-     */
-    fun getIndexInYear(): Int{
-        var index: Int = month - 1
-        if (leap) {
-            index += 1
-        } else {
-            val leapMonth = getLunarYear().getLeapMonth()
-            if (leapMonth in 1..<month) {
-                index += 1
-            }
+    override val dayCount: Int
+        get() {
+            // 大月30天，小月29天
+            val w = getNewMoon()
+            // 本月天数 = 下月初一 - 本月初一
+            return (ShouXingUtil.calcShuo(w + 29.5306) - ShouXingUtil.calcShuo(w)).toInt()
         }
-        return index
-    }
 
     /**
      * 农历季节
@@ -114,27 +88,8 @@ class LunarMonth(
      *
      * @return 儒略日
      */
-    fun getFirstJulianDay(): JulianDay{
-        return JulianDay.fromJulianDay(JulianDay.J2000 + ShouXingUtil.calcShuo(getNewMoon()))
-    }
-
-    /**
-     * 是否闰月
-     *
-     * @return true/false
-     */
-    fun isLeap(): Boolean{
-        return leap
-    }
-
-    /**
-     * 周数
-     *
-     * @param start 起始星期，1234560分别代表星期一至星期天
-     * @return 周数
-     */
-    fun getWeekCount(start: Int): Int {
-        return ceil((indexOf(getFirstJulianDay().getWeek().getIndex() - start, 7) + getDayCount()) / 7.0).toInt()
+    fun getFirstJulianDay(): JulianDay {
+        return JulianDay(JulianDay.J2000 + ShouXingUtil.calcShuo(getNewMoon()))
     }
 
     /**
@@ -146,40 +101,9 @@ class LunarMonth(
         return (if (leap) "闰" else "") + NAMES[month - 1]
     }
 
-    override fun toString(): String {
-        return getLunarYear().toString() + getName()
-    }
-
     override fun next(n: Int): LunarMonth {
-        if (n == 0) {
-            return fromYm(year, getMonthWithLeap())
-        }
-        var m: Int = getIndexInYear() + 1 + n
-        var y: LunarYear = getLunarYear()
-        if (n > 0) {
-            var monthCount: Int = y.getMonthCount()
-            while (m > monthCount) {
-                m -= monthCount
-                y = y.next(1)
-                monthCount = y.getMonthCount()
-            }
-        } else {
-            while (m <= 0) {
-                y = y.next(-1)
-                m += y.getMonthCount()
-            }
-        }
-        var leap = false
-        val leapMonth = y.getLeapMonth()
-        if (leapMonth > 0) {
-            if (m == leapMonth + 1) {
-                leap = true
-            }
-            if (m > leapMonth) {
-                m--
-            }
-        }
-        return fromYm(y.year, if (leap) -m else m)
+        val m = super.next(n)
+        return LunarMonth(m.year, m.monthValue)
     }
 
     /**
@@ -188,8 +112,8 @@ class LunarMonth(
      * @return 农历日列表
      */
     fun getDays(): List<LunarDay> {
-        val size: Int = getDayCount()
-        val m: Int = getMonthWithLeap()
+        val size: Int = dayCount
+        val m: Int = monthValue
         val l: MutableList<LunarDay> = ArrayList(size)
         for (i in 1..size) {
             l.add(LunarDay(year, m, i))
@@ -197,9 +121,11 @@ class LunarMonth(
         return l
     }
 
-    fun getFirstDay(): LunarDay {
-        return LunarDay.fromYmd(year, getMonthWithLeap(), 1)
-    }
+    /**
+     * 初一
+     */
+    override val firstDay: AbstractDay
+        get() = LunarDay(year, monthValue, 1)
 
     /**
      * 本月的农历周列表
@@ -209,7 +135,7 @@ class LunarMonth(
      */
     fun getWeeks(start: Int): List<LunarWeek> {
         val size: Int = getWeekCount(start)
-        val m: Int = getMonthWithLeap()
+        val m: Int = monthValue
         val l: MutableList<LunarWeek> = ArrayList(size)
         for (i in 0 until size) {
             l.add(LunarWeek(year, m, i, start))
@@ -231,12 +157,12 @@ class LunarMonth(
       *
       * @return 九星
       */
-    fun getNineStar():NineStar {
-         var index: Int = getSixtyCycle().getEarthBranch().getIndex()
+    fun getNineStar(): NineStar {
+         var index: Int = getSixtyCycle().getEarthBranch().index
          if (index < 2) {
              index += 3
          }
-         return NineStar(27 - getLunarYear().getSixtyCycle().getEarthBranch().getIndex() % 3 * 3 - index)
+         return NineStar(27 - lunarYear.getSixtyCycle().getEarthBranch().index % 3 * 3 - index)
     }
 
     /**
@@ -246,7 +172,7 @@ class LunarMonth(
      */
     fun getJupiterDirection(): Direction {
         val sixtyCycle: SixtyCycle = getSixtyCycle()
-        val n: Int = intArrayOf(7, -1, 1, 3)[sixtyCycle.getEarthBranch().next(-2).getIndex() % 4]
+        val n: Int = intArrayOf(7, -1, 1, 3)[sixtyCycle.getEarthBranch().next(-2).index % 4]
         return if (n != -1) Direction(n) else sixtyCycle.getHeavenStem().getDirection()
     }
 
@@ -268,16 +194,9 @@ class LunarMonth(
         return MinorRen((month - 1) % 6)
     }
 
-    override fun equals(other: Any?): Boolean {
-        return other is LunarMonth && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
-
     companion object {
         val NAMES: Array<String> = arrayOf("正月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月")
+        private val NEW_MOON_CACHE: Array<DoubleArray?> = arrayOfNulls<DoubleArray>(10000)
 
         @JvmStatic
         fun validate(year: Int, month: Int) {
@@ -285,8 +204,8 @@ class LunarMonth(
                 throw IllegalArgumentException("illegal lunar month: $month")
             }
             // 闰月检查
-            if (month < 0 && -month != LunarYear.fromYear(year).getLeapMonth()) {
-                throw IllegalArgumentException("illegal leap month -$month in lunar year $year")
+            if (month < 0 && -month != LunarYear(year).leapMonth) {
+                throw IllegalArgumentException("illegal leap month ${-month} in lunar year $year")
             }
         }
 

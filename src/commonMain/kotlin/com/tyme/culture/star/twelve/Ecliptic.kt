@@ -9,10 +9,10 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class Ecliptic : LoopTyme {
-    constructor(index: Int) : super(NAMES, index)
+class Ecliptic: LoopTyme {
+    constructor(index: Int): super(NAMES, index)
 
-    constructor(name: String) : super(NAMES, name)
+    constructor(name: String): super(NAMES, name)
 
     override fun next(n: Int): Ecliptic {
         return Ecliptic(nextIndex(n))
@@ -24,7 +24,7 @@ class Ecliptic : LoopTyme {
      * @return 吉凶
      */
     fun getLuck(): Luck {
-        return Luck(getIndex())
+        return Luck(index)
     }
 
     companion object {

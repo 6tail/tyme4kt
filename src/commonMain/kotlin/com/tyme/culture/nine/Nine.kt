@@ -20,11 +20,23 @@ class Nine: LoopTyme {
     companion object {
         val NAMES: Array<String> = arrayOf("一九", "二九", "三九", "四九", "五九", "六九", "七九", "八九", "九九")
 
+        /**
+         * 从索引初始化
+         *
+         * @param index 索引
+         * @return 数九
+         */
         @JvmStatic
         fun fromIndex(index: Int): Nine {
             return Nine(index)
         }
 
+        /**
+         * 从名称初始化
+         *
+         * @param name 名称
+         * @return 数九
+         */
         @JvmStatic
         fun fromName(name: String): Nine {
             return Nine(name)

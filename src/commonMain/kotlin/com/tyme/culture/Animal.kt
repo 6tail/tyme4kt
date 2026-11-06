@@ -10,7 +10,6 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class Animal: LoopTyme {
-
     constructor(index: Int): super(NAMES, index)
 
     constructor(name: String): super(NAMES, name)
@@ -19,9 +18,13 @@ class Animal: LoopTyme {
         return Animal(nextIndex(n))
     }
 
-    /** 二十八宿 */
+    /**
+     * 二十八宿
+     *
+     * @return 二十八宿
+     */
     fun getTwentyEightStar(): TwentyEightStar {
-        return TwentyEightStar(getIndex())
+        return TwentyEightStar(index)
     }
 
     companion object {

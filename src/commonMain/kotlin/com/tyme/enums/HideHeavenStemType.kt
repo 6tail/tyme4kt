@@ -7,7 +7,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-enum class HideHeavenStemType(private val code: Int) {
+enum class HideHeavenStemType(val code: Int) {
     RESIDUAL(0),
     MIDDLE(1),
     MAIN(2);
@@ -18,10 +18,6 @@ enum class HideHeavenStemType(private val code: Int) {
             MIDDLE -> "中气"
             MAIN -> "本气"
         }
-    }
-
-    fun getCode(): Int {
-        return code
     }
 
     override fun toString(): String {
@@ -38,12 +34,12 @@ enum class HideHeavenStemType(private val code: Int) {
          */
         @JvmStatic
         fun fromName(name: String): HideHeavenStemType? {
-            return HideHeavenStemType.entries.find { it.getName() == name }
+            return entries.find { it.getName() == name }
         }
 
         @JvmStatic
         fun fromCode(code: Int): HideHeavenStemType? {
-            return HideHeavenStemType.entries.find { it.code == code }
+            return entries.find { it.code == code }
         }
     }
 }

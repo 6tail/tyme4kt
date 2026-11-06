@@ -11,29 +11,32 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class SixtyCycleMonth(
-    /** 干支年 */
-    protected var year: SixtyCycleYear,
-    /** 月柱 */
-    protected var month: SixtyCycle
-) : AbstractTyme() {
-
+class SixtyCycleMonth: AbstractTyme {
     /**
      * 干支年
-     *
-     * @return 干支年
      */
-    fun getSixtyCycleYear(): SixtyCycleYear {
-        return year
-    }
+    val sixtyCycleYear: SixtyCycleYear
 
     /**
      * 年柱
-     *
-     * @return 年柱
      */
-    fun getYear(): SixtyCycle {
-        return year.getSixtyCycle()
+    val year: SixtyCycle
+        get() = sixtyCycleYear.getSixtyCycle()
+
+    /**
+     * 月柱
+     */
+    private var month: SixtyCycle
+
+    /**
+     * 位于当年的索引(0-11)，寅月为0，依次类推
+     */
+    val indexInYear: Int
+        get() = month.getEarthBranch().next(-2).index
+
+    constructor(year: SixtyCycleYear, month: SixtyCycle): super() {
+        this.sixtyCycleYear = year
+        this.month = month
     }
 
     /**
@@ -50,20 +53,11 @@ class SixtyCycleMonth(
     }
 
     override fun toString(): String {
-        return year.toString() + getName()
+        return sixtyCycleYear.toString() + getName()
     }
 
     override fun next(n: Int): SixtyCycleMonth {
-        return SixtyCycleMonth(SixtyCycleYear((year.getYear() * 12 + getIndexInYear() + n) / 12), month.next(n))
-    }
-
-    /**
-     * 位于当年的索引(0-11)，寅月为0，依次类推
-     *
-     * @return 索引
-     */
-    fun getIndexInYear(): Int {
-        return month.getEarthBranch().next(-2).getIndex()
+        return SixtyCycleMonth(SixtyCycleYear((sixtyCycleYear.year * 12 + indexInYear + n) / 12), month.next(n))
     }
 
     /**
@@ -72,11 +66,11 @@ class SixtyCycleMonth(
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        var index: Int = getSixtyCycle().getEarthBranch().getIndex()
+        var index: Int = month.getEarthBranch().index
         if (index < 2) {
             index += 3
         }
-        return NineStar(27 - year.getSixtyCycle().getEarthBranch().getIndex() % 3 * 3 - index)
+        return NineStar(27 - year.getEarthBranch().index % 3 * 3 - index)
     }
 
     /**
@@ -85,19 +79,15 @@ class SixtyCycleMonth(
      * @return 方位
      */
     fun getJupiterDirection(): Direction {
-        val sixtyCycle: SixtyCycle = getSixtyCycle()
-        val n: Int = intArrayOf(7, -1, 1, 3)[sixtyCycle.getEarthBranch().next(-2).getIndex() % 4]
-        return if(n == -1) sixtyCycle.getHeavenStem().getDirection() else Direction(n)
+        val n: Int = intArrayOf(7, -1, 1, 3)[month.getEarthBranch().next(-2).index % 4]
+        return if(n == -1) month.getHeavenStem().getDirection() else Direction(n)
     }
 
     /**
      * 首日（节令当天）
-     *
-     * @return 干支日
      */
-    fun getFirstDay(): SixtyCycleDay {
-        return SixtyCycleDay(SolarTerm(year.getYear(), 3 + getIndexInYear() * 2).getSolarDay())
-    }
+    val firstDay: SixtyCycleDay
+        get() = SixtyCycleDay(SolarTerm(sixtyCycleYear.year, 3 + indexInYear * 2).getSolarDay())
 
     /**
      * 本月的干支日列表
@@ -105,9 +95,9 @@ class SixtyCycleMonth(
      * @return 干支日列表
      */
     fun getDays(): List<SixtyCycleDay> {
-        val l: MutableList<SixtyCycleDay> = mutableListOf()
-        var d: SixtyCycleDay = getFirstDay()
-        while (d.getSixtyCycleMonth() == this) {
+        val l: MutableList<SixtyCycleDay> = ArrayList()
+        var d: SixtyCycleDay = firstDay
+        while (d.sixtyCycleMonth == this) {
             l.add(d)
             d = d.next(1)
         }
@@ -124,7 +114,7 @@ class SixtyCycleMonth(
          */
         @JvmStatic
         fun fromIndex(year: Int, index: Int): SixtyCycleMonth {
-            return SixtyCycleYear(year).getFirstMonth().next(index)
+            return SixtyCycleYear(year).firstMonth.next(index)
         }
     }
 }

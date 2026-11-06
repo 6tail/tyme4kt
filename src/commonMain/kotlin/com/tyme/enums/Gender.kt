@@ -7,8 +7,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-enum class Gender(private val code: Int) {
-
+enum class Gender(val code: Int) {
     WOMAN(0),
     MAN(1);
 
@@ -17,10 +16,6 @@ enum class Gender(private val code: Int) {
             WOMAN -> "女"
             MAN -> "男"
         }
-    }
-
-    fun getCode(): Int {
-        return code
     }
 
     override fun toString(): String {
@@ -37,12 +32,12 @@ enum class Gender(private val code: Int) {
          */
         @JvmStatic
         fun fromName(name: String): Gender? {
-            return Gender.entries.find { it.getName() == name }
+            return entries.find { it.getName() == name }
         }
 
         @JvmStatic
-        fun fromCode(code: Int): Gender? {
-            return Gender.entries.find { it.code == code }
+        fun fromCode(code: Int): Gender {
+            return entries.first { it.code == code.and(1) }
         }
     }
 }

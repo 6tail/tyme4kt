@@ -13,6 +13,6 @@ import com.tyme.sixtycycle.SixtyCycleHour
 class LunarSect2EightCharProvider: EightCharProvider {
     override fun getEightChar(hour: LunarHour): EightChar {
         val h: SixtyCycleHour = hour.getSixtyCycleHour()
-        return EightChar(h.getYear(), h.getMonth(), hour.getLunarDay().getSixtyCycle(), h.getSixtyCycle())
+        return EightChar(h.year, h.month, hour.lunarDay.getSixtyCycle(), h.getSixtyCycle())
     }
 }

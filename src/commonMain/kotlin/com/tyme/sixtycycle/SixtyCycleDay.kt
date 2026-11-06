@@ -1,7 +1,11 @@
 package com.tyme.sixtycycle
 
 import com.tyme.AbstractTyme
-import com.tyme.culture.*
+import com.tyme.culture.Direction
+import com.tyme.culture.Duty
+import com.tyme.culture.Element
+import com.tyme.culture.God
+import com.tyme.culture.Taboo
 import com.tyme.culture.fetus.FetusDay
 import com.tyme.culture.star.nine.NineStar
 import com.tyme.culture.star.twelve.TwelveStar
@@ -16,16 +20,36 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class SixtyCycleDay: AbstractTyme {
-    /** 公历日 */
-    private var solarDay: SolarDay
-    /** 干支月 */
-    private var month: SixtyCycleMonth
-    /** 日柱 */
+    /**
+     * 公历日
+     */
+    private val solarDay: SolarDay
+
+    /**
+     * 干支月
+     */
+    val sixtyCycleMonth: SixtyCycleMonth
+
+    /**
+     * 年柱(当天所属的干支年干支，以立春换年。)
+     */
+    val year: SixtyCycle
+        get() = sixtyCycleMonth.year
+
+    /**
+     * 月柱(当天所属的干支月干支，以节令换月。)
+     */
+    val month: SixtyCycle
+        get() = sixtyCycleMonth.getSixtyCycle()
+
+    /**
+     * 日柱
+     */
     private var day: SixtyCycle
 
-    constructor(solarDay: SolarDay, month: SixtyCycleMonth, day: SixtyCycle): super() {
+    constructor(solarDay: SolarDay, month: SixtyCycleMonth, day: SixtyCycle) {
         this.solarDay = solarDay
-        this.month = month
+        sixtyCycleMonth = month
         this.day = day
     }
 
@@ -36,11 +60,11 @@ class SixtyCycleDay: AbstractTyme {
      */
     constructor(solarDay: SolarDay) {
         val term = solarDay.getTerm()
-        val index = term.getIndex()
+        val index = term.index
         val offset = if (index < 3) (if (index == 0) -2 else -1) else ((index - 3) / 2)
         this.solarDay = solarDay
-        month = SixtyCycleYear.fromYear(term.getYear()).getFirstMonth().next(offset)
-        day = SixtyCycle.fromIndex(solarDay.subtract(SolarDay.fromYmd(2000, 1, 7)))
+        sixtyCycleMonth = SixtyCycleYear(term.year).firstMonth.next(offset)
+        day = SixtyCycle(solarDay.subtract(SolarDay(2000, 1, 7)))
     }
 
     /**
@@ -50,33 +74,6 @@ class SixtyCycleDay: AbstractTyme {
      */
     fun getSolarDay(): SolarDay {
         return solarDay
-    }
-
-    /**
-     * 干支月
-     *
-     * @return 干支月
-     */
-    fun getSixtyCycleMonth(): SixtyCycleMonth {
-        return month
-    }
-
-    /**
-     * 年柱
-     * 当天所属的干支年干支，以立春换年。
-     * @returns 干支 SixtyCycle。
-     */
-    fun getYear(): SixtyCycle {
-        return month.getYear()
-    }
-
-    /**
-     * 月柱
-     * 当天所属的干支月干支，以节令换月。
-     * @returns 干支 SixtyCycle。
-     */
-    fun getMonth(): SixtyCycle {
-        return month.getSixtyCycle()
     }
 
     /**
@@ -93,7 +90,7 @@ class SixtyCycleDay: AbstractTyme {
     }
 
     override fun toString(): String {
-        return month.toString() + getName()
+        return sixtyCycleMonth.toString() + getName()
     }
 
     /**
@@ -102,7 +99,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 建除十二值神
      */
     fun getDuty(): Duty {
-        return Duty(day.getEarthBranch().getIndex() - getMonth().getEarthBranch().getIndex())
+        return Duty(day.getEarthBranch().index - month.getEarthBranch().index)
     }
 
     /**
@@ -111,7 +108,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 黄道黑道十二神
      */
     fun getTwelveStar(): TwelveStar {
-        return TwelveStar(day.getEarthBranch().getIndex() + (8 - getMonth().getEarthBranch().getIndex() % 6) * 2)
+        return TwelveStar(day.getEarthBranch().index + (8 - month.getEarthBranch().index % 6) * 2)
     }
 
     /**
@@ -129,8 +126,8 @@ class SixtyCycleDay: AbstractTyme {
      * @return 方位
      */
     fun getJupiterDirection(): Direction {
-        val index: Int = day.getIndex()
-        return if(index % 12 < 6) Element(index / 12).getDirection() else month.getSixtyCycleYear().getJupiterDirection()
+        val index: Int = day.index
+        return if(index % 12 < 6) Element(index / 12).getDirection() else sixtyCycleMonth.sixtyCycleYear.jupiterDirection
     }
 
     /**
@@ -148,7 +145,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 二十八宿
      */
     fun getTwentyEightStar(): TwentyEightStar {
-        return TwentyEightStar(intArrayOf(10, 18, 26, 6, 14, 22, 2)[solarDay.getWeek().getIndex()]).next(-7 * day.getEarthBranch().getIndex())
+        return TwentyEightStar(10 + 8 * solarDay.getWeek().index).next(-7 * day.getEarthBranch().index)
     }
 
     /**
@@ -157,7 +154,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 神煞列表
      */
     fun getGods(): List<God> {
-        return God.getDayGods(getMonth(), day)
+        return God.getDayGods(month, day)
     }
 
     /**
@@ -166,7 +163,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 宜忌列表
      */
     fun getRecommends(): List<Taboo> {
-        return Taboo.getDayRecommends(getMonth(), day)
+        return Taboo.getDayRecommends(month, day)
     }
 
     /**
@@ -175,7 +172,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 宜忌列表
      */
     fun getAvoids(): List<Taboo> {
-        return Taboo.getDayAvoids(getMonth(), day)
+        return Taboo.getDayAvoids(month, day)
     }
 
     /**
@@ -194,11 +191,11 @@ class SixtyCycleDay: AbstractTyme {
      * @return 干支时辰列表
      */
     fun getHours(): List<SixtyCycleHour> {
-        val l: MutableList<SixtyCycleHour> = mutableListOf()
+        val l: MutableList<SixtyCycleHour> = ArrayList()
         val d: SolarDay = solarDay.next(-1)
         var h = SixtyCycleHour(SolarTime(d.year, d.month, d.day, 23, 0, 0))
         l.add(h)
-        (0 until 11).forEach { _ ->
+        for(i in 0 until 11) {
             h = h.next(7200)
             l.add(h)
         }
@@ -211,7 +208,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 三柱
      */
     fun getThreePillars(): ThreePillars {
-        return ThreePillars(getYear(), getMonth(), getSixtyCycle())
+        return ThreePillars(year, month, getSixtyCycle())
     }
 
     companion object {

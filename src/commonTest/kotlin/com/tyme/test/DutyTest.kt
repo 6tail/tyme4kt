@@ -1,5 +1,6 @@
 package com.tyme.test
 
+import com.tyme.culture.Duty
 import com.tyme.solar.SolarDay
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,5 +33,10 @@ class DutyTest {
     fun test3() {
         assertEquals("除", SolarDay(2023, 10, 8).getLunarDay().getDuty().getName())
         assertEquals("除", SolarDay(2023, 10, 8).getSixtyCycleDay().getDuty().getName())
+    }
+
+    @Test
+    fun test4() {
+        assertEquals(0, Duty("建").index)
     }
 }

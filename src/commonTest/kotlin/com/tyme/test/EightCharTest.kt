@@ -7,6 +7,7 @@ import com.tyme.eightchar.Fortune
 import com.tyme.eightchar.provider.impl.*
 import com.tyme.enums.Gender
 import com.tyme.lunar.LunarHour
+import com.tyme.sixtycycle.EarthBranch
 import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.solar.SolarTime
@@ -20,20 +21,22 @@ import kotlin.test.assertNull
  * @author 6tail
  */
 class EightCharTest {
-    /** 十神 */
+    /**
+     * 十神
+     */
     @Test
     fun test1() {
         // 八字
         val eightChar = EightChar("丙寅", "癸巳", "癸酉", "己未")
 
         // 年柱
-        val year: SixtyCycle = eightChar.getYear()
+        val year: SixtyCycle = eightChar.year
         // 月柱
-        val month: SixtyCycle = eightChar.getMonth()
+        val month: SixtyCycle = eightChar.month
         // 日柱
-        val day: SixtyCycle = eightChar.getDay()
+        val day: SixtyCycle = eightChar.day
         // 时柱
-        val hour: SixtyCycle = eightChar.getHour()
+        val hour: SixtyCycle = eightChar.hour
 
         // 日元(日主、日干)
         val me: HeavenStem = day.getHeavenStem()
@@ -72,13 +75,13 @@ class EightCharTest {
         val eightChar = EightChar("丙寅", "癸巳", "癸酉", "己未")
 
         // 年柱
-        val year: SixtyCycle = eightChar.getYear()
+        val year: SixtyCycle = eightChar.year
         // 月柱
-        val month: SixtyCycle = eightChar.getMonth()
+        val month: SixtyCycle = eightChar.month
         // 日柱
-        val day: SixtyCycle = eightChar.getDay()
+        val day: SixtyCycle = eightChar.day
         // 时柱
-        val hour: SixtyCycle = eightChar.getHour()
+        val hour: SixtyCycle = eightChar.hour
 
         // 日元(日主、日干)
         val me: HeavenStem = day.getHeavenStem()
@@ -162,15 +165,15 @@ class EightCharTest {
         val eightChar = EightChar("乙酉", "戊子", "辛巳", "壬辰")
 
         // 日干
-        val me: HeavenStem = eightChar.getDay().getHeavenStem()
+        val me: HeavenStem = eightChar.day.getHeavenStem()
         // 年柱地势
-        assertEquals("临官", me.getTerrain(eightChar.getYear().getEarthBranch()).getName())
+        assertEquals("临官", me.getTerrain(eightChar.year.getEarthBranch()).getName())
         // 月柱地势
-        assertEquals("长生", me.getTerrain(eightChar.getMonth().getEarthBranch()).getName())
+        assertEquals("长生", me.getTerrain(eightChar.month.getEarthBranch()).getName())
         // 日柱地势
-        assertEquals("死", me.getTerrain(eightChar.getDay().getEarthBranch()).getName())
+        assertEquals("死", me.getTerrain(eightChar.day.getEarthBranch()).getName())
         // 时柱地势
-        assertEquals("墓", me.getTerrain(eightChar.getHour().getEarthBranch()).getName())
+        assertEquals("墓", me.getTerrain(eightChar.hour.getEarthBranch()).getName())
     }
 
     /**
@@ -179,19 +182,19 @@ class EightCharTest {
     @Test
     fun test8() {
         val eightChar = SolarTime(2005, 12, 23, 8, 37, 0).getLunarHour().getEightChar()
-        assertEquals("乙酉", eightChar.getYear().getName())
-        assertEquals("戊子", eightChar.getMonth().getName())
-        assertEquals("辛巳", eightChar.getDay().getName())
-        assertEquals("壬辰", eightChar.getHour().getName())
+        assertEquals("乙酉", eightChar.year.getName())
+        assertEquals("戊子", eightChar.month.getName())
+        assertEquals("辛巳", eightChar.day.getName())
+        assertEquals("壬辰", eightChar.hour.getName())
     }
 
     @Test
     fun test9() {
         val eightChar = SolarTime(1988, 2, 15, 23, 30, 0).getLunarHour().getEightChar()
-        assertEquals("戊辰", eightChar.getYear().getName())
-        assertEquals("甲寅", eightChar.getMonth().getName())
-        assertEquals("辛丑", eightChar.getDay().getName())
-        assertEquals("戊子", eightChar.getHour().getName())
+        assertEquals("戊辰", eightChar.year.getName())
+        assertEquals("甲寅", eightChar.month.getName())
+        assertEquals("辛丑", eightChar.day.getName())
+        assertEquals("戊子", eightChar.hour.getName())
     }
 
     /**
@@ -230,7 +233,7 @@ class EightCharTest {
         // 童限
         val childLimit = ChildLimit(SolarTime(1983, 2, 15, 20, 0, 0), Gender.WOMAN)
         // 八字
-        assertEquals("癸亥 甲寅 甲戌 甲戌", childLimit.getEightChar().toString())
+        assertEquals("癸亥 甲寅 甲戌 甲戌", childLimit.eightChar.toString())
         // 童限年数
         assertEquals(6, childLimit.getYearCount())
         // 童限月数
@@ -240,9 +243,9 @@ class EightCharTest {
         // 童限结束(即开始起运)的公历时刻
         assertEquals("1989年5月4日 18:24:00", childLimit.getEndTime().toString())
         // 童限开始(即出生)的农历年干支
-        assertEquals("癸亥", childLimit.getStartTime().getLunarHour().getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("癸亥", childLimit.getStartTime().getLunarHour().lunarDay.lunarMonth.lunarYear.getSixtyCycle().getName())
         // 童限结束(即开始起运)的农历年干支
-        assertEquals("己巳", childLimit.getEndTime().getLunarHour().getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("己巳", childLimit.getEndTime().getLunarHour().lunarDay.lunarMonth.lunarYear.getSixtyCycle().getName())
 
         // 第1轮大运
         val decadeFortune: DecadeFortune = childLimit.getStartDecadeFortune()
@@ -251,9 +254,9 @@ class EightCharTest {
         // 结束年龄
         assertEquals(16, decadeFortune.getEndAge())
         // 开始年
-        assertEquals(1989, decadeFortune.getStartSixtyCycleYear().getYear())
+        assertEquals(1989, decadeFortune.getStartSixtyCycleYear().year)
         // 结束年
-        assertEquals(1998, decadeFortune.getEndSixtyCycleYear().getYear())
+        assertEquals(1998, decadeFortune.getEndSixtyCycleYear().year)
         // 干支
         assertEquals("乙卯", decadeFortune.getName())
         // 下一大运
@@ -268,7 +271,7 @@ class EightCharTest {
         // 年龄
         assertEquals(7, fortune.getAge())
         // 干支年
-        assertEquals(1989, fortune.getSixtyCycleYear().getYear())
+        assertEquals(1989, fortune.getSixtyCycleYear().year)
         // 干支
         assertEquals("辛巳", fortune.getName())
 
@@ -281,7 +284,7 @@ class EightCharTest {
         // 童限
         val childLimit = ChildLimit(SolarTime(1992, 2, 2, 12, 0, 0), Gender.MAN)
         // 八字
-        assertEquals("辛未 辛丑 戊申 戊午", childLimit.getEightChar().toString())
+        assertEquals("辛未 辛丑 戊申 戊午", childLimit.eightChar.toString())
         // 童限年数
         assertEquals(9, childLimit.getYearCount())
         // 童限月数
@@ -291,9 +294,9 @@ class EightCharTest {
         // 童限结束(即开始起运)的公历时刻
         assertEquals("2001年2月11日 18:58:00", childLimit.getEndTime().toString())
         // 童限开始(即出生)的农历年干支
-        assertEquals("辛未", childLimit.getStartTime().getLunarHour().getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("辛未", childLimit.getStartTime().getLunarHour().lunarDay.lunarMonth.lunarYear.getSixtyCycle().getName())
         // 童限结束(即开始起运)的农历年干支
-        assertEquals("辛巳", childLimit.getEndTime().getLunarHour().getLunarDay().getLunarMonth().getLunarYear().getSixtyCycle().getName())
+        assertEquals("辛巳", childLimit.getEndTime().getLunarHour().lunarDay.lunarMonth.lunarYear.getSixtyCycle().getName())
 
         // 第1轮大运
         val decadeFortune: DecadeFortune = childLimit.getStartDecadeFortune()
@@ -302,20 +305,22 @@ class EightCharTest {
         // 结束年龄
         assertEquals(19, decadeFortune.getEndAge())
         // 开始年
-        assertEquals(2001, decadeFortune.getStartSixtyCycleYear().getYear())
+        assertEquals(2001, decadeFortune.getStartSixtyCycleYear().year)
         // 结束年
-        assertEquals(2010, decadeFortune.getEndSixtyCycleYear().getYear())
+        assertEquals(2010, decadeFortune.getEndSixtyCycleYear().year)
         // 干支
         assertEquals("庚子", decadeFortune.getName())
         // 下一大运
         assertEquals("己亥", decadeFortune.next(1).getName())
+        // 开始小运
+        assertEquals("戊申", decadeFortune.getStartFortune().getName())
 
         // 小运
         val fortune: Fortune = childLimit.getStartFortune()
         // 年龄
         assertEquals(10, fortune.getAge())
         // 干支年
-        assertEquals(2001, fortune.getSixtyCycleYear().getYear())
+        assertEquals(2001, fortune.getSixtyCycleYear().year)
         // 干支
         assertEquals("戊申", fortune.getName())
         // 小运推移
@@ -332,31 +337,19 @@ class EightCharTest {
     @Test
     fun test15() {
         val eightChar = EightChar("丙寅", "癸巳", "癸酉", "己未")
-        val year: SixtyCycle = eightChar.getYear()
-        val month: SixtyCycle = eightChar.getMonth()
-        val day: SixtyCycle = eightChar.getDay()
-        val hour: SixtyCycle = eightChar.getHour()
+        val year: SixtyCycle = eightChar.year
+        val month: SixtyCycle = eightChar.month
+        val day: SixtyCycle = eightChar.day
+        val hour: SixtyCycle = eightChar.hour
 
         val me: HeavenStem = day.getHeavenStem()
-
-        fun formatAndPrintln(template: String, vararg args: Any?): String = args
-            .fold(template) { acc, e -> acc.replaceFirst("%s", e.toString()) }
-            .replace("%n", "\n")
-            .also(::print)
-
         formatAndPrintln(
             "主星：%s %s 日主 %s%n",
             me.getTenStar(year.getHeavenStem()),
             me.getTenStar(month.getHeavenStem()),
             me.getTenStar(hour.getHeavenStem())
         )
-        formatAndPrintln(
-            "八字：%s %s %s %s%n",
-            year,
-            month,
-            day,
-            hour
-        )
+        formatAndPrintln("八字：%s %s %s %s%n", year, month, day, hour)
         formatAndPrintln(
             "藏干：[%s %s %s] [%s %s %s] [%s %s %s] [%s %s %s]%n",
             year.getEarthBranch().getHideHeavenStemMain(),
@@ -430,35 +423,18 @@ class EightCharTest {
             hour.getExtraEarthBranches().contentToString()
         )
 
-        formatAndPrintln(
-            "胎元：%s(%s)%n",
-            eightChar.getFetalOrigin(),
-            eightChar.getFetalOrigin().getSound()
-        )
-        formatAndPrintln(
-            "胎息：%s(%s)%n",
-            eightChar.getFetalBreath(),
-            eightChar.getFetalBreath().getSound()
-        )
-        formatAndPrintln(
-            "命宫：%s(%s)%n",
-            eightChar.getOwnSign(),
-            eightChar.getOwnSign().getSound()
-        )
-        formatAndPrintln(
-            "身宫：%s(%s)%n",
-            eightChar.getBodySign(),
-            eightChar.getBodySign().getSound()
-        )
+        formatAndPrintln("胎元：%s(%s)%n", eightChar.getFetalOrigin(), eightChar.getFetalOrigin().getSound())
+        formatAndPrintln("胎息：%s(%s)%n", eightChar.getFetalBreath(), eightChar.getFetalBreath().getSound())
+        formatAndPrintln("命宫：%s(%s)%n", eightChar.getOwnSign(), eightChar.getOwnSign().getSound())
+        formatAndPrintln("身宫：%s(%s)%n", eightChar.getBodySign(), eightChar.getBodySign().getSound())
     }
 
     @Test
     fun test16() {
         // 童限
-        val childLimit =
-            ChildLimit(SolarTime(1990, 3, 15, 10, 30, 0), Gender.MAN)
+        val childLimit = ChildLimit(SolarTime(1990, 3, 15, 10, 30, 0), Gender.MAN)
         // 八字
-        assertEquals("庚午 己卯 己卯 己巳", childLimit.getEightChar().toString())
+        assertEquals("庚午 己卯 己卯 己巳", childLimit.eightChar.toString())
         // 童限年数
         assertEquals(6, childLimit.getYearCount())
         // 童限月数
@@ -467,6 +443,10 @@ class EightCharTest {
         assertEquals(23, childLimit.getDayCount())
         // 童限结束(即开始起运)的公历时刻
         assertEquals("1997年3月11日 00:22:00", childLimit.getEndTime().toString())
+        assertEquals(Gender.MAN, childLimit.gender)
+        assertEquals(1, childLimit.getStartAge())
+        assertEquals(7, childLimit.getEndAge())
+        assertEquals("己卯", childLimit.getDecadeFortune().getName())
 
         // 小运
         val fortune: Fortune = childLimit.getStartFortune()
@@ -491,7 +471,7 @@ class EightCharTest {
 
     @Test
     fun test20() {
-        val eightChar = ChildLimit(SolarTime(2024, 1, 29, 9, 33, 0), Gender.MAN).getEightChar()
+        val eightChar = ChildLimit(SolarTime(2024, 1, 29, 9, 33, 0), Gender.MAN).eightChar
         assertEquals("癸卯 乙丑 壬辰 乙巳", eightChar.toString())
         assertEquals("癸亥", eightChar.getOwnSign().getName())
         assertEquals("己未", eightChar.getBodySign().getName())
@@ -504,17 +484,17 @@ class EightCharTest {
 
     @Test
     fun test22() {
-        assertEquals("丙寅", ChildLimit(SolarTime(1990, 1, 27, 0, 0, 0), Gender.MAN).getEightChar().getBodySign().getName())
+        assertEquals("丙寅", ChildLimit(SolarTime(1990, 1, 27, 0, 0, 0), Gender.MAN).eightChar.getBodySign().getName())
     }
 
     @Test
     fun test23() {
-        assertEquals("甲戌", ChildLimit(SolarTime(2019, 3, 7, 8, 0, 0), Gender.MAN).getEightChar().getOwnSign().getName())
+        assertEquals("甲戌", ChildLimit(SolarTime(2019, 3, 7, 8, 0, 0), Gender.MAN).eightChar.getOwnSign().getName())
     }
 
     @Test
     fun test24() {
-        assertEquals("丁丑", ChildLimit(SolarTime(2019, 3, 27, 2, 0, 0), Gender.MAN).getEightChar().getOwnSign().getName())
+        assertEquals("丁丑", ChildLimit(SolarTime(2019, 3, 27, 2, 0, 0), Gender.MAN).eightChar.getOwnSign().getName())
     }
 
     @Test
@@ -562,12 +542,12 @@ class EightCharTest {
     @Test
     fun test31() {
         val solarTimes: List<SolarTime> = EightChar("丙辰", "丁酉", "丙子", "甲午").getSolarTimes(1900, 2024)
-        val actual: MutableList<String> = mutableListOf()
+        val actual: MutableList<String> = ArrayList()
         for (solarTime in solarTimes) {
             actual.add(solarTime.toString())
         }
 
-        val expected: MutableList<String> = mutableListOf()
+        val expected: MutableList<String> = ArrayList()
         expected.add("1916年10月6日 12:00:00")
         expected.add("1976年9月21日 12:00:00")
         assertEquals(expected, actual)
@@ -721,8 +701,7 @@ class EightCharTest {
         // 采用元亨利贞的起运算法
         ChildLimit.provider = China95ChildLimitProvider()
         // 童限
-        val childLimit =
-            ChildLimit(SolarTime(1986, 5, 29, 13, 37, 0), Gender.MAN)
+        val childLimit = ChildLimit(SolarTime(1986, 5, 29, 13, 37, 0), Gender.MAN)
         // 童限年数
         assertEquals(2, childLimit.getYearCount())
         // 童限月数
@@ -777,6 +756,17 @@ class EightCharTest {
         LunarHour.provider = DefaultEightCharProvider()
     }
 
+    /**
+     * 地势(长生十二神)
+     */
+    @Test
+    fun test47() {
+        // 日元(日主、日干)
+        val me = HeavenStem("丙")
+        // 地势
+        assertEquals("长生", me.getTerrain(EarthBranch("寅")).getName())
+    }
+
     @Test
     fun test48() {
         // 童限
@@ -817,6 +807,46 @@ class EightCharTest {
 
     @Test
     fun test51() {
-        assertEquals("甲戌 癸酉 甲戌 甲戌", SolarTime.fromYmdHms(1034, 10, 2, 20, 0, 0).getLunarHour().getEightChar().toString())
+        assertEquals("甲戌 癸酉 甲戌 甲戌", SolarTime(1034, 10, 2, 20, 0, 0).getLunarHour().getEightChar().toString())
     }
+
+    @Test
+    fun test52() {
+        assertEquals("辛酉 丙申 丙戌 戊子", SolarTime(1981, 9, 5, 0, 0, 0).getLunarHour().getEightChar().toString())
+    }
+
+    @Test
+    fun test54() {
+        assertEquals("戊寅 癸亥 庚申 甲申", ChildLimit(SolarTime(198, 11, 26, 15, 13, 59), Gender.MAN).eightChar.toString())
+        assertEquals("庚申 己丑 甲辰 壬申", ChildLimit(SolarTime(1981, 1, 26, 15, 13, 59), Gender.MAN).eightChar.toString())
+    }
+
+    @Test
+    fun test55() {
+        assertEquals("丙寅 壬辰 己酉 甲子", SolarTime(1986, 5, 5, 0, 0, 0).getLunarHour().getEightChar().toString())
+    }
+
+    @Test
+    fun test56() {
+        val solarTimes: List<SolarTime> = EightChar("丙寅", "壬辰", "己酉", "甲子").getSolarTimes(1986, 1986)
+        val actual: MutableList<String> = ArrayList()
+        for (solarTime in solarTimes) {
+            actual.add(solarTime.toString())
+        }
+
+        val expected: MutableList<String> = ArrayList()
+        expected.add("1986年5月4日 23:00:00")
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun test57() {
+        val eightChar = SolarTime.fromYmdHms(1997, 12, 7, 10, 4, 49).getLunarHour().getEightChar()
+        assertEquals("丁丑 辛亥 癸未 丁巳", eightChar.toString())
+    }
+
+    fun formatAndPrintln(template: String, vararg args: Any?): String = args
+        .fold(template) { acc, e -> acc.replaceFirst("%s", e.toString()) }
+        .replace("%n", "\n")
+        .also(::print)
 }

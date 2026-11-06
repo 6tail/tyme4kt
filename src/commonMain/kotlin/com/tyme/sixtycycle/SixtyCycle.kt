@@ -12,7 +12,6 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class SixtyCycle: LoopTyme {
-
     constructor(index: Int): super(NAMES, index)
 
     constructor(name: String): super(NAMES, name)
@@ -23,7 +22,7 @@ class SixtyCycle: LoopTyme {
      * @return 天干
      */
     fun getHeavenStem(): HeavenStem {
-        return HeavenStem(getIndex() % HeavenStem.NAMES.size)
+        return HeavenStem(index % HeavenStem.NAMES.size)
     }
 
     /**
@@ -32,7 +31,7 @@ class SixtyCycle: LoopTyme {
      * @return 地支
      */
     fun getEarthBranch(): EarthBranch {
-        return EarthBranch(getIndex() % EarthBranch.NAMES.size)
+        return EarthBranch(index % EarthBranch.NAMES.size)
     }
 
     /**
@@ -41,7 +40,7 @@ class SixtyCycle: LoopTyme {
      * @return 纳音
      */
     fun getSound(): Sound {
-        return Sound(getIndex() / 2)
+        return Sound(index / 2)
     }
 
     /**
@@ -59,7 +58,7 @@ class SixtyCycle: LoopTyme {
      * @return 旬
      */
     fun getTen(): Ten {
-        return Ten((getHeavenStem().getIndex() - getEarthBranch().getIndex()) / 2)
+        return Ten((getHeavenStem().index - getEarthBranch().index) / 2)
     }
 
     /**
@@ -68,7 +67,7 @@ class SixtyCycle: LoopTyme {
      * @return 旬空(空亡)
      */
     fun getExtraEarthBranches(): Array<EarthBranch> {
-        val eb = EarthBranch(10 + getEarthBranch().getIndex() - getHeavenStem().getIndex())
+        val eb = EarthBranch(10 + getEarthBranch().index - getHeavenStem().index)
         return arrayOf(eb, eb.next(1))
     }
 

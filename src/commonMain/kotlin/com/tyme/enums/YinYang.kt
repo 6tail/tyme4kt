@@ -7,7 +7,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-enum class YinYang(private val code: Int) {
+enum class YinYang(val code: Int) {
     YIN(0),
     YANG(1);
 
@@ -16,10 +16,6 @@ enum class YinYang(private val code: Int) {
             YIN -> "阴"
             YANG -> "阳"
         }
-    }
-
-    fun getCode(): Int {
-        return code
     }
 
     override fun toString(): String {
@@ -36,12 +32,12 @@ enum class YinYang(private val code: Int) {
          */
         @JvmStatic
         fun fromName(name: String): YinYang? {
-            return YinYang.entries.find { it.getName() == name }
+            return entries.find { it.getName() == name }
         }
 
         @JvmStatic
-        fun fromCode(code: Int): YinYang? {
-            return YinYang.entries.find { it.code == code }
+        fun fromCode(code: Int): YinYang {
+            return entries.first { it.code == code.and(1) }
         }
     }
 }

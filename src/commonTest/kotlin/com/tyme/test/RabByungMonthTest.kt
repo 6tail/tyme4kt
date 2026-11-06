@@ -12,6 +12,6 @@ import kotlin.test.assertEquals
 class RabByungMonthTest{
     @Test
     fun test0() {
-        assertEquals("第十六饶迥铁虎年十二月", RabByungMonth.fromYm(1950, 12).toString())
+        assertEquals("第十六饶迥铁虎年十二月", RabByungMonth(1950, 12).toString())
     }
 }

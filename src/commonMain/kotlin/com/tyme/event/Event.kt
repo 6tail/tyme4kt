@@ -7,6 +7,7 @@ import com.tyme.lunar.LunarMonth
 import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarMonth
 import com.tyme.solar.SolarTerm
+import com.tyme.unit.MonthUnit
 import kotlin.jvm.JvmStatic
 
 /**
@@ -15,11 +16,15 @@ import kotlin.jvm.JvmStatic
  * @author 6tail
  */
 class Event(
-    /** 名称 */
-    private var name: String,
-    /** 数据 */
-    private var data: String
-) : AbstractCulture() {
+    /**
+     * 名称
+     */
+    private val name: String,
+    /**
+     * 数据
+     */
+    val data: String
+): AbstractCulture() {
     init {
         validate(data)
     }
@@ -32,14 +37,14 @@ class Event(
         return getCharIndex(index) - 31
     }
 
-    fun getMonth(year: Int): IntArray {
+    fun getMonth(year: Int): MonthUnit {
         var y: Int = year
         var m: Int = getValue(2)
         if (m > 12) {
             m = 1
             y += 1
         }
-        return intArrayOf(y, m)
+        return MonthUnit(y, m)
     }
 
     /**
@@ -58,15 +63,6 @@ class Event(
      */
     override fun getName(): String {
         return name
-    }
-
-    /**
-     * 数据
-     *
-     * @return 数据
-     */
-    fun getData(): String {
-        return data
     }
 
     /**
@@ -95,7 +91,7 @@ class Event(
             return null
         }
         val d: SolarDay? = when (type) {
-            EventType.SOLAR_DAY -> getSolarDayBySolarDay(year)
+            EventType.SOLAR_DAY -> getSolarDayByDay(year)
             EventType.SOLAR_WEEK -> getSolarDayByWeek(year)
             EventType.LUNAR_DAY -> getSolarDayByLunarDay(year)
             EventType.TERM_DAY -> getSolarDayByTerm(year)
@@ -109,36 +105,26 @@ class Event(
         return if (0 == offset) d else d.next(offset)
     }
 
-    private fun getSolarDayBySolarDay(year: Int): SolarDay? {
-        val month: IntArray = getMonth(year)
-        val y: Int = month[0]
-        val m: Int = month[1]
+    private fun getSolarDayByDay(year: Int, isLunar: Boolean = false): SolarDay? {
+        val month: MonthUnit = getMonth(year)
+        val y: Int = month.year
+        val m: Int = month.month
         val d: Int = getValue(3)
         val delay: Int = getValue(4)
-        val lastDay: Int = SolarMonth(y, m).getDayCount()
+        val lastDay: Int = if (isLunar) LunarMonth(y, m).dayCount else SolarMonth.getDayCount(y, m)
         if (d > lastDay) {
             if (0 == delay) {
                 return null
+            } else if (delay < 0) {
+                return if (isLunar) LunarDay(y, m, d + delay).getSolarDay() else SolarDay(y, m, d + delay)
             }
-            return if (delay < 0) SolarDay.fromYmd(y, m, d + delay) else SolarDay.fromYmd(y, m, lastDay).next(delay)
+            return if (isLunar) LunarDay(y, m, lastDay).getSolarDay().next(delay) else SolarDay(y, m, lastDay).next(delay)
         }
-        return SolarDay.fromYmd(y, m, d)
+        return if (isLunar) LunarDay(y, m, d).getSolarDay() else SolarDay(y, m, d)
     }
 
     private fun getSolarDayByLunarDay(year: Int): SolarDay? {
-        val month: IntArray = getMonth(year)
-        val y: Int = month[0]
-        val m: Int = month[1]
-        val d: Int = getValue(3)
-        val delay: Int = getValue(4)
-        val lastDay: Int = LunarMonth(y, m).getDayCount()
-        if (d > lastDay) {
-            if (0 == delay) {
-                return null
-            }
-            return if (delay < 0) LunarDay.fromYmd(y, m, d + delay).getSolarDay() else LunarDay.fromYmd(y, m, lastDay).getSolarDay().next(delay)
-        }
-        return LunarDay.fromYmd(y, m, d).getSolarDay()
+        return getSolarDayByDay(year, true)
     }
 
     private fun getSolarDayByWeek(year: Int): SolarDay? {
@@ -152,18 +138,18 @@ class Event(
         val w: Int = getValue(4)
         if (n > 0) {
             // 当月第1天
-            val d: SolarDay = m.getFirstDay()
+            val d: SolarDay = m.firstDay as SolarDay
             // 往后找第几个星期几
             return d.next(d.getWeek().stepsTo(w) + 7 * n - 7)
         }
         // 当月最后一天
-        val d: SolarDay = SolarDay.fromYmd(year, m.month, m.getDayCount())
+        val d: SolarDay = SolarDay(year, m.month, m.dayCount)
         // 往前找第几个星期几
         return d.next(d.getWeek().stepsBackTo(w) + 7 * n + 7)
     }
 
     private fun getSolarDayByTerm(year: Int): SolarDay {
-        val d: SolarDay = SolarTerm.fromIndex(year, getValue(2)).getSolarDay()
+        val d: SolarDay = SolarTerm(year, getValue(2)).getSolarDay()
         val offset: Int = getValue(4)
         return if (0 == offset) d else d.next(offset)
     }

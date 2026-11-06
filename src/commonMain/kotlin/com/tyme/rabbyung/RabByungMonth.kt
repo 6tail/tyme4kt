@@ -1,7 +1,9 @@
 package com.tyme.rabbyung
 
 import com.tyme.lunar.LunarMonth
-import com.tyme.unit.MonthUnit
+import com.tyme.unit.AbstractDay
+import com.tyme.unit.AbstractLeapMonth
+import com.tyme.unit.AbstractYear
 import kotlin.jvm.JvmStatic
 import kotlin.math.abs
 
@@ -10,64 +12,20 @@ import kotlin.math.abs
  *
  * @author 6tail
  */
-class RabByungMonth(
-    year: Int,
-    month: Int,
-) : MonthUnit(year, abs(month)) {
-    /**
-     * 是否闰月
-     */
-    private var leap: Boolean
+class RabByungMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
 
     init {
         validate(year, month)
-        leap = month < 0
     }
 
     /**
      * 藏历年
-     *
-     * @return 藏历年
      */
-    fun getRabByungYear(): RabByungYear {
-        return RabByungYear.fromYear(year)
-    }
+    val rabByungYear: RabByungYear
+        get() = RabByungYear(year)
 
-    /**
-     * 月
-     *
-     * @return 月，当月为闰月时，返回负数
-     */
-    fun getMonthWithLeap(): Int {
-        return if (leap) -month else month
-    }
-
-    /**
-     * 位于当年的索引(0-12)
-     *
-     * @return 索引
-     */
-    fun getIndexInYear(): Int {
-        var index: Int = month - 1
-        if (leap) {
-            index += 1
-        } else {
-            val leapMonth: Int = getRabByungYear().getLeapMonth()
-            if (leapMonth in 1..<month) {
-                index += 1
-            }
-        }
-        return index
-    }
-
-    /**
-     * 是否闰月
-     *
-     * @return true/false
-     */
-    fun isLeap(): Boolean {
-        return leap
-    }
+    override val abstractYear: AbstractYear
+        get() = rabByungYear
 
     /**
      * 名称
@@ -88,49 +46,19 @@ class RabByungMonth(
     }
 
     override fun toString(): String {
-        return getRabByungYear().toString() + getName()
+        return rabByungYear.toString() + getName()
     }
 
     override fun next(n: Int): RabByungMonth {
-        if (n == 0) {
-            return fromYm(year, getMonthWithLeap())
-        }
-        var m: Int = getIndexInYear() + 1 + n
-        var y: RabByungYear = getRabByungYear()
-        if (n > 0) {
-            var monthCount: Int = y.getMonthCount()
-            while (m > monthCount) {
-                m -= monthCount
-                y = y.next(1)
-                monthCount = y.getMonthCount()
-            }
-        } else {
-            while (m <= 0) {
-                y = y.next(-1)
-                m += y.getMonthCount()
-            }
-        }
-        var leap = false
-        val leapMonth: Int = y.getLeapMonth()
-        if (leapMonth > 0) {
-            if (m == leapMonth + 1) {
-                leap = true
-            }
-            if (m > leapMonth) {
-                m--
-            }
-        }
-        return fromYm(y.getYear(), if (leap) -m else m)
+        val m = super.next(n)
+        return RabByungMonth(m.year, m.monthValue)
     }
 
     /**
      * 首日
-     *
-     * @return 藏历日
      */
-    fun getFirstDay(): RabByungDay {
-        return RabByungDay(year, getMonthWithLeap(), 1)
-    }
+    override val firstDay: AbstractDay
+        get() = RabByungDay(year, monthValue, 1)
 
     /**
      * 本月的藏历日列表
@@ -141,7 +69,7 @@ class RabByungMonth(
         val l: MutableList<RabByungDay> = ArrayList()
         val missDays: List<Int> = getMissDays()
         val leapDays: List<Int> = getLeapDays()
-        val m: Int = getMonthWithLeap()
+        val m: Int = monthValue
         for (i in 1 until 31) {
             if (missDays.contains(i)) {
                 continue
@@ -154,14 +82,8 @@ class RabByungMonth(
         return l
     }
 
-    /**
-     * 当月天数
-     *
-     * @return 数量
-     */
-    fun getDayCount(): Int {
-        return 30 + getLeapDays().size - getMissDays().size
-    }
+    override val dayCount: Int
+        get() = 30 + getLeapDays().size - getMissDays().size
 
     /**
      * 特殊日子列表，闰日为正，缺日为负
@@ -170,7 +92,7 @@ class RabByungMonth(
      */
     fun getSpecialDays(): List<Int> {
         val l: MutableList<Int> = ArrayList()
-        val days: IntArray = DAYS[year * 13 + getIndexInYear()] ?: return l
+        val days: IntArray = DAYS[year * 13 + indexInYear] ?: return l
         for (d in days) {
             l.add(d)
         }
@@ -209,18 +131,9 @@ class RabByungMonth(
         return l
     }
 
-    override fun equals(other: Any?): Boolean {
-        return other is RabByungMonth && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
-
     companion object {
         val ALIAS: Array<String> = arrayOf("神变月", "苦行月", "具香月", "萨嘎月", "作净月", "明净月", "具醉月", "具贤月", "天降月", "持众月", "庄严月", "满意月")
-
-        protected val DAYS: MutableMap<Int, IntArray> = HashMap()
+        private val DAYS: MutableMap<Int, IntArray> = HashMap()
 
         init {
             var y = 1950
@@ -245,16 +158,19 @@ class RabByungMonth(
 
         @JvmStatic
         fun validate(year: Int, month: Int) {
-            require(month in -12..12 && month != 0) { "illegal rab-byung month: $month" }
-            require(year in 1950..2050) { "rab-byung year $year must between 1950 and 2050" }
-            val leap = month < 0
-            var m: Int = month
-            if (leap) {
-                m = -m
+            if (month == 0 || month > 12 || month < -12) {
+                throw IllegalArgumentException("illegal rab-byung month: $month")
             }
-            require(!(year == 1950 && m < 12)) { "month $month must be 12 in rab-byung year $year" }
-            val leapMonth: Int = RabByungYear.fromYear(year).getLeapMonth()
-            require(!(leap && m != leapMonth)) { "illegal leap month $m in rab-byung year $year" }
+            validateRange(year, 1950, 2050, "rab-byung year")
+            val leap = month < 0
+            val m: Int = abs(month)
+            if (year == 1950 && m < 12) {
+                throw IllegalArgumentException("month $month must be 12 in rab-byung year $year")
+            }
+            val leapMonth: Int = RabByungYear(year).leapMonth
+            if (leap && m != leapMonth) {
+                throw IllegalArgumentException("illegal leap month $m in rab-byung year $year")
+            }
         }
 
         /**

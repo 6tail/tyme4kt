@@ -10,10 +10,10 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class NineStar : LoopTyme {
-    constructor(index: Int) : super(NAMES, index)
+class NineStar: LoopTyme {
+    constructor(index: Int): super(NAMES, index)
 
-    constructor(name: String) : super(NAMES, name)
+    constructor(name: String): super(NAMES, name)
 
     override fun next(n: Int): NineStar {
         return NineStar(nextIndex(n))
@@ -25,7 +25,7 @@ class NineStar : LoopTyme {
      * @return 颜色
      */
     fun getColor(): String {
-        return arrayOf("白", "黑", "碧", "绿", "黄", "白", "赤", "白", "紫")[getIndex()]
+        return COLORS[index]
     }
 
     /**
@@ -34,7 +34,7 @@ class NineStar : LoopTyme {
      * @return 五行
      */
     fun getElement(): Element {
-        return Element(intArrayOf(4, 2, 0, 0, 2, 3, 3, 2, 1)[getIndex()])
+        return getDirection().getElement()
     }
 
     /**
@@ -43,7 +43,7 @@ class NineStar : LoopTyme {
      * @return 北斗九星
      */
     fun getDipper(): Dipper {
-        return Dipper(getIndex())
+        return Dipper(index)
     }
 
     /**
@@ -52,7 +52,7 @@ class NineStar : LoopTyme {
      * @return 方位
      */
     fun getDirection(): Direction {
-        return Direction(getIndex())
+        return Direction(index)
     }
 
     override fun toString(): String {
@@ -61,6 +61,7 @@ class NineStar : LoopTyme {
 
     companion object {
         val NAMES: Array<String> = arrayOf("一", "二", "三", "四", "五", "六", "七", "八", "九")
+        val COLORS: Array<String> = arrayOf("白", "黑", "碧", "绿", "黄", "白", "赤", "白", "紫")
 
         @JvmStatic
         fun fromIndex(index: Int): NineStar {

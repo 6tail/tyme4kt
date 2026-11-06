@@ -8,10 +8,7 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class SolarHalfYear(
-    year: Int,
-    val index: Int
-) : YearUnit(year) {
+class SolarHalfYear(year: Int, val index: Int): YearUnit(year) {
 
     init {
         validate(year, index)
@@ -19,19 +16,16 @@ class SolarHalfYear(
 
     /**
      * 公历年
-     *
-     * @return 公历年
      */
-    fun getSolarYear(): SolarYear {
-        return SolarYear.fromYear(year)
-    }
+    val solarYear: SolarYear
+        get() = SolarYear(year)
 
     override fun getName(): String {
         return NAMES[index]
     }
 
     override fun toString(): String {
-        return "${getSolarYear()}${getName()}"
+        return "${solarYear}${getName()}"
     }
 
     override fun next(n: Int): SolarHalfYear {
@@ -63,14 +57,6 @@ class SolarHalfYear(
             l.add(SolarSeason(year, index * 2 + i))
         }
         return l
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is SolarHalfYear && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
     }
 
     companion object {

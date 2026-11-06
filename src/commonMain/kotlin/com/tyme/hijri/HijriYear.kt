@@ -1,7 +1,6 @@
 package com.tyme.hijri
 
-import com.tyme.solar.SolarYear
-import com.tyme.unit.YearUnit
+import com.tyme.unit.AbstractYear
 import kotlin.jvm.JvmStatic
 
 /**
@@ -9,19 +8,16 @@ import kotlin.jvm.JvmStatic
  *
  * @author 6tail
  */
-class HijriYear(year: Int) : YearUnit(year) {
+class HijriYear(year: Int): AbstractYear(year) {
     init {
         validate(year)
     }
 
     /**
      * 天数（平年354天，闰年355天）
-     *
-     * @return 天数
      */
-    fun getDayCount(): Int {
-        return if (isLeap()) 355 else 354
-    }
+    val dayCount: Int
+        get() = if (isLeap()) 355 else 354
 
     /**
      * 是否闰年(1个闰周为30年，1个闰周中第2、5、7、10、13、16、18、21、24、26、29年为闰年)
@@ -33,18 +29,14 @@ class HijriYear(year: Int) : YearUnit(year) {
         return i == 1 || i == 4 || i == 6 || i == 9 || i == 12 || i == 15 || i == 17 || i == 20 || i == 23 || i == 25 || i == 28
     }
 
-    override fun getName(): String {
-        return "${year}年"
-    }
-
-    override fun next(n: Int): SolarYear {
-        return SolarYear(year + n)
+    override fun next(n: Int): HijriYear {
+        return HijriYear(year + n)
     }
 
     /**
-     * 月份列表
+     * 月份列表，1年有12个月。
      *
-     * @return 月份列表，1年有12个月。
+     * @return 回历月列表
      */
     fun getMonths(): List<HijriMonth> {
         val l: MutableList<HijriMonth> = ArrayList(12)
@@ -56,20 +48,9 @@ class HijriYear(year: Int) : YearUnit(year) {
 
     /**
      * 首月
-     *
-     * @return 回历月
      */
-    fun getFirstMonth(): HijriMonth {
-        return HijriMonth(year, 1)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is HijriYear && toString() == other.toString()
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
+    val firstMonth: HijriMonth
+        get() = HijriMonth(year, 1)
 
     companion object {
         @JvmStatic

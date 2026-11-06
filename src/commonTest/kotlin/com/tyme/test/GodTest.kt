@@ -218,4 +218,24 @@ class GodTest {
         assertEquals(mutableListOf("月空", "不将", "福生", "金匮", "鸣吠"), ji)
         assertEquals(mutableListOf("天罡", "大时", "大败", "咸池", "天贼", "九坎", "九焦"), xiong)
     }
+
+    @Test
+    fun test10() {
+        val gods: List<God?> = SolarDay.fromYmd(2025, 12, 15).getLunarDay().getGods()
+        val ji: MutableList<String> = ArrayList()
+        for (god in gods) {
+            if ("吉" == god!!.getLuck().getName()) {
+                ji.add(god.getName())
+            }
+        }
+
+        val xiong: MutableList<String> = ArrayList()
+        for (god in gods) {
+            if ("凶" == god!!.getLuck().getName()) {
+                xiong.add(god.getName())
+            }
+        }
+        assertEquals(listOf("阳德", "六仪", "续世", "解神", "司命"), ji)
+        assertEquals(listOf("月破", "大耗", "灾煞", "天火", "厌对", "招摇", "五虚", "血忌"), xiong)
+    }
 }

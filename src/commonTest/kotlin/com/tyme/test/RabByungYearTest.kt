@@ -18,27 +18,32 @@ class RabByungYearTest {
         assertEquals("第一饶迥火兔年", y.getName())
         assertEquals("1027年", y.getSolarYear().getName())
         assertEquals("丁卯", y.getSixtyCycle().getName())
-        assertEquals(10, y.getLeapMonth())
+        assertEquals(10, y.leapMonth)
     }
 
     @Test
     fun test1() {
-        assertEquals("第一饶迥火兔年", RabByungYear.fromYear(1027).getName())
+        assertEquals("第一饶迥火兔年", RabByungYear(1027).getName())
     }
 
     @Test
     fun test2() {
-        assertEquals("第十七饶迥铁虎年", RabByungYear.fromYear(2010).getName())
+        assertEquals("第十七饶迥铁虎年", RabByungYear(2010).getName())
     }
 
     @Test
     fun test3() {
-        assertEquals(5, RabByungYear.fromYear(2043).getLeapMonth())
-        assertEquals(0, RabByungYear.fromYear(2044).getLeapMonth())
+        assertEquals(5, RabByungYear(2043).leapMonth)
+        assertEquals(0, RabByungYear(2044).leapMonth)
     }
 
     @Test
     fun test4() {
-        assertEquals("第十六饶迥铁牛年", RabByungYear.fromYear(1961).getName())
+        assertEquals("第十六饶迥铁牛年", RabByungYear(1961).getName())
+    }
+
+    @Test
+    fun test5() {
+        assertEquals(1961, RabByungYear.fromElementZodiac(15, RabByungElement("铁"), Zodiac("牛")).year)
     }
 }

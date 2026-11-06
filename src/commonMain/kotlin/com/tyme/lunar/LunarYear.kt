@@ -1,22 +1,15 @@
 package com.tyme.lunar
 
-import com.tyme.culture.Direction
 import com.tyme.culture.KitchenGodSteed
-import com.tyme.culture.Twenty
-import com.tyme.culture.star.nine.NineStar
-import com.tyme.sixtycycle.SixtyCycle
-import com.tyme.unit.YearUnit
+import com.tyme.unit.AbstractTraditionalYear
 import kotlin.jvm.JvmStatic
-import kotlin.math.floor
 
 /**
  * 农历年
  *
  * @author 6tail
  */
-class LunarYear(
-    year: Int
-) : YearUnit(year) {
+class LunarYear(year: Int): AbstractTraditionalYear(year) {
 
     init {
         validate(year)
@@ -27,23 +20,15 @@ class LunarYear(
      *
      * @return 天数
      */
-    fun getDayCount(): Int {
-        var n = 0
-        val months: List<LunarMonth> = getMonths()
-        for (m: LunarMonth in months) {
-            n += m.getDayCount()
+    val dayCount: Int
+        get() {
+            var n = 0
+            val months: List<LunarMonth> = getMonths()
+            for (m in months) {
+                n += m.dayCount
+            }
+            return n
         }
-        return n
-    }
-
-    /**
-     * 月数
-     *
-     * @return 月数
-     */
-    fun getMonthCount(): Int {
-        return if (getLeapMonth() < 1) 12 else 13
-    }
 
     /**
      * 依据国家标准《农历的编算和颁行》GB/T 33661-2017，农历年有2种命名方法：干支纪年法和生肖纪年法，这里默认采用干支纪年法。
@@ -58,67 +43,24 @@ class LunarYear(
         return LunarYear(year + n)
     }
 
-    /**
-     * 闰月
-     *
-     * @return 闰月数字，1代表闰1月，0代表无闰月
-     */
-    fun getLeapMonth(): Int {
-        if (year == -1) {
-            return 11
-        }
-        for (i in 0 until LEAP.size) {
-            if (LEAP[i].contains(year)) {
-                return i + 1
+    override val leapMonth: Int
+        get() {
+            if (year == -1) {
+                return 11
             }
+            for (i in LEAP.indices) {
+                if (LEAP[i].contains(year)) {
+                    return i + 1
+                }
+            }
+            return 0
         }
-        return 0
-    }
-
-    /**
-     * 干支
-     *
-     * @return 干支
-     */
-    fun getSixtyCycle(): SixtyCycle {
-        return SixtyCycle(year - 4)
-    }
-
-    /**
-     * 运
-     *
-     * @return 运
-     */
-    fun getTwenty(): Twenty {
-        return Twenty(floor((year - 1864) / 20.0).toInt())
-    }
-
-    /**
-     * 九星
-     *
-     * @return 九星
-     */
-    fun getNineStar(): NineStar {
-        return NineStar(63 + getTwenty().getSixty().getIndex() * 3 - getSixtyCycle().getIndex())
-    }
-
-    /**
-     * 太岁方位
-     *
-     * @return 方位
-     */
-    fun getJupiterDirection(): Direction {
-        return Direction(intArrayOf(0, 7, 7, 2, 3, 3, 8, 1, 1, 6, 0, 0)[getSixtyCycle().getEarthBranch().getIndex()])
-    }
 
     /**
      * 首月（农历月，即一月，俗称正月）
-     *
-     * @return 农历月
      */
-    fun getFirstMonth(): LunarMonth {
-        return LunarMonth.fromYm(year, 1)
-    }
+    val firstMonth: LunarMonth
+        get() = LunarMonth(year, 1)
 
     /**
      * 月份列表
@@ -127,7 +69,7 @@ class LunarYear(
      */
     fun getMonths(): List<LunarMonth> {
         val l: MutableList<LunarMonth> = ArrayList(13)
-        val leapMonth = getLeapMonth()
+        val leapMonth = leapMonth
         for (i in 1..12) {
             l.add(LunarMonth(year, i))
             if (i == leapMonth) {
@@ -135,10 +77,6 @@ class LunarYear(
             }
         }
         return l
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other is LunarYear && toString() == other.toString()
     }
 
     /**
@@ -150,13 +88,12 @@ class LunarYear(
         return KitchenGodSteed(year)
     }
 
-    override fun hashCode(): Int {
-        return super.hashCode()
-    }
-
     companion object {
-        /** 缓存{闰月:年} */
-        protected val LEAP: MutableList<List<Int>> = ArrayList()
+        /**
+         * 缓存{闰月:年}
+         */
+        @JvmStatic
+        private val LEAP: Array<IntArray> = Array(12) { IntArray(0) }
         init {
             val chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_@"
             val months: Array<String> = arrayOf(
@@ -173,22 +110,23 @@ class LunarYear(
                 "0n0Q0j1c14010q0V1c171k0u0r140V0j0j1c0C0N1O0j0V0j0j0j1c0j0u110u0C0j0C0V0C0j0j0b671v0j1v5Q1O2S2o2S1v4l1v0j1v2S2o0C1Z0j0C0C1O141v0j1c0j2z1O0j0V0j0j1v0b2H390j1c0j0V0C2z0j1c0j1v2g0C0V0j1O0b0j0j0V0C1c0j0u0j1c0j0j0j0j0j0j0j0j1c0N0j0j0V0j0j0C0j0j0b081v0u0j0j0j0C0j1c0N0j0j0C0j0j0j0C0j0j0j0u0C0r0u0j0j0j0C0j0b080j1c0j0b0j0C0C0j0C0C0j0b080b080u0C0j080b0j0C0j0j0j0u110u0j0j0j0j0j0j0j0j0C0C0j0b0j0j0j0C0j0C0C0j0b080b080b0j0C0j080b0j0C0j0j0j0b0j110b0j0j0j0j0j",
                 "0B0j0V0j0j0C0j0j0j0C0j0C0j0j0C0j0m0j0j0j0j0C0j0C0j0j0u0j1c0j0j0C0C0j0j0j0j0j0j0j0j0u110N0j0j0V0C0V0j0b081n080b0CrU1O5e2SbX2_1Z0V2o141v0j0C0C0j2z1v0j1c0j7N1O420j1c0j1v2S1c0j1v2S2_0b0j0V0j0j1v0N1v0j0j1c0j1v140j0V0j0j0C0C0b080u1v0C0V0u110u0j0j0j0C0j0j0j0C0C0N0C0V0j0j0C0j0j0b080u110u0C0j0C0u0r0C0u080b0j0j0C0j0j0j"
             )
-            for (m: String in months) {
+            for (i in months.indices) {
                 var n = 0
-                val size: Int = m.length / 2
-                val l: MutableList<Int> = ArrayList(size)
-                for (y in 0 until size) {
+                val m: String = months[i]
+                val size = m.length / 2
+                val l = IntArray(size)
+                for (y in 0..<size) {
                     val z: Int = y * 2
-                    var t = 0
-                    var c = 1
+                    var t: Int = 0
+                    var c: Int = 1
                     for (x in 1 downTo 0) {
                         t += c * chars.indexOf(m[z + x])
                         c *= 64
                     }
                     n += t
-                    l.add(n)
+                    l[y] = n
                 }
-                LEAP.add(l)
+                LEAP[i] = l
             }
         }
 
@@ -197,6 +135,12 @@ class LunarYear(
             validateRange(year, -1, 9999, "lunar year")
         }
 
+        /**
+         * 从年初始化
+         *
+         * @param year 年，支持-1到9999年
+         * @return 农历年
+         */
         @JvmStatic
         fun fromYear(year: Int): LunarYear {
             return LunarYear(year)
