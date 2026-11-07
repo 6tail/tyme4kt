@@ -40,13 +40,10 @@ class SixtyCycleYear(year: Int): AbstractTraditionalYear(year) {
      * @return 干支月列表
      */
     fun getMonths(): List<SixtyCycleMonth> {
-        val l: MutableList<SixtyCycleMonth> = ArrayList(12)
         val m: SixtyCycleMonth = firstMonth
-        l.add(m)
-        for (i in 1 until 12) {
-            l.add(m.next(i))
+        return List(12) { i ->
+            m.next(i)
         }
-        return l
     }
 
     companion object {

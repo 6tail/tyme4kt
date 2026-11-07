@@ -52,7 +52,7 @@ class LunarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return true/false
      */
     fun isBefore(target: LunarDay): Boolean {
-        return getCompareIndex() < target.getCompareIndex()
+        return super.isBefore(target)
     }
 
     /**
@@ -62,7 +62,7 @@ class LunarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return true/false
      */
     fun isAfter(target: LunarDay): Boolean {
-        return getCompareIndex() > target.getCompareIndex()
+        return super.isAfter(target)
     }
 
     override fun getWeek(): Week {
@@ -132,15 +132,7 @@ class LunarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return 月相第几天
      */
     fun getPhaseDay(): PhaseDay {
-        val today: SolarDay = getSolarDay()
-        val m: LunarMonth = lunarMonth.next(1)
-        var p: Phase = Phase(m.year, m.monthValue, 0)
-        var d: SolarDay = p.getSolarDay()
-        while (d.isAfter(today)) {
-            p = p.next(-1)
-            d = p.getSolarDay()
-        }
-        return PhaseDay(p, today.subtract(d))
+        return getSolarDay().getPhaseDay()
     }
 
     /**
@@ -203,12 +195,9 @@ class LunarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return 农历时辰列表
      */
     fun getHours(): List<LunarHour> {
-        val l: MutableList<LunarHour> = ArrayList(13)
-        l.add(LunarHour(year, month, day, 0, 0, 0))
-        for (i in 0..23 step 2) {
-            l.add(LunarHour(year, month, day, i + 1, 0, 0))
+        return List(13) { i ->
+            LunarHour(year, month, day, if (0 == i) 0 else i * 2 - 1, 0, 0)
         }
-        return l
     }
 
     /**

@@ -24,15 +24,12 @@ open class SecondUnit(
 ): DayUnit(year, month, day) {
     /**
      * 当天秒数
-     *
-     * @return 当天秒数
      */
-    fun getSecondsInDay(): Int {
-        return hour * 3600 + minute * 60 + second
-    }
+    val secondsInDay: Int
+        get() = hour * 3600 + minute * 60 + second
 
     override fun getCompareIndex(): Long {
-        return super.getCompareIndex() * 86400L + getSecondsInDay()
+        return super.getCompareIndex() * 86400L + secondsInDay
     }
 
     companion object {

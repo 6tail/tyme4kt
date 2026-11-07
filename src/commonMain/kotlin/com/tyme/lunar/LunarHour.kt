@@ -64,7 +64,7 @@ class LunarHour(year: Int, month: Int, day: Int, hour: Int, minute: Int, second:
      * @return true/false
      */
     fun isBefore(target: LunarHour): Boolean {
-        return getCompareIndex() < target.getCompareIndex()
+        return super.isBefore(target)
     }
 
     /**
@@ -74,7 +74,7 @@ class LunarHour(year: Int, month: Int, day: Int, hour: Int, minute: Int, second:
      * @return true/false
      */
     fun isAfter(target: LunarHour): Boolean {
-        return getCompareIndex() > target.getCompareIndex()
+        return super.isAfter(target)
     }
 
     /**
@@ -107,16 +107,8 @@ class LunarHour(year: Int, month: Int, day: Int, hour: Int, minute: Int, second:
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        val solar: SolarDay = lunarDay.getSolarDay()
-        val dongZhi = SolarTerm(solar.year, 0)
-        val earthBranchIndex: Int = indexInDay % 12
-        var index: Int = 8 - 3 * (lunarDay.getSixtyCycle().getEarthBranch().index % 3)
-        if (!solar.isBefore(dongZhi.getJulianDay().getSolarDay()) && solar.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {
-            index = 8 + earthBranchIndex - index
-        } else {
-            index -= earthBranchIndex
-        }
-        return NineStar(index)
+        val d: LunarDay = lunarDay
+        return NineStar.fromHour(d.getSolarDay(), d.getSixtyCycle(), indexInDay)
     }
 
     /**

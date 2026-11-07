@@ -68,11 +68,8 @@ class LunarFestival(index: Int, event: Event, private val day: LunarDay): Abstra
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): LunarFestival? {
             val d: LunarDay = LunarDay(year, month, day)
-            var i = 0
-            val j: Int = NAMES.size
-            while (i < j) {
-                val start: Int = i * 8
-                val e = Event(NAMES[i], "@${DATA.substring(start, start + 8)}")
+            for (i in NAMES.indices) {
+                val e = buildEvent(NAMES, DATA, i) ?: continue
                 when (e.getType()) {
                     EventType.LUNAR_DAY -> {
                         val offset: Int = e.getValue(5)
@@ -88,7 +85,6 @@ class LunarFestival(index: Int, event: Event, private val day: LunarDay): Abstra
                             }
                         }
                     }
-
                     EventType.TERM_DAY -> {
                         val term: SolarTermDay = d.getSolarDay().getTermDay()
                         if (term.dayIndex == 0 && term.getSolarTerm().index == e.getValue(2) % 24) {
@@ -97,7 +93,6 @@ class LunarFestival(index: Int, event: Event, private val day: LunarDay): Abstra
                     }
                     else -> return null
                 }
-                i++
             }
             return null
         }

@@ -51,15 +51,11 @@ class SolarFestival(index: Int, event: Event, private val day: SolarDay): Abstra
         @JvmStatic
         fun fromYmd(year: Int, month: Int, day: Int): SolarFestival? {
             val d: SolarDay = SolarDay(year, month, day)
-            var i = 0
-            val j: Int = NAMES.size
-            while (i < j) {
-                val start: Int = i * 8
-                val e = Event(NAMES[i], "@${DATA.substring(start, start + 8)}")
+            for (i in NAMES.indices) {
+                val e = buildEvent(NAMES, DATA, i) ?: continue
                 if (d.year >= e.getStartYear() && d.month == e.getValue(2) && d.day == e.getValue(3)) {
                     return SolarFestival(i, e, d)
                 }
-                i++
             }
             return null
         }

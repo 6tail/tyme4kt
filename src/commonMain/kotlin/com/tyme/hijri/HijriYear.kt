@@ -39,11 +39,9 @@ class HijriYear(year: Int): AbstractYear(year) {
      * @return 回历月列表
      */
     fun getMonths(): List<HijriMonth> {
-        val l: MutableList<HijriMonth> = ArrayList(12)
-        for (i in 1..12) {
-            l.add(HijriMonth(year, i))
+        return buildMonths { i ->
+            HijriMonth(year, i)
         }
-        return l
     }
 
     /**

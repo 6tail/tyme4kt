@@ -91,12 +91,8 @@ class RabByungMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
      * @return 特殊日子列表
      */
     fun getSpecialDays(): List<Int> {
-        val l: MutableList<Int> = ArrayList()
-        val days: IntArray = DAYS[year * 13 + indexInYear] ?: return l
-        for (d in days) {
-            l.add(d)
-        }
-        return l
+        val days = DAYS[year * 13 + indexInYear] ?: return emptyList()
+        return days.asList()
     }
 
     /**
@@ -105,14 +101,7 @@ class RabByungMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
      * @return 闰日列表
      */
     fun getLeapDays(): List<Int> {
-        val l: MutableList<Int> = ArrayList()
-        val days: List<Int> = getSpecialDays()
-        for (d in days) {
-            if (d > 0) {
-                l.add(d)
-            }
-        }
-        return l
+        return getSpecialDays().filter { it > 0 }
     }
 
     /**
@@ -121,14 +110,7 @@ class RabByungMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
      * @return 缺日列表
      */
     fun getMissDays(): List<Int> {
-        val l: MutableList<Int> = ArrayList()
-        val days: List<Int> = getSpecialDays()
-        for (d in days) {
-            if (d < 0) {
-                l.add(-d)
-            }
-        }
-        return l
+        return getSpecialDays().filter { it < 0 }.map { -it }
     }
 
     companion object {

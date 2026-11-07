@@ -61,12 +61,9 @@ class HijriMonth(year: Int, month: Int): AbstractMonth(year, month) {
      * @return 回历日列表
      */
     fun getDays(): List<HijriDay> {
-        val size: Int = dayCount
-        val l: MutableList<HijriDay> = ArrayList(size)
-        for (i in 1..size) {
-            l.add(HijriDay(year, month, i))
+        return buildDays { i ->
+            HijriDay(year, month, i)
         }
-        return l
     }
 
     override val firstDay: AbstractDay
