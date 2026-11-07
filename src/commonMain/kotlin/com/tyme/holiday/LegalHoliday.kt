@@ -33,7 +33,7 @@ class LegalHoliday: AbstractTyme {
     val target: SolarDay
 
     constructor(year: Int, month: Int, day: Int, data: String): super() {
-        val d: SolarDay = SolarDay(year, month, day)
+        val d = SolarDay(year, month, day)
         this.day = d
         work = '0' == data[8]
         name = NAMES[data[9].code - '0'.code]

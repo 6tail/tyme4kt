@@ -49,3 +49,4 @@ gradle/
 local.properties
 *.hprof
 kotlin-js-store/
+.workbuddy/
