@@ -40,11 +40,9 @@ class SolarYear(year: Int): AbstractYear(year) {
      * @return 月份列表，1年有12个月。
      */
     fun getMonths(): List<SolarMonth> {
-        val l: MutableList<SolarMonth> = ArrayList(12)
-        for (i in 1..12) {
-            l.add(SolarMonth(year, i))
+        return buildMonths { i ->
+            SolarMonth(year, i)
         }
-        return l
     }
 
     /**
@@ -53,11 +51,9 @@ class SolarYear(year: Int): AbstractYear(year) {
      * @return 季度列表，1年有4个季度。
      */
     fun getSeasons(): List<SolarSeason> {
-        val l: MutableList<SolarSeason> = ArrayList(4)
-        for (i in 0..3) {
-            l.add(SolarSeason(year, i))
+        return List(4) { i ->
+            SolarSeason(year, i)
         }
-        return l
     }
 
     /**
@@ -66,11 +62,9 @@ class SolarYear(year: Int): AbstractYear(year) {
      * @return 半年列表，1年有2个半年。
      */
     fun getHalfYears(): List<SolarHalfYear> {
-        val l: MutableList<SolarHalfYear> = ArrayList(2)
-        for (i in 0..1) {
-            l.add(SolarHalfYear(year, i))
+        return List(2) { i ->
+            SolarHalfYear(year, i)
         }
-        return l
     }
 
     /**

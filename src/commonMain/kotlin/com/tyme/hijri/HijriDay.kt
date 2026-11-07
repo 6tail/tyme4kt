@@ -42,7 +42,7 @@ class HijriDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return true/false
      */
     fun isBefore(target: HijriDay): Boolean {
-        return getCompareIndex() < target.getCompareIndex()
+        return super.isBefore(target)
     }
 
     /**
@@ -52,7 +52,7 @@ class HijriDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return true/false
      */
     fun isAfter(target: HijriDay): Boolean {
-        return getCompareIndex() > target.getCompareIndex()
+        return super.isAfter(target)
     }
 
     /**

@@ -74,13 +74,10 @@ class SolarWeek(
      * @return 公历日列表
      */
     fun getDays(): List<SolarDay> {
-        val l: MutableList<SolarDay> = ArrayList(7)
         val d: SolarDay = firstDay
-        l.add(d)
-        for (i in 1..6) {
-            l.add(d.next(i))
+        return List(7) { i ->
+            d.next(i)
         }
-        return l
     }
 
     companion object {

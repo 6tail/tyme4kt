@@ -55,14 +55,11 @@ class LunarWeek: AbstractWeek {
      *
      * @return 农历日列表
      */
-    fun getDays(): MutableList<LunarDay> {
-        val l: MutableList<LunarDay> = ArrayList(7)
+    fun getDays(): List<LunarDay> {
         val d: LunarDay = firstDay
-        l.add(d)
-        for (i in 1..6) {
-            l.add(d.next(i))
+        return List(7) { i ->
+            d.next(i)
         }
-        return l
     }
 
     companion object {

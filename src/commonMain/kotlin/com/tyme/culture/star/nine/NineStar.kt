@@ -3,6 +3,10 @@ package com.tyme.culture.star.nine
 import com.tyme.LoopTyme
 import com.tyme.culture.Direction
 import com.tyme.culture.Element
+import com.tyme.sixtycycle.SixtyCycle
+import com.tyme.solar.SolarDay
+import com.tyme.solar.SolarTerm
+import com.tyme.unit.AbstractTraditionalYear
 import kotlin.jvm.JvmStatic
 
 /**
@@ -62,6 +66,28 @@ class NineStar: LoopTyme {
     companion object {
         val NAMES: Array<String> = arrayOf("一", "二", "三", "四", "五", "六", "七", "八", "九")
         val COLORS: Array<String> = arrayOf("白", "黑", "碧", "绿", "黄", "白", "赤", "白", "紫")
+
+        @JvmStatic
+        fun fromYm(year: AbstractTraditionalYear, month: SixtyCycle): NineStar {
+            var index: Int = month.getEarthBranch().index
+            if (index < 2) {
+                index += 3
+            }
+            return NineStar(27 - year.getSixtyCycle().getEarthBranch().index % 3 * 3 - index)
+        }
+
+        @JvmStatic
+        fun fromHour(solarDay: SolarDay, daySixtyCycle: SixtyCycle, hourIndexInDay: Int): NineStar {
+            val dongZhi: SolarTerm = SolarTerm(solarDay.year, 0)
+            val earthBranchIndex = hourIndexInDay % 12
+            var index: Int = 8 - 3 * (daySixtyCycle.getEarthBranch().index % 3)
+            if (!solarDay.isBefore(dongZhi.getJulianDay().getSolarDay()) && solarDay.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {
+                index = 8 + earthBranchIndex - index
+            } else {
+                index -= earthBranchIndex
+            }
+            return NineStar(index)
+        }
 
         @JvmStatic
         fun fromIndex(index: Int): NineStar {

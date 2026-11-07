@@ -112,13 +112,9 @@ class LunarMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
      * @return 农历日列表
      */
     fun getDays(): List<LunarDay> {
-        val size: Int = dayCount
-        val m: Int = monthValue
-        val l: MutableList<LunarDay> = ArrayList(size)
-        for (i in 1..size) {
-            l.add(LunarDay(year, m, i))
+        return buildDays { i ->
+            LunarDay(year, monthValue, i)
         }
-        return l
     }
 
     /**
@@ -134,13 +130,9 @@ class LunarMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
      * @return 周列表
      */
     fun getWeeks(start: Int): List<LunarWeek> {
-        val size: Int = getWeekCount(start)
-        val m: Int = monthValue
-        val l: MutableList<LunarWeek> = ArrayList(size)
-        for (i in 0 until size) {
-            l.add(LunarWeek(year, m, i, start))
+        return List(getWeekCount(start)) { i ->
+            LunarWeek(year, monthValue, i, start)
         }
-        return l
     }
 
     /**
@@ -158,11 +150,7 @@ class LunarMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
       * @return 九星
       */
     fun getNineStar(): NineStar {
-         var index: Int = getSixtyCycle().getEarthBranch().index
-         if (index < 2) {
-             index += 3
-         }
-         return NineStar(27 - lunarYear.getSixtyCycle().getEarthBranch().index % 3 * 3 - index)
+         return NineStar.fromYm(lunarYear, getSixtyCycle())
     }
 
     /**
@@ -173,7 +161,7 @@ class LunarMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
     fun getJupiterDirection(): Direction {
         val sixtyCycle: SixtyCycle = getSixtyCycle()
         val n: Int = intArrayOf(7, -1, 1, 3)[sixtyCycle.getEarthBranch().next(-2).index % 4]
-        return if (n != -1) Direction(n) else sixtyCycle.getHeavenStem().getDirection()
+        return if (n == -1) sixtyCycle.getHeavenStem().getDirection() else Direction(n)
     }
 
     /**

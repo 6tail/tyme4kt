@@ -9,7 +9,6 @@ import com.tyme.lunar.LunarDay
 import com.tyme.lunar.LunarHour
 import com.tyme.lunar.LunarMonth
 import com.tyme.lunar.LunarYear
-import com.tyme.solar.SolarDay
 import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTime
 import kotlin.jvm.JvmStatic
@@ -115,16 +114,7 @@ class SixtyCycleHour(private var solarTime: SolarTime): AbstractTyme() {
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        val solar: SolarDay = solarTime.solarDay
-        val dongZhi = SolarTerm(solar.year, 0)
-        val earthBranchIndex: Int = indexInDay % 12
-        var index: Int = 8 - 3 * (day.getEarthBranch().index % 3)
-        if (!solar.isBefore(dongZhi.getJulianDay().getSolarDay()) && solar.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {
-            index = 8 + earthBranchIndex - index
-        } else {
-            index -= earthBranchIndex
-        }
-        return NineStar(index)
+        return NineStar.fromHour(solarTime.solarDay, day, indexInDay)
     }
 
     /**

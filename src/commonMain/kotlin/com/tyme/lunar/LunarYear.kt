@@ -68,15 +68,9 @@ class LunarYear(year: Int): AbstractTraditionalYear(year) {
      * @return 月份列表，一般有12个月，当年有闰月时，有13个月。
      */
     fun getMonths(): List<LunarMonth> {
-        val l: MutableList<LunarMonth> = ArrayList(13)
-        val leapMonth = leapMonth
-        for (i in 1..12) {
-            l.add(LunarMonth(year, i))
-            if (i == leapMonth) {
-                l.add(LunarMonth(year, -i))
-            }
+        return buildMonths { i ->
+            LunarMonth(year, i)
         }
-        return l
     }
 
     /**

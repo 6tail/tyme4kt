@@ -59,12 +59,9 @@ class SolarMonth(year: Int, month: Int): AbstractMonth(year, month) {
      * @return 周列表
      */
     fun getWeeks(start: Int): List<SolarWeek> {
-        val size: Int = getWeekCount(start)
-        val l: MutableList<SolarWeek> = ArrayList(size)
-        for (i in 0 until size) {
-            l.add(SolarWeek(year, month, i, start))
+        return List(getWeekCount(start)) { i ->
+            SolarWeek(year, month, i, start)
         }
-        return l
     }
 
     /**
@@ -73,12 +70,9 @@ class SolarMonth(year: Int, month: Int): AbstractMonth(year, month) {
      * @return 公历日列表
      */
     fun getDays(): List<SolarDay> {
-        val size: Int = dayCount
-        val l: MutableList<SolarDay> = ArrayList(size)
-        for (i in 1..size) {
-            l.add(SolarDay(year, month, i))
+        return buildDays { i ->
+            SolarDay(year, month, i)
         }
-        return l
     }
 
     override val firstDay: AbstractDay

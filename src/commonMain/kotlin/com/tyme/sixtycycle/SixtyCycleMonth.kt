@@ -66,11 +66,7 @@ class SixtyCycleMonth: AbstractTyme {
      * @return 九星
      */
     fun getNineStar(): NineStar {
-        var index: Int = month.getEarthBranch().index
-        if (index < 2) {
-            index += 3
-        }
-        return NineStar(27 - year.getEarthBranch().index % 3 * 3 - index)
+        return NineStar.fromYm(sixtyCycleYear, month)
     }
 
     /**

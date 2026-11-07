@@ -87,7 +87,7 @@ class SolarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return true/false
      */
     fun isBefore(target: SolarDay): Boolean {
-        return getCompareIndex() < target.getCompareIndex()
+        return super.isBefore(target)
     }
 
     /**
@@ -97,7 +97,7 @@ class SolarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return true/false
      */
     fun isAfter(target: SolarDay): Boolean {
-        return getCompareIndex() > target.getCompareIndex()
+        return super.isAfter(target)
     }
 
     /**

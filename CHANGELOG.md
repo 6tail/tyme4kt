@@ -66,3 +66,5 @@
 3. 废弃：getMonthWithLeap()。
 4. 新增：monthValue用于替代getMonthWithLeap()，当月为闰月时返回负数。
 5. 优化：提升批量公农历转换的效率。
+6. 新增：2027年法定假日。 
+7. 优化：代码简化。

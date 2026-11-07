@@ -113,14 +113,9 @@ class RabByungYear(year: Int): AbstractTraditionalYear(year) {
      * @return 藏历月列表，一般有12个月，当年有闰月时，有13个月。
      */
     fun getMonths(): List<RabByungMonth> {
-        val l: MutableList<RabByungMonth> = ArrayList(13)
-        for (i in 1 until 13) {
-            l.add(RabByungMonth(year, i))
-            if (i == leapMonth) {
-                l.add(RabByungMonth(year, -i))
-            }
+        return buildMonths { i ->
+            RabByungMonth(year, i)
         }
-        return l
     }
 
     companion object {

@@ -39,11 +39,9 @@ class SolarSeason(year: Int, val index: Int): YearUnit(year) {
      * @return 月份列表，1季度有3个月。
      */
     fun getMonths(): List<SolarMonth> {
-        val l: MutableList<SolarMonth> = ArrayList(3)
-        for (i in 1..3) {
-            l.add(SolarMonth(year, index * 3 + i))
+        return List(3) { i ->
+            SolarMonth(year, index * 3 + i + 1)
         }
-        return l
     }
 
     companion object {

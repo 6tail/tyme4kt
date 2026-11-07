@@ -26,6 +26,17 @@ abstract class AbstractMonth(year: Int, month: Int): MonthUnit(year, month) {
         return ceil((indexOf(firstDay.getWeek().index - start, 7) + dayCount) / 7.0).toInt()
     }
 
+    /**
+     * 本月的日列表
+     *
+     * @param factory 工厂
+     * @param <T>     日类型
+     * @return 日的列表
+     */
+    protected fun <T> buildDays(factory: (Int) -> T): List<T> {
+        return List(dayCount) { factory(it + 1) }
+    }
+
     abstract override fun next(n: Int): AbstractMonth
 
     /**

@@ -339,8 +339,14 @@ object ShouXingUtil {
         return v / SECOND_PER_RAD
     }
 
+    /**
+     * 太阳光行差
+     *
+     * @param t 世纪数
+     */
     fun gxcSunLon(t: Double): Double {
         val t2: Double = t * t
+        // 平近点角
         val v: Double = -0.043126 + 628.301955 * t - 0.000002732 * t2
         val e: Double = 0.016708634 - 0.000042037 * t - 0.0000001267 * t2
         return -20.49552 * (1 + e * cos(v)) / SECOND_PER_RAD
@@ -544,7 +550,7 @@ object ShouXingUtil {
      */
     private fun calc(isQi: Boolean, jd: Double, kb: DoubleArray, pc: Int, fkb: String): Double {
         val size: Int = kb.size
-        var d = 0.0
+        var d: Double
         val j: Double = jd + JulianDay.J2000
         val f1: Double = kb[0] - pc
         val f2: Double = kb[size - 1] - pc
@@ -552,7 +558,7 @@ object ShouXingUtil {
         if (j !in f1..<2436935.0) {
             // 平气表中首个之前，或1960.1.1之后，使用现代天文算法
             d = qiShuo(isQi, true, j, pc)
-        } else if (j in f1..<f2) {
+        } else if (j < f2) {
             // 平气/平朔
             var i = 0
             for (k in 0 until size step 2) {
@@ -567,7 +573,7 @@ object ShouXingUtil {
                 d += 1.0
             }
             d -= JulianDay.J2000
-        } else if (j >= f2) {
+        } else {
             // 定气/定朔
             d = qiShuo(isQi, false, j, pc)
             val n: Char = fkb[(if (isQi) (j - f2) / 365.2422 * 24 else (j - f2) / 29.5306).toInt()]

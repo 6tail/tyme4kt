@@ -54,7 +54,7 @@ class SolarTime: SecondUnit {
         if (n == 0) {
             return SolarTime(year, month, day, hour, minute, second)
         }
-        val t = getSecondsInDay() + n
+        val t = secondsInDay + n
         val s = indexOf(t, 86400)
         val d = solarDay.next(t.floorDiv(86400))
         return SolarTime(d.year, d.month, d.day, s / 3600, s % 3600 / 60, s % 60)
@@ -67,7 +67,7 @@ class SolarTime: SecondUnit {
      * @return true/false
      */
     fun isBefore(target: SolarTime): Boolean {
-        return getCompareIndex() < target.getCompareIndex()
+        return super.isBefore(target)
     }
 
     /**
@@ -77,7 +77,7 @@ class SolarTime: SecondUnit {
      * @return true/false
      */
     fun isAfter(target: SolarTime): Boolean {
-        return getCompareIndex() > target.getCompareIndex()
+        return super.isAfter(target)
     }
 
     /**
@@ -122,7 +122,7 @@ class SolarTime: SecondUnit {
      * @return 秒数
      */
     fun subtract(target: SolarTime): Int {
-        val t = solarDay.subtract(target.solarDay) * 86400L + getSecondsInDay() - target.getSecondsInDay()
+        val t = solarDay.subtract(target.solarDay) * 86400L + secondsInDay - target.secondsInDay
         if (t < Int.MIN_VALUE || t > Int.MAX_VALUE) {
             throw ArithmeticException("seconds difference exceeds int range: $t")
         }
