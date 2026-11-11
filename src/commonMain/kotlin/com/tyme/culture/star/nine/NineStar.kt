@@ -78,7 +78,7 @@ class NineStar: LoopTyme {
 
         @JvmStatic
         fun fromHour(solarDay: SolarDay, daySixtyCycle: SixtyCycle, hourIndexInDay: Int): NineStar {
-            val dongZhi: SolarTerm = SolarTerm(solarDay.year, 0)
+            val dongZhi = SolarTerm(solarDay.year, 0)
             val earthBranchIndex = hourIndexInDay % 12
             var index: Int = 8 - 3 * (daySixtyCycle.getEarthBranch().index % 3)
             if (!solarDay.isBefore(dongZhi.getJulianDay().getSolarDay()) && solarDay.isBefore(dongZhi.next(12).getJulianDay().getSolarDay())) {

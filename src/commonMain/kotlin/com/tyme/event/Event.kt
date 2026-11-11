@@ -116,7 +116,11 @@ class Event(
             if (0 == delay) {
                 return null
             } else if (delay < 0) {
-                return if (isLunar) LunarDay(y, m, d + delay).getSolarDay() else SolarDay(y, m, d + delay)
+                val day = d + delay
+                if (day in 1..lastDay) {
+                    return if (isLunar) LunarDay(y, m, day).getSolarDay() else SolarDay(y, m, day)
+                }
+                return null
             }
             return if (isLunar) LunarDay(y, m, lastDay).getSolarDay().next(delay) else SolarDay(y, m, lastDay).next(delay)
         }
@@ -184,7 +188,7 @@ class Event(
 
         @JvmStatic
         fun fromName(name: String): Event? {
-            return EventManager.REGEX.replace("%s", name).toRegex().find(EventManager.DATA)?.let { Event(name, it.groupValues[1]) }
+            return EventManager.REGEX.replace("%s", Regex.escape(name)).toRegex().find(EventManager.DATA)?.let { Event(name, it.groupValues[1]) }
         }
 
         /**
@@ -205,7 +209,7 @@ class Event(
          */
         @JvmStatic
         fun all(): List<Event> {
-            return EventManager.REGEX.replace("%s", ".[^@]+").toRegex().findAll(EventManager.DATA).map {
+            return EventManager.REGEX.replace("%s", "[^@]+").toRegex().findAll(EventManager.DATA).map {
                 Event(it.groupValues[2], it.groupValues[1])
             }.toList()
         }

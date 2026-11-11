@@ -41,7 +41,7 @@ class SolarTime: SecondUnit {
     }
 
     override fun toString(): String {
-        return "${solarDay} ${getName()}"
+        return "$solarDay ${getName()}"
     }
 
     /**

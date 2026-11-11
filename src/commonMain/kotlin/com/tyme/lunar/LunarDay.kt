@@ -113,8 +113,7 @@ class LunarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return 方位
      */
     fun getJupiterDirection(): Direction {
-        val index: Int = getSixtyCycle().index
-        return if (index % 12 < 6) Element(index / 12).getDirection() else LunarYear(year).jupiterDirection
+        return Direction.dayJupiter(LunarYear(year).getJupiterDirection(), getSixtyCycle())
     }
 
     /**
@@ -177,7 +176,7 @@ class LunarDay(year: Int, month: Int, day: Int): AbstractDay(year, month, day) {
      * @return 二十八宿
      */
     fun getTwentyEightStar(): TwentyEightStar {
-        return TwentyEightStar(10 + 8 * getWeek().index).next(-7 * getSixtyCycle().getEarthBranch().index)
+        return TwentyEightStar.fromDay(getSixtyCycle(), getWeek())
     }
 
     /**

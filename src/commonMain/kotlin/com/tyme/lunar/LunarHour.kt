@@ -12,7 +12,6 @@ import com.tyme.sixtycycle.HeavenStem
 import com.tyme.sixtycycle.SixtyCycle
 import com.tyme.sixtycycle.SixtyCycleHour
 import com.tyme.solar.SolarDay
-import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTime
 import com.tyme.unit.SecondUnit
 import kotlin.jvm.JvmStatic
@@ -98,7 +97,7 @@ class LunarHour(year: Int, month: Int, day: Int, hour: Int, minute: Int, second:
      * @return 黄道黑道十二神
      */
     fun getTwelveStar(): TwelveStar {
-        return TwelveStar(getSixtyCycle().getEarthBranch().index + (8 - getSixtyCycleHour().day.getEarthBranch().index % 6) * 2)
+        return TwelveStar.fromHour(getSixtyCycleHour().day, getSixtyCycle())
     }
 
     /**

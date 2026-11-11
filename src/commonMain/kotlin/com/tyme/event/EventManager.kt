@@ -24,11 +24,14 @@ object EventManager {
      * </ul>
      */
     var DATA: String = ""
+        private set
 
     /**
      * 数据匹配的正则表达式
+     *
+     * <p>名称后必须紧跟下一个事件的数据头（@）或字符串结尾，避免「全」匹配到「全国中小学生安全教育日」。</p>
      */
-    const val REGEX: String = "(@[0-9A-Za-z_]{8})(%s)"
+    const val REGEX: String = "(@[0-9A-Za-z_]{8})(%s)(?=@|$)"
 
     /**
      * 删除事件
@@ -36,13 +39,13 @@ object EventManager {
      * @param name 名称
      */
     fun remove(name: String) {
-        DATA = DATA.replace(REGEX.replace("%s", name).toRegex(), "")
+        DATA = DATA.replace(REGEX.replace("%s", Regex.escape(name)).toRegex(), "")
     }
 
     private fun saveOrUpdate(name: String, data: String) {
-        val reg = REGEX.replace("%s", name).toRegex()
+        val reg = REGEX.replace("%s", Regex.escape(name)).toRegex()
         DATA = if (reg.containsMatchIn(DATA)) {
-            DATA.replace(reg, data)
+            DATA.replace(reg, Regex.escapeReplacement(data))
         } else {
             DATA + data
         }

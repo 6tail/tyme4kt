@@ -75,8 +75,7 @@ class SixtyCycleMonth: AbstractTyme {
      * @return 方位
      */
     fun getJupiterDirection(): Direction {
-        val n: Int = intArrayOf(7, -1, 1, 3)[month.getEarthBranch().next(-2).index % 4]
-        return if(n == -1) month.getHeavenStem().getDirection() else Direction(n)
+        return Direction.monthJupiter(month)
     }
 
     /**

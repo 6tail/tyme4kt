@@ -62,6 +62,14 @@ class LunarWeek: AbstractWeek {
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is LunarWeek && firstDay == other.firstDay
+    }
+
+    override fun hashCode(): Int {
+        return firstDay.hashCode()
+    }
+
     companion object {
         @JvmStatic
         fun validate(year: Int, month: Int, index: Int, start: Int) {
