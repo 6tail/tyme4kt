@@ -1,6 +1,7 @@
 package com.tyme.culture.star.twelve
 
 import com.tyme.LoopTyme
+import com.tyme.sixtycycle.SixtyCycle
 import kotlin.jvm.JvmStatic
 
 /**
@@ -28,6 +29,21 @@ class TwelveStar: LoopTyme {
 
     companion object {
         val NAMES: Array<String> = arrayOf("青龙", "明堂", "天刑", "朱雀", "金匮", "天德", "白虎", "玉堂", "天牢", "玄武", "司命", "勾陈")
+
+        @JvmStatic
+        private fun fromSixtyCycle(parent: SixtyCycle, base: SixtyCycle): TwelveStar {
+            return TwelveStar(base.getEarthBranch().index + (8 - parent.getEarthBranch().index % 6) * 2)
+        }
+
+        @JvmStatic
+        fun fromDay(month: SixtyCycle, day: SixtyCycle): TwelveStar {
+            return fromSixtyCycle(month, day)
+        }
+
+        @JvmStatic
+        fun fromHour(day: SixtyCycle, hour: SixtyCycle): TwelveStar {
+            return fromSixtyCycle(day, hour)
+        }
 
         @JvmStatic
         fun fromIndex(index: Int): TwelveStar {

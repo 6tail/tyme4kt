@@ -17,21 +17,21 @@ import kotlin.test.assertEquals
 class NineStarTest {
     @Test
     fun test0() {
-        val nineStar: NineStar = LunarYear(1985).nineStar
+        val nineStar: NineStar = LunarYear(1985).getNineStar()
         assertEquals("六", nineStar.getName())
         assertEquals("六白金", nineStar.toString())
     }
 
     @Test
     fun test1() {
-        val nineStar: NineStar = LunarYear(2022).nineStar
+        val nineStar: NineStar = LunarYear(2022).getNineStar()
         assertEquals("五黄土", nineStar.toString())
         assertEquals("玉衡", nineStar.getDipper().toString())
     }
 
     @Test
     fun test2() {
-        val nineStar: NineStar = LunarYear(2033).nineStar
+        val nineStar: NineStar = LunarYear(2033).getNineStar()
         assertEquals("三碧木", nineStar.toString())
         assertEquals("天玑", nineStar.getDipper().toString())
     }

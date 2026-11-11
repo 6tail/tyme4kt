@@ -8,8 +8,6 @@ package com.tyme.unit
 abstract class AbstractWeek(year: Int, month: Int, index: Int, start: Int): WeekUnit(year, month, index, start) {
     /**
      * 抽象月
-     *
-     * @return 抽象月
      */
     open val abstractMonth: AbstractMonth
         get() = throw UnsupportedOperationException()

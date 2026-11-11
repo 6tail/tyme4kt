@@ -80,6 +80,14 @@ class SolarWeek(
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is SolarWeek && firstDay == other.firstDay
+    }
+
+    override fun hashCode(): Int {
+        return firstDay.hashCode()
+    }
+
     companion object {
         val NAMES: Array<String> = arrayOf("第一周", "第二周", "第三周", "第四周", "第五周", "第六周")
 

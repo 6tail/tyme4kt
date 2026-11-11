@@ -70,6 +70,16 @@ class SolarMonth(year: Int, month: Int): AbstractMonth(year, month) {
      * @return 公历日列表
      */
     fun getDays(): List<SolarDay> {
+        if (1582 == year && 10 == month) {
+            return buildList(21) {
+                for (i in 1..4) {
+                    add(SolarDay(year, month, i))
+                }
+                for (i in 15..31) {
+                    add(SolarDay(year, month, i))
+                }
+            }
+        }
         return buildDays { i ->
             SolarDay(year, month, i)
         }

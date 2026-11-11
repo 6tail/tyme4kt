@@ -159,9 +159,7 @@ class LunarMonth(year: Int, month: Int): AbstractLeapMonth(year, month) {
      * @return 方位
      */
     fun getJupiterDirection(): Direction {
-        val sixtyCycle: SixtyCycle = getSixtyCycle()
-        val n: Int = intArrayOf(7, -1, 1, 3)[sixtyCycle.getEarthBranch().next(-2).index % 4]
-        return if (n == -1) sixtyCycle.getHeavenStem().getDirection() else Direction(n)
+        return Direction.monthJupiter(getSixtyCycle())
     }
 
     /**

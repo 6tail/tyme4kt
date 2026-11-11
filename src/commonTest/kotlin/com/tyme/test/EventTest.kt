@@ -91,6 +91,7 @@ class EventTest {
         EventManager.remove("生日")
 
         EventManager.update("农历生日", Event.builder().lunarDay(4, 21, 0).startYear(1986).build())
+        EventManager.update("单", Event.builder().solarDay(11, 9, 0).startYear(2026).build())
     }
 
     @Test
@@ -163,5 +164,21 @@ class EventTest {
             assertNotNull(d)
             assertEquals(value, d.toString())
         }
+    }
+
+    @Test
+    fun test4() {
+        val e: Event? = Event.fromName("单")
+        assertNotNull(e)
+
+        val d: SolarDay? = e.getSolarDay(2026)
+        assertNotNull(d)
+        assertEquals("2026年11月9日", d.toString())
+    }
+
+    @Test
+    fun test5() {
+        val e = Event.fromName("全")
+        assertNull(e)
     }
 }

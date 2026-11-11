@@ -5,10 +5,7 @@ import com.tyme.culture.Taboo
 import com.tyme.culture.star.nine.NineStar
 import com.tyme.culture.star.twelve.TwelveStar
 import com.tyme.eightchar.EightChar
-import com.tyme.lunar.LunarDay
-import com.tyme.lunar.LunarHour
-import com.tyme.lunar.LunarMonth
-import com.tyme.lunar.LunarYear
+import com.tyme.lunar.*
 import com.tyme.solar.SolarTerm
 import com.tyme.solar.SolarTime
 import kotlin.jvm.JvmStatic
@@ -65,7 +62,7 @@ class SixtyCycleHour(private var solarTime: SolarTime): AbstractTyme() {
         }
         val term: SolarTerm = solarTime.getTerm()
         var index: Int = term.index - 3
-        if (index < 0 && term.getJulianDay().getSolarTime().isAfter(SolarTerm(solarYear, 3).getJulianDay().getSolarTime())) {
+        if (index < 0 && term.getJulianDay().getSolarTime().isAfter(springSolarTime)) {
             index += 24
         }
         val d: SixtyCycle = lunarDay.getSixtyCycle()
@@ -123,7 +120,7 @@ class SixtyCycleHour(private var solarTime: SolarTime): AbstractTyme() {
      * @return 黄道黑道十二神
      */
     fun getTwelveStar(): TwelveStar {
-        return TwelveStar(hour.getEarthBranch().index + (8 - day.getEarthBranch().index % 6) * 2)
+        return TwelveStar.fromHour(day, hour)
     }
 
     /**

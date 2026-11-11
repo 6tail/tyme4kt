@@ -3,7 +3,6 @@ package com.tyme.sixtycycle
 import com.tyme.AbstractTyme
 import com.tyme.culture.Direction
 import com.tyme.culture.Duty
-import com.tyme.culture.Element
 import com.tyme.culture.God
 import com.tyme.culture.Taboo
 import com.tyme.culture.fetus.FetusDay
@@ -108,7 +107,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 黄道黑道十二神
      */
     fun getTwelveStar(): TwelveStar {
-        return TwelveStar(day.getEarthBranch().index + (8 - month.getEarthBranch().index % 6) * 2)
+        return TwelveStar.fromDay(month, day)
     }
 
     /**
@@ -126,8 +125,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 方位
      */
     fun getJupiterDirection(): Direction {
-        val index: Int = day.index
-        return if(index % 12 < 6) Element(index / 12).getDirection() else sixtyCycleMonth.sixtyCycleYear.jupiterDirection
+        return Direction.dayJupiter(sixtyCycleMonth.sixtyCycleYear.getJupiterDirection(), day)
     }
 
     /**
@@ -145,7 +143,7 @@ class SixtyCycleDay: AbstractTyme {
      * @return 二十八宿
      */
     fun getTwentyEightStar(): TwentyEightStar {
-        return TwentyEightStar(10 + 8 * solarDay.getWeek().index).next(-7 * day.getEarthBranch().index)
+        return TwentyEightStar.fromDay(day, solarDay.getWeek())
     }
 
     /**

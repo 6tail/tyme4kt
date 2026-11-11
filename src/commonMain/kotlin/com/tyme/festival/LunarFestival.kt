@@ -41,7 +41,7 @@ class LunarFestival(index: Int, event: Event, private val day: LunarDay): Abstra
 
     companion object {
         val NAMES: Array<String> = arrayOf("春节", "元宵节", "龙头节", "上巳节", "清明节", "端午节", "七夕节", "中元节", "中秋节", "重阳节", "冬至节", "腊八节", "除夕")
-        var DATA: String = "2VV__0002Vj__0002WW__0002XX__0003b___0002ZZ__0002bb__0002bj__0002cj__0002dd__0003s___0002gc__0002hV_U000"
+        const val DATA: String = "2VV__0002Vj__0002WW__0002XX__0003b___0002ZZ__0002bb__0002bj__0002cj__0002dd__0003s___0002gc__0002hV_U000"
 
         @JvmStatic
         fun fromIndex(year: Int, index: Int): LunarFestival? {

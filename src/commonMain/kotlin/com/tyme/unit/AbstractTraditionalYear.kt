@@ -23,8 +23,6 @@ abstract class AbstractTraditionalYear(year: Int): AbstractYear(year) {
 
     /**
      * 运
-     *
-     * @return 运
      */
     val twenty: Twenty
         get() = Twenty(floor((year - 1864) / 20.0).toInt())
@@ -34,14 +32,16 @@ abstract class AbstractTraditionalYear(year: Int): AbstractYear(year) {
      *
      * @return 九星
      */
-    val nineStar: NineStar
-        get() = NineStar(63 + twenty.getSixty().index * 3 - getSixtyCycle().index)
+    fun getNineStar(): NineStar {
+        return NineStar(63 + twenty.getSixty().index * 3 - getSixtyCycle().index)
+    }
 
     /**
      * 太岁方位
      *
      * @return 方位
      */
-    val jupiterDirection: Direction
-        get() = Direction(intArrayOf(0, 7, 7, 2, 3, 3, 8, 1, 1, 6, 0, 0)[getSixtyCycle().getEarthBranch().index])
+    fun getJupiterDirection(): Direction {
+        return Direction(intArrayOf(0, 7, 7, 2, 3, 3, 8, 1, 1, 6, 0, 0)[getSixtyCycle().getEarthBranch().index])
+    }
 }

@@ -9,9 +9,7 @@ import kotlin.math.ceil
  */
 abstract class AbstractMonth(year: Int, month: Int): MonthUnit(year, month) {
     /**
-     * 月
-     *
-     * @return 月，当月为闰月时，返回负数，如-2代表闰二月
+     * 月，当月为闰月时，返回负数，如-2代表闰二月
      */
     open val monthValue: Int
         get() = month
@@ -23,7 +21,7 @@ abstract class AbstractMonth(year: Int, month: Int): MonthUnit(year, month) {
      * @return 周数
      */
     fun getWeekCount(start: Int): Int {
-        return ceil((indexOf(firstDay.getWeek().index - start, 7) + dayCount) / 7.0).toInt()
+        return (indexOf(firstDay.getWeek().index - start, 7) + dayCount + 6) / 7
     }
 
     /**

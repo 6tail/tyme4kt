@@ -37,7 +37,7 @@ class SolarFestival(index: Int, event: Event, private val day: SolarDay): Abstra
 
     companion object {
         val NAMES: Array<String> = arrayOf("元旦", "妇女节", "植树节", "劳动节", "青年节", "儿童节", "建党节", "建军节", "教师节", "国庆节")
-        var DATA: String = "0VV__0Ux0Xc__0Ux0Xg__0_Q0ZV__0Ux0ZY__0Ux0aV__0Ux0bV__0Uo0cV__0Ug0de__0_V0eV__0Ux"
+        const val DATA: String = "0VV__0Ux0Xc__0Ux0Xg__0_Q0ZV__0Ux0ZY__0Ux0aV__0Ux0bV__0Uo0cV__0Ug0de__0_V0eV__0Ux"
 
         @JvmStatic
         fun fromIndex(year: Int, index: Int): SolarFestival? {
